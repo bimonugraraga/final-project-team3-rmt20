@@ -9,19 +9,121 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      EarthquakeEvent.belongsTo(models.EarthquakeReport, {
+        foreignKey: "EventquakeId",
+      });
     }
   }
   EarthquakeEvent.init(
     {
-      date: DataTypes.STRING,
-      hour: DataTypes.STRING,
-      dateTime: DataTypes.DATE,
-      coordinates: DataTypes.STRING,
-      magnitude: DataTypes.FLOAT,
-      depth: DataTypes.FLOAT,
-      area: DataTypes.STRING,
-      potensi: DataTypes.STRING,
-      dirasakan: DataTypes.STRING,
+      date: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Date is required",
+          },
+          notNull: {
+            msg: "Date cannot be null",
+          },
+        },
+      },
+      hour: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Hour is required",
+          },
+          notNull: {
+            msg: "Hour cannot be null",
+          },
+        },
+      },
+      dateTime: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Date Time is required",
+          },
+          notNull: {
+            msg: "Date Time cannot be null",
+          },
+        },
+      },
+      coordinates: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Coordinates is required",
+          },
+          notNull: {
+            msg: "Coordinates cannot be null",
+          },
+        },
+      },
+      magnitude: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Magnitude is required",
+          },
+          notNull: {
+            msg: "Magnitude cannot be null",
+          },
+        },
+      },
+      depth: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Depth is required",
+          },
+          notNull: {
+            msg: "Depth cannot be null",
+          },
+        },
+      },
+      area: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Area is required",
+          },
+          notNull: {
+            msg: "Area cannot be null",
+          },
+        },
+      },
+      potensi: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Potensi is required",
+          },
+          notNull: {
+            msg: "Potensi cannot be null",
+          },
+        },
+      },
+      dirasakan: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Dirasakan is required",
+          },
+          notNull: {
+            msg: "Dirasakan cannot be null",
+          },
+        },
+      },
       shakeMap: DataTypes.STRING,
     },
     {

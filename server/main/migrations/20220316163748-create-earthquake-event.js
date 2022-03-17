@@ -37,12 +37,15 @@ module.exports = {
         type: Sequelize.STRING,
       },
       potensi: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       dirasakan: {
+        allowNull: false,
         type: Sequelize.TEXT,
       },
       shakeMap: {
+        allowNull: true,
         type: Sequelize.STRING,
       },
       createdAt: {

@@ -1,4 +1,4 @@
-const EventController = require("../controllers/eventsControllers");
+const EventController = require("../controllers/eventControllers");
 const router = require("express").Router();
 
 router.get("/", EventController.allEarthquake);

@@ -2,24 +2,30 @@ const axios = require("axios");
 const { EarthquakeEvent, EarthquakeReport } = require("../models");
 
 class EventController {
-  static async allEarthquake(req, res) {
+  static async allEarthquake(req, res, next) {
     try {
       const { data } = await axios.get(
         "https://data.bmkg.go.id/DataMKG/TEWS/gempadirasakan.json"
       );
-      console.log("fetch pada", new Date().toDateString());
+
       res.status(200).json(data);
     } catch (err) {
-      res.status(500).json({
-        message: "Internal server error",
-      });
+      next(err);
     }
   }
 
-  static async detailEq(req, res) {
+  static async detailEq(req, res, next) {
     try {
       const { id } = req.params;
       const detail = await EarthquakeEvent.findByPk(+id);
+
+      if (!detail) {
+        throw {
+          name: "NOT FOUND",
+          code: 404,
+          message: "Event not found",
+        };
+      }
       const reports = await EarthquakeReport.findAll({
         where: {
           EventquakeId: detail.id,
@@ -31,9 +37,7 @@ class EventController {
         reports: reports,
       });
     } catch (err) {
-      res.status(500).json({
-        message: "Internal server error",
-      });
+      next(err);
     }
   }
 }
