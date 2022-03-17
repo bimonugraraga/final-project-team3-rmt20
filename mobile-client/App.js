@@ -6,6 +6,8 @@ import Login from './src/screens/Login';
 import Register from './src/screens/Register';
 import DetailGempa from './src/screens/DetailGempa'
 import Detailweather from './src/screens/DetailWeather'
+import WeatherForm from './src/components/WeatherForm';
+import ImagePickerExample from "./src/components/ImagePickerExample"
 
 const Drawer = createDrawerNavigator();
 export default function App() {
@@ -17,6 +19,8 @@ export default function App() {
       <Drawer.Screen name="Register" component={Register} />
       <Drawer.Screen name="Gempa" component={DetailGempa} />
       <Drawer.Screen name="Weather" component={Detailweather} />
+      <Drawer.Screen name = "WeatherForm" component={WeatherForm}/>
+      <Drawer.Screen name = "ImagePickerExample" component={ImagePickerExample}/>
     </Drawer.Navigator>
   </NavigationContainer>
   );
