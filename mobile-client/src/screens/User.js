@@ -9,6 +9,3 @@ export default function User() {
     </View>
   )
 }
-// rm -rf node_modules
-// rm package-lock.json
-// npm install
