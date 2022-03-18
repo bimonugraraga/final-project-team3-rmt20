@@ -1,7 +1,13 @@
 const {User, WeatherReport} = require('../models')
+const { Op } = require("sequelize");
 class ReportController {
   static async getAllWeatherReport(req, res, next){
     console.log("GET ALL WEATHER REPORT")
+    let todayDate = new Date()
+    todayDate.setDate(todayDate.getDate() + 1)
+    let agoDate = new Date()
+    agoDate.setDate(agoDate.getDate() - 7)
+    console.log(todayDate, agoDate, "<<<<<")
     try {
       let allWeatherReport = await WeatherReport.findAll({
         include:{
@@ -9,9 +15,18 @@ class ReportController {
           attribute :{
             exclude: ['password']
           },
-        }
+          where: {
+            createdAt: {
+              [Op.between]: [agoDate, todayDate]
+            }
+          }
+        },
+        
       })
 
+      // let allWeatherReport = await sequelize.query('SELECT *')
+
+      console.log(allWeatherReport)
       res.status(200).json(allWeatherReport)
     } catch (error) {
       res.status(500).json({"message": "Internal server error"})
