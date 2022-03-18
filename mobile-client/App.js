@@ -1,20 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import Home from './src/screens/Home';
+import Login from './src/screens/Login';
+import Register from './src/screens/Register';
+import DetailGempa from './src/screens/DetailGempa'
+import Detailweather from './src/screens/DetailWeather'
+import FormGempa from './src/components/FormReportGempa';
+import WeatherForm from './src/components/WeatherForm';
 
+const Drawer = createDrawerNavigator();
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+    <Drawer.Navigator useLegacyImplementation={true} initialRouteName="Home">
+      <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="Login" component={Login} />
+      <Drawer.Screen name="Register" component={Register} />
+      <Drawer.Screen name="Gempa" component={DetailGempa} />
+      <Drawer.Screen name="Weather" component={Detailweather} />
+      <Drawer.Screen name="FormGempa" component={FormGempa} />
+      <Drawer.Screen name = "WeatherForm" component={WeatherForm}/>
+    </Drawer.Navigator>
+  </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

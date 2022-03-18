@@ -13,7 +13,6 @@ class reportController {
     try {
       const { status, description, photoUrl, coordinate } = req.body;
       const { access_token } = req.headers;
-      // const { eventId } = req.params;
 
       if (!access_token) {
         throw {
@@ -31,13 +30,6 @@ class reportController {
         UserId: 1,
         EventquakeId: 4,
       };
-
-      // await EarthquakeEvent.findOrCreate({
-      //   where: { id: eventId },
-      //   defaults: {
-
-      //   },
-      // });
 
       const report = await EarthquakeReport.create(payload);
 
