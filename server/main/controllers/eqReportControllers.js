@@ -4,6 +4,7 @@ class reportController {
   static async allEarthquakeReport(req, res, next) {
     try {
       const reports = await EarthquakeReport.findAll();
+      console.log(reports);
       res.status(200).json(reports);
     } catch (err) {
       next(err);
