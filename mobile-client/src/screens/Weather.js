@@ -46,7 +46,7 @@ export default function Weather({ navigation }) {
       ],
     },
   };
-  
+
   return (
     <ScrollView>
       <View style ={{backgroundColor : "#fef3c7"}}>
@@ -73,6 +73,14 @@ export default function Weather({ navigation }) {
               backgroundColor: "#22d3ee",
             }}
           >
+        <Box borderWidth={2} rounded="md">
+          <AspectRatio w="100%" ratio={16 / 9 }>
+            <Image source={{
+            uri: "https://developers.google.com/maps/images/landing/hero_geocoding_api_480.png"
+          }} alt="image" />
+          </AspectRatio>
+        </Box>
+
             <Stack p="4" space={3}>
               <Stack space={2}>
                 <Heading size="md" ml="-1" color="white">

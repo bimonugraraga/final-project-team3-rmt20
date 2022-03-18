@@ -55,7 +55,7 @@ export default function DetailWeather({navigation}) {
         <Box style={{backgroundColor: "#22d3ee"}}>
           <AspectRatio w="100%" >
             <Image source={{
-            uri: cuaca.current.weather[0].icon
+            uri: "https://developers.google.com/maps/images/landing/hero_geocoding_api_480.png"
           }} alt="image" />
           </AspectRatio>
           <Center bg="#3f3f46" _dark={{
@@ -68,7 +68,7 @@ export default function DetailWeather({navigation}) {
             {cuaca.current.weather[0].description}
           </Center>
         </Box>
-        <Stack p="4" space={3}>
+        <Stack p="4" space={3} style={{backgroundColor: "#e2e8f0"}}>
           <View style= {{flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
           <Stack space={2}>
             <Heading size="md" ml="-1">
@@ -82,6 +82,12 @@ export default function DetailWeather({navigation}) {
              {todayDate}
             </Text>
           </Stack>
+          <AspectRatio w="30%" ratio={16 / 9}>
+                  <Image
+                    source={{ uri: cuaca.current.weather[0].icon }}
+                    alt="image"
+                  />
+                </AspectRatio>
           <Text style={{fontSize: 22.5, fontWeight: "bold", color: "#1e293b"}}>{cuaca.current.temp}°C</Text>
           </View>
           <Text fontWeight="bold" color="#1e293b" marginBottom= "1.5" style= {{textAlign: "center"}}>
@@ -102,12 +108,20 @@ export default function DetailWeather({navigation}) {
           <MaterialCommunityIcons name = "air-humidifier"><Text fontWeight="400" style={{marginStart: 5}}>
               {cuaca.current.humidity} %</Text> </MaterialCommunityIcons>
         </View>
-        </Stack>
-          <TouchableOpacity><Button style={{backgroundColor: "#22d3ee"}} mt="2"
+        <TouchableOpacity><Button style={{backgroundColor: "#22d3ee"}} mt="0"
           onPress={() => navigation.navigate('FormCuaca')}
         >Report Cuaca</Button></TouchableOpacity>
+        </Stack>
       </Box>
     </Box>;
+    <Box alignItems="center" mt="2">
+          <Box bg="#e2e8f0" rounded="lg">
+            <Stack p="4" space={3}>
+              <Button style={{backgroundColor: "#22d3ee"}} w="100%" onPress={() => navigation.navigate('FormCuaca')}>Pengaduan Pengguna</Button>
+            </Stack>
+          </Box>
+        </Box>
+      
       </Center>
     </NativeBaseProvider>
 
