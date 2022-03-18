@@ -1,22 +1,22 @@
 import * as React from "react";
-import { Box, Heading, VStack, FormControl, Input, Button, Center, NativeBaseProvider } from "native-base";
+import { Box, Heading, VStack, FormControl, HStack, Input, Button, Center, NativeBaseProvider, Text, Link } from "native-base";
 
-export default function Register() {
+export default function Register( {navigation}) {
 
   return (
     <NativeBaseProvider>
     <Center flex={1} px="3">
     <Center w="100%">
       <Box safeArea p="2" w="90%" maxW="290" py="8">
-        <Heading size="lg" color="coolGray.800" _dark={{
+        <Heading textAlign="center"  size="lg" color="coolGray.800" _dark={{
         color: "warmGray.50"
       }} fontWeight="semibold">
-          Welcome
+          Daftar
         </Heading>
-        <Heading mt="1" color="coolGray.600" _dark={{
+        <Heading textAlign="center"  mt="1" color="coolGray.600" _dark={{
         color: "warmGray.200"
       }} fontWeight="medium" size="xs">
-          Sign up to continue!
+          Daftar Akun
         </Heading>
         <VStack space={3} mt="5">
           <FormControl>
@@ -27,13 +27,20 @@ export default function Register() {
             <FormControl.Label>Password</FormControl.Label>
             <Input type="password" />
           </FormControl>
-          <FormControl>
-            <FormControl.Label>Confirm Password</FormControl.Label>
-            <Input type="password" />
-          </FormControl>
           <Button mt="2" colorScheme="indigo">
-            Sign up
+            Daftar
           </Button>
+            <HStack style={{flexDirection: 'row', alignItems: 'center'}} mt="6" justifyContent="center" >
+              <Text fontSize="sm" color="coolGray.600" _dark={{
+              color: "warmGray.200"
+            }}>
+                Sudah punya akun?
+              </Text>
+              <Button
+              variant="link"
+                onPress={() => navigation.navigate('Masuk')}
+              >Masuk</Button>
+            </HStack>
         </VStack>
       </Box>
     </Center>

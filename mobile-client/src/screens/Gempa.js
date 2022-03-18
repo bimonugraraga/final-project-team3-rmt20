@@ -2,14 +2,14 @@ import react from 'react'
 import { View, Text} from 'react-native'
 import { Button} from "native-base";
 
-export default function DetailGempa({navigation}) {
+export default function Gempa({navigation}) {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>DetailGempa</Text>
+      <Text>List Gempa</Text>
       <Button mt="2"
-        onPress={() => navigation.navigate('FormGempa')}
-      >Report Gempa</Button>
+        onPress={() => navigation.navigate('DetailGempa')}
+      >Detail Gempa</Button>
     </View>
   )
 }
