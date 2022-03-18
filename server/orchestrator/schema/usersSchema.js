@@ -6,10 +6,13 @@ const typeDefs = gql`
   type message {
     message: String
   }
+  type token {
+    access_token: String
+  }
 
   type Mutation {
     register(email: String, password: String): message
-    login(email: String, password: String): message
+    login(email: String, password: String): token
   }
 `;
 
