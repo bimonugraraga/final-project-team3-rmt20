@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "UserId is required",
           },
           notNull: {
-            msg: "UserId cannot be null",
+            msg: "UserId is required",
           },
         },
       },
@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "EventquakeId is required",
           },
           notNull: {
-            msg: "EventquakeId cannot be null",
+            msg: "EventquakeId is required",
           },
         },
       },
@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Status is required",
           },
           notNull: {
-            msg: "Status cannot be null",
+            msg: "Status is required",
           },
         },
       },
@@ -60,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Description is required",
           },
           notNull: {
-            msg: "Description cannot be null",
+            msg: "Description is required",
           },
         },
       },
@@ -80,7 +80,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Coordinate is required",
           },
           notNull: {
-            msg: "Coordinate cannot be null",
+            msg: "Coordinate is required",
           },
         },
       },

@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      EarthquakeEvent.belongsTo(models.EarthquakeReport, {
+      EarthquakeEvent.hasMany(models.EarthquakeReport, {
         foreignKey: "EventquakeId",
       });
     }
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Date is required",
           },
           notNull: {
-            msg: "Date cannot be null",
+            msg: "Date is required",
           },
         },
       },
@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Hour is required",
           },
           notNull: {
-            msg: "Hour cannot be null",
+            msg: "Hour is required",
           },
         },
       },
@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Date Time is required",
           },
           notNull: {
-            msg: "Date Time cannot be null",
+            msg: "Date Time is required",
           },
         },
       },
@@ -60,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Coordinates is required",
           },
           notNull: {
-            msg: "Coordinates cannot be null",
+            msg: "Coordinates is required",
           },
         },
       },
@@ -72,7 +72,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Magnitude is required",
           },
           notNull: {
-            msg: "Magnitude cannot be null",
+            msg: "Magnitude is required",
           },
         },
       },
@@ -84,7 +84,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Depth is required",
           },
           notNull: {
-            msg: "Depth cannot be null",
+            msg: "Depth is required",
           },
         },
       },
@@ -96,7 +96,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Area is required",
           },
           notNull: {
-            msg: "Area cannot be null",
+            msg: "Area is required",
           },
         },
       },
@@ -108,7 +108,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Potensi is required",
           },
           notNull: {
-            msg: "Potensi cannot be null",
+            msg: "Potensi is required",
           },
         },
       },
@@ -120,7 +120,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Dirasakan is required",
           },
           notNull: {
-            msg: "Dirasakan cannot be null",
+            msg: "Dirasakan is required",
           },
         },
       },

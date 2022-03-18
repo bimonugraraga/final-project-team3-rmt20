@@ -1,10 +1,19 @@
-const { EarthquakeReport } = require("../models");
+const { EarthquakeReport, EarthquakeEvent } = require("../models");
 
 class reportController {
+  static async allEarthquakeReport(req, res, next) {
+    try {
+      const reports = await EarthquakeReport.findAll();
+      res.status(200).json(reports);
+    } catch (err) {
+      next(err);
+    }
+  }
   static async createReport(req, res, next) {
     try {
       const { status, description, photoUrl, coordinate } = req.body;
       const { access_token } = req.headers;
+      // const { eventId } = req.params;
 
       if (!access_token) {
         throw {
@@ -23,9 +32,34 @@ class reportController {
         EventquakeId: 4,
       };
 
+      // await EarthquakeEvent.findOrCreate({
+      //   where: { id: eventId },
+      //   defaults: {
+
+      //   },
+      // });
+
       const report = await EarthquakeReport.create(payload);
 
       res.status(201).json(report);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async earthquakeReportById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const report = await EarthquakeReport.findByPk(+id);
+      if (!report) {
+        throw {
+          name: "NOT FOUND",
+          code: 404,
+          message: "Report not found",
+        };
+      }
+
+      res.status(200).json(report);
     } catch (err) {
       next(err);
     }
@@ -54,7 +88,6 @@ class reportController {
         message: "Report has been deleted",
       });
     } catch (err) {
-      console.log(err);
       next(err);
     }
   }

@@ -7,13 +7,17 @@ const fs = require("fs");
 
 beforeAll(async () => {
   try {
-    console.log("halo");
     const earthQuake = await JSON.parse(
       fs.readFileSync("./db/eventsEarthquake.json", "utf-8")
     );
 
     await EarthquakeEvent.bulkCreate(earthQuake);
-    console.log("apakah ke create?");
+
+    const EarthquakeReports = await JSON.parse(
+      fs.readFileSync("./db/reportsEarthquake.json", "utf-8")
+    );
+
+    await EarthquakeReport.bulkCreate(EarthquakeReports);
   } catch (err) {
     console.log(err);
   }
@@ -30,7 +34,7 @@ const report = {
 
 describe("Earthquake Events from Database /events/:id", () => {
   describe("GET", () => {
-    it.only("200 success to fetch Earthquake detail and reports", (done) => {
+    it("200 success to fetch Earthquake detail and reports", (done) => {
       request(app)
         .get("/events/1")
         .end(function (err, res) {
@@ -81,7 +85,7 @@ describe("Earthquake Events from Database /events/:id", () => {
         .end((err, res) => {
           if (err) return done(err);
           const { body, status } = res;
-          expect(status).toBe(400);
+          expect(status).toBe(404);
           expect(body).toHaveProperty("message", "Event not found");
           done();
         });
@@ -90,6 +94,47 @@ describe("Earthquake Events from Database /events/:id", () => {
 });
 
 describe("Earthquake Reports /reports", () => {
+  describe("GET", () => {
+    it("200 success fetch all Earthquake reports", (done) => {
+      request(app)
+        .get("/reports")
+        .send(report)
+        .end((err, res) => {
+          if (err) done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(200);
+          expect(body).toEqual(expect.any(Array));
+          expect(body[0]).toHaveProperty("id", expect.any(Number));
+          done();
+        });
+    });
+    it("200 success get one Earthquake report", (done) => {
+      request(app)
+        .get("/reports/1")
+        .send(report)
+        .end((err, res) => {
+          if (err) done(err);
+          const { body, status } = res;
+          expect(status).toBe(200);
+          expect(body).toEqual(expect.any(Object));
+          expect(body).toHaveProperty("status", expect.any(String));
+          done();
+        });
+    });
+    it("404 failed get one Earthquake report because report not found", (done) => {
+      request(app)
+        .get("/reports/300")
+        .send(report)
+        .end((err, res) => {
+          if (err) done(err);
+          const { body, status } = res;
+          expect(status).toBe(404);
+          expect(body).toHaveProperty("message", "Report not found");
+          done();
+        });
+    });
+  });
   describe("POST", () => {
     it("201 create report successfully with access token", (done) => {
       request(app)
@@ -101,7 +146,7 @@ describe("Earthquake Reports /reports", () => {
           done();
         });
     });
-    it("401 failed to create report without invalid access token", (done) => {
+    it("401 failed to create report without access token", (done) => {
       request(app)
         .post("/reports")
         .send(report)
@@ -114,19 +159,78 @@ describe("Earthquake Reports /reports", () => {
           done();
         });
     });
-    it("400 bad request to create report", (done) => {
-      request(app);
-      done();
+    it("400 bad request Status is null to create report", (done) => {
+      request(app)
+        .post("/reports")
+        .set("access_token", access_token)
+        .send({
+          UserId: 1,
+          EventquakeId: 1,
+          // status: "Safe",
+          description: "disini aman banget test",
+          photoUrl: "imageUrlContoh",
+          coordinate: "-12.94,106.94",
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(400);
+          expect(body).toEqual(expect.any(Array));
+          expect(body[0]).toBe("Status is required");
+          done();
+        });
     });
-    it("404 earthquake event not found", (done) => {
-      // request(app);
-      done();
+    it("400 bad request Description is null to create report", (done) => {
+      request(app)
+        .post("/reports")
+        .set("access_token", access_token)
+        .send({
+          UserId: 1,
+          EventquakeId: 1,
+          status: "Safe",
+          // description: "disini aman banget test",
+          photoUrl: "imageUrlContoh",
+          coordinate: "-12.94,106.94",
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(400);
+          expect(body).toEqual(expect.any(Array));
+          expect(body[0]).toBe("Description is required");
+          done();
+        });
     });
+    it("400 bad request Coordinate is null to create report", (done) => {
+      request(app)
+        .post("/reports")
+        .set("access_token", access_token)
+        .send({
+          UserId: 1,
+          EventquakeId: 1,
+          status: "Safe",
+          description: "disini aman banget test",
+          photoUrl: "imageUrlContoh",
+          // coordinate: "-12.94,106.94",
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(400);
+          expect(body).toEqual(expect.any(Array));
+          expect(body[0]).toBe("Coordinate is required");
+          done();
+        });
+    });
+    // it("404 earthquake event not found", (done) => {
+    //   request(app);
+    //   done();
+    // });
   });
   describe("DELETE", () => {
     it("200 success to delete report with access token", (done) => {
       request(app)
-        .post("/reports/5")
+        .post("/reports/1")
         .set("access_token", access_token)
         .send(report)
         .end((err, res) => {
@@ -140,7 +244,7 @@ describe("Earthquake Reports /reports", () => {
     });
     it("401 failed to delete report without access token", (done) => {
       request(app)
-        .post("/reports/5")
+        .post("/reports/1")
         .send(report)
         .end((err, res) => {
           if (err) done(err);
