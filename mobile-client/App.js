@@ -1,28 +1,32 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NativeBaseProvider } from "native-base";
+import { SSRProvider } from '@react-aria/ssr'
 import Home from './src/screens/Home';
-import Login from './src/screens/Login';
-import Register from './src/screens/Register';
-import DetailGempa from './src/screens/DetailGempa'
-import Detailweather from './src/screens/DetailWeather'
-import FormGempa from './src/components/FormReportGempa';
-import WeatherForm from './src/components/WeatherForm';
+import LoginRouter from './src/navigation/LoginRouter';
+import GempaRouter from './src/navigation/EarthquakeRouter';
+import CuacaRouter from './src/navigation/WeatherRouter';
 
 const Drawer = createDrawerNavigator();
 export default function App() {
   return (
-    <NavigationContainer>
-    <Drawer.Navigator useLegacyImplementation={true} initialRouteName="Home">
-      <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="Login" component={Login} />
-      <Drawer.Screen name="Register" component={Register} />
-      <Drawer.Screen name="Gempa" component={DetailGempa} />
-      <Drawer.Screen name="Weather" component={Detailweather} />
-      <Drawer.Screen name="FormGempa" component={FormGempa} />
-      <Drawer.Screen name = "WeatherForm" component={WeatherForm}/>
-    </Drawer.Navigator>
-  </NavigationContainer>
+    <SSRProvider>
+      <NativeBaseProvider>
+        <NavigationContainer>
+          <Drawer.Navigator useLegacyImplementation={true} initialRouteName="Home"
+          screenOptions={{
+            headerTitleAlign: 'center',
+          }}
+          >
+            <Drawer.Screen name="Home" component={Home} />
+            <Drawer.Screen name="LoginRouter" options={{title: 'Masuk'}}  component={LoginRouter} />
+            <Drawer.Screen name="GempaRouter" options={{title: 'Gempa'}} component={GempaRouter}/>
+            <Drawer.Screen name="CuacaRouter" options={{title: 'Cuaca'}}  component={CuacaRouter}/>
+          </Drawer.Navigator>
+        </NavigationContainer>
+      </NativeBaseProvider>
+    </SSRProvider>
   );
 }
 
