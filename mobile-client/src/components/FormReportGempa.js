@@ -42,7 +42,7 @@ export default function FormGempa() {
   return (
       <Center flex={1} px="3">
         <Center w="100%">
-          <Box  safeArea p="2" w="90%" maxW="290" py="8">
+          <Box borderWidth={2} rounded="lg" safeArea p="2" w="90%" maxW="290" py="8">
             <Heading textAlign="center"  size="lg" color="coolGray.800" _dark={{
             color: "warmGray.50"
           }} fontWeight="semibold">
@@ -57,7 +57,7 @@ export default function FormGempa() {
 
               <FormControl>
                 <FormControl.Label>Status</FormControl.Label>
-                <Select selectedValue={status} onValueChange={(itemValue, itemIndex) => setStatus(itemValue)} minWidth="200" accessibilityLabel="Choose Service" placeholder="Choose Service" _selectedItem={{
+                <Select borderWidth={1} borderColor="black" bg="#f8fafc" selectedValue={status} onValueChange={(itemValue, itemIndex) => setStatus(itemValue)} minWidth="200" accessibilityLabel="Choose Service" placeholder="Choose Service" _selectedItem={{
                 bg: "teal.600",
                 endIcon: <CheckIcon size="5" />
               }} mt={1} >
@@ -68,7 +68,7 @@ export default function FormGempa() {
 
               <FormControl>
                 <FormControl.Label>Deskripsi</FormControl.Label>
-                <TextArea name="description" onChangeText={newText => setDescription(newText)} h={20} placeholder="Deskripsi" />
+                <TextArea borderWidth={1} borderColor="black" bg="#f8fafc" name="description" onChangeText={newText => setDescription(newText)} h={20} placeholder="Deskripsi" />
               </FormControl>
 
               <View justifyContent="center" alignItems="center">
@@ -84,7 +84,7 @@ export default function FormGempa() {
 
               </View>
 
-              <Button mt="2" colorScheme="indigo" onPress={submitHandler}>
+              <Button mt="2" colorScheme="orange" onPress={submitHandler}>
                 Report
               </Button>
             </VStack>
