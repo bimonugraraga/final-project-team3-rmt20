@@ -1,0 +1,26 @@
+[
+  {
+    "UserId": 1,
+    "EventquakeId": 1,
+    "status": "Safe",
+    "description": "disini aman banget",
+    "photoUrl": "imageUrlContoh",
+    "coordinate": "-12.94,106.94"
+  },
+  {
+    "UserId": 1,
+    "EventquakeId": 2,
+    "status": "Warning",
+    "description": "disini sedikit kerassa",
+    "photoUrl": "imageUrlContoh",
+    "coordinate": "-12.94,106.94"
+  },
+  {
+    "UserId": 1,
+    "EventquakeId": 3,
+    "status": "Danger",
+    "description": "disini kerasa banget",
+    "photoUrl": "imageUrlContoh",
+    "coordinate": "-12.94,106.94"
+  }
+]

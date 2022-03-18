@@ -2,14 +2,14 @@
   "development": {
     "username": "postgres",
     "password": "postgres",
-    "database": "alert_me",
+    "database": "alertMe_db",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
     "password": "postgres",
-    "database": "alert_me_test",
+    "database": "alertMe_test",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
