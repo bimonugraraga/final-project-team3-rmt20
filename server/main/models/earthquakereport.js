@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       EarthquakeReport.belongsTo(models.EarthquakeEvent, {
         foreignKey: "EventquakeId",
       });
+      EarthquakeReport.belongsTo(models.User, { foreignKey: "UserId" });
     }
   }
   EarthquakeReport.init(
