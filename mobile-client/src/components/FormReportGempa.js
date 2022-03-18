@@ -1,5 +1,5 @@
 import { View, Text} from 'react-native'
-import { Box, Heading, VStack, FormControl, Input, Button, Center, NativeBaseProvider, Select, CheckIcon, TextArea, Platform, Image, Form } from "native-base";
+import { Box, Heading, VStack, FormControl, Input,WarningOutlineIcon, Button, Center, NativeBaseProvider, Select, CheckIcon, TextArea, Platform, Image, Form } from "native-base";
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -39,7 +39,6 @@ export default function FormGempa() {
   }
   
   return (
-    <NativeBaseProvider>
       <Center flex={1} px="3">
         <Center w="100%">
           <Box  safeArea p="2" w="90%" maxW="290" py="8">
@@ -54,16 +53,32 @@ export default function FormGempa() {
               silahkan isi pengaduan kamu disini
             </Heading>
             <VStack space={3} mt="5">
-              <FormControl>
+
+            <FormControl w="3/4" maxW="300" isRequired isInvalid>
+              <FormControl.Label>Choose service</FormControl.Label>
+              <Select minWidth="200" accessibilityLabel="Choose Service" placeholder="Choose Service" _selectedItem={{
+              bg: "teal.600",
+              endIcon: <CheckIcon size={5} />
+            }} mt="1">
+                <Select.Item label="UX Research" value="ux" />
+                <Select.Item label="Web Development" value="web" />
+                <Select.Item label="Cross Platform Development" value="cross" />
+                <Select.Item label="UI Designing" value="ui" />
+                <Select.Item label="Backend Development" value="backend" />
+              </Select>
+              <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                Please make a selection!
+              </FormControl.ErrorMessage>
+            </FormControl>
+              
+              {/* <FormControl>
                 <FormControl.Label>Status</FormControl.Label>
                 <Select selectedValue={status} onValueChange={(itemValue, itemIndex) => setStatus(itemValue)} minWidth="200" accessibilityLabel="Choose Service" placeholder="Choose Service" _selectedItem={{
                 bg: "teal.600",
                 endIcon: <CheckIcon size="5" />
               }} mt={1} >
-                  <Select.Item label="Aman" value="aman" />
-                  <Select.Item label="Tidak aman" value="bahaya" />
                 </Select>
-              </FormControl>
+              </FormControl> */}
 
               <FormControl>
                 <FormControl.Label>Deskripsi</FormControl.Label>
@@ -81,6 +96,5 @@ export default function FormGempa() {
           </Box>
         </Center>
       </Center>
-    </NativeBaseProvider>
   )
 }
