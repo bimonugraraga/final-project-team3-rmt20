@@ -1,16 +1,9 @@
-const { EarthquakeReport, EarthquakeEvent, User } = require("../models");
+const { EarthquakeReport, EarthquakeEvent } = require("../models");
 
 class reportController {
   static async allEarthquakeReport(req, res, next) {
     try {
-      const reports = await EarthquakeReport.findAll({
-        include: {
-          model: User,
-          attribute: {
-            exclude: ["password"],
-          },
-        },
-      });
+      const reports = await EarthquakeReport.findAll();
       res.status(200).json(reports);
     } catch (err) {
       next(err);
@@ -18,10 +11,9 @@ class reportController {
   }
   static async createReport(req, res, next) {
     try {
-      const { status, description, photoUrl, coordinate, EventquakeId } =
-        req.body;
+      const { status, description, photoUrl, coordinate } = req.body;
       const { access_token } = req.headers;
-      let { id } = req.loggedUser;
+      // const { eventId } = req.params;
 
       if (!access_token) {
         throw {
@@ -36,9 +28,16 @@ class reportController {
         description,
         photoUrl,
         coordinate,
-        UserId: +id,
-        EventquakeId,
+        UserId: 1,
+        EventquakeId: 4,
       };
+
+      // await EarthquakeEvent.findOrCreate({
+      //   where: { id: eventId },
+      //   defaults: {
+
+      //   },
+      // });
 
       const report = await EarthquakeReport.create(payload);
 
