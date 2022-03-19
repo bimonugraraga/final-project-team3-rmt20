@@ -25,7 +25,7 @@ beforeAll(async () => {
       fs.readFileSync("./db/eventsEarthquake.json", "utf-8")
     );
 
-    await EarthquakeEvent.bulkCreate(earthQuake);
+    const events = await EarthquakeEvent.bulkCreate(earthQuake);
 
     const EarthquakeReports = await JSON.parse(
       fs.readFileSync("./db/reportsEarthquake.json", "utf-8")
@@ -53,6 +53,7 @@ describe("Earthquake Events from Database /events/:id", () => {
         .get("/events/earthquake/1")
         .end(function (err, res) {
           const { body, status } = res;
+          console.log(body);
           expect(status).toBe(200);
           expect(body).toHaveProperty("earthQuake", expect.any(Object));
           expect(body).toHaveProperty("reports", expect.any(Array));
@@ -373,6 +374,10 @@ describe("Earthquake Reports /reports/earthquakes", () => {
     it("200 success fetch all Earthquake reports", (done) => {
       request(app)
         .get("/reports/earthquakes")
+        .query({
+          dateTime: "2022-03-16T14:12:00+00:00",
+          coordinates: "-3.70,128.12",
+        })
         .send(report)
         .end((err, res) => {
           if (err) done(err);
@@ -444,6 +449,16 @@ describe("Earthquake Reports /reports/earthquakes", () => {
           description: "disini aman banget test",
           photoUrl: "imageUrlContoh",
           coordinate: "-12.94,106.94",
+          date: "16 Mar 2022",
+          hour: "21:12:00 WIB",
+          dateTime: "2022-03-16T14:12:00+00:00",
+          coordinates: "-3.70,128.12",
+          magnitude: "2.7",
+          depth: 10,
+          area: "Pusat gempa berada di laut 47 km Baratdaya Kairatu",
+          dirasakan: "II-III Ambon",
+          potensi: "Tidak berpotensi tsunami",
+          Shakemap: "20220319080340.mmi.jpg",
         })
         .end((err, res) => {
           if (err) return done(err);
@@ -465,6 +480,16 @@ describe("Earthquake Reports /reports/earthquakes", () => {
           // description: "disini aman banget test",
           photoUrl: "imageUrlContoh",
           coordinate: "-12.94,106.94",
+          date: "16 Mar 2022",
+          hour: "21:12:00 WIB",
+          dateTime: "2022-03-16T14:12:00+00:00",
+          coordinates: "-3.70,128.12",
+          magnitude: "2.7",
+          depth: 10,
+          area: "Pusat gempa berada di laut 47 km Baratdaya Kairatu",
+          dirasakan: "II-III Ambon",
+          potensi: "Tidak berpotensi tsunami",
+          Shakemap: "20220319080340.mmi.jpg",
         })
         .end((err, res) => {
           if (err) return done(err);
@@ -485,6 +510,16 @@ describe("Earthquake Reports /reports/earthquakes", () => {
           status: "Safe",
           description: "disini aman banget test",
           photoUrl: "imageUrlContoh",
+          date: "16 Mar 2022",
+          hour: "21:12:00 WIB",
+          dateTime: "2022-03-16T14:12:00+00:00",
+          coordinates: "-3.70,128.12",
+          magnitude: "2.7",
+          depth: 10,
+          area: "Pusat gempa berada di laut 47 km Baratdaya Kairatu",
+          dirasakan: "II-III Ambon",
+          potensi: "Tidak berpotensi tsunami",
+          Shakemap: "20220319080340.mmi.jpg",
           // coordinate: "-12.94,106.94",
         })
         .end((err, res) => {
@@ -496,10 +531,6 @@ describe("Earthquake Reports /reports/earthquakes", () => {
           done();
         });
     });
-    // it("404 earthquake event not found", (done) => {
-    //   request(app);
-    //   done();
-    // });
   });
   describe("DELETE", () => {
     it("200 success to delete report with access token", (done) => {
