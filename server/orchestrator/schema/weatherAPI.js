@@ -35,10 +35,9 @@ const resolvers = {
       try {
         const { lat, lon } = args;
         const resp = await axios({ method: "GET", url: baseUrl + `&lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily` });
-        // console.log(resp.data.current);
         return resp.data.current;
       } catch (error) {
-        console.log(error);
+        return error.response.data;
       }
     },
   },
