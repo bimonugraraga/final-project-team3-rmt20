@@ -29,7 +29,7 @@ const typeDefs = gql`
     description: String
     photoUrl: String
     coordinate: String
-    temperature: Float
+    temp: Float
     pressure: Int
     uvi: Float
     humidity: Int
@@ -83,10 +83,9 @@ const resolvers = {
 
   Mutation: {
     createWeatherReport: async (_, args) => {
-      const { status, description, photoUrl, coordinate, temperature, uvi, pressure, humidity, windspeed, weatherMain, weatherDesc, weatherIcon, access_token } = args.data;
+      const { status, description, photoUrl, coordinate, temp, uvi, pressure, humidity, windspeed, weatherMain, weatherDesc, weatherIcon, access_token } = args.data;
 
       try {
-        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ1c2VyMkBtYWlsLmNvbSIsImlhdCI6MTY0NzY3OTAyNX0.rXAXb_rfw2wRVBEtc5X1n0mBoWrLUgcsR6lXPFKT1-Q";
         const resp = await axios({
           method: "POST",
           url: baseUrl,
@@ -109,8 +108,8 @@ const resolvers = {
             weatherIcon,
           },
           headers: {
-            access_token
-          }
+            access_token,
+          },
         });
         return resp.data;
       } catch (error) {
