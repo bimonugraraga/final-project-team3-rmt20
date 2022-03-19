@@ -56,6 +56,7 @@ const baseUrl = "http://localhost:3000/reports/weathers";
 const resolvers = {
   Query: {
     getWeatherReports: async () => {
+      console.log("WR")
       try {
         const resp = await axios({
           method: "GET",
@@ -63,7 +64,7 @@ const resolvers = {
         });
         return resp.data;
       } catch (error) {
-        return error.response.data;
+        console.log(error);
       }
     },
 
@@ -84,22 +85,16 @@ const resolvers = {
   Mutation: {
     createWeatherReport: async (_, args) => {
       const { status, description, photoUrl, coordinate, temperature, uvi, pressure, humidity, windspeed, weatherMain, weatherDesc, weatherIcon, access_token } = args.data;
-
       try {
-        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ1c2VyMkBtYWlsLmNvbSIsImlhdCI6MTY0NzY3OTAyNX0.rXAXb_rfw2wRVBEtc5X1n0mBoWrLUgcsR6lXPFKT1-Q";
         const resp = await axios({
           method: "POST",
           url: baseUrl,
-          headers: {
-            "Content-Type": "application/json",
-            access_token,
-          },
           data: {
             status,
             description,
             photoUrl,
             coordinate,
-            temperature: temp,
+            temperature,
             uvi,
             pressure,
             humidity,

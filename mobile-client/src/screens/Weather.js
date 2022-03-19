@@ -15,8 +15,14 @@ import {
 } from "native-base";
 
 import {Entypo} from 'react-native-vector-icons';
+import { useQuery } from '@apollo/client';
+import { GET_ALL_WEATHERS_REPORT } from "../../lib/apollo/queries/weatherQueries";
 
 export default function Weather({ navigation }) {
+
+  let {loading, error, data} = useQuery(GET_ALL_WEATHERS_REPORT)
+  console.log(loading, error, data, "<--->")
+
   const cuaca = {
     lat: -6.0398,
     lon: 107.2456,
