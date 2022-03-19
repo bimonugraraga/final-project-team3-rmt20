@@ -43,6 +43,7 @@ const resolvers = {
   Query: {
     getEqReports: async (_, args) => {
       try {
+        // console.log(context.auth);
         const { dateTime, coordinates } = args;
         const resp = await axios({
           method: "GET",
@@ -54,7 +55,7 @@ const resolvers = {
         });
         return resp.data;
       } catch (error) {
-        console.log(error);
+        return error.response.data;
       }
     },
   },
@@ -63,9 +64,14 @@ const resolvers = {
     createEqReports: async (_, args) => {
       try {
         let { status, description, photoUrl, coordinate, date, hour, dateTime, coordinates, magnitude, depth, area, dirasakan, potensi, shakeMap } = args.data;
+        const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ1c2VyMkBtYWlsLmNvbSIsImlhdCI6MTY0NzY3NzQwMn0.WYZe6IoYRwqxvURPItcBFtvt9Ii6hQpMtSv-rjoBCDg";
         const resp = await axios({
           method: "POST",
           url: baseUrl,
+          headers: {
+            "Content-Type": "application/json",
+            access_token,
+          },
           data: {
             status,
             description,
@@ -84,11 +90,10 @@ const resolvers = {
           },
         });
         if (resp.status === 201) {
-          console.log(resp.data);
           return { message: `Laporan berhasil dibuat` };
         }
       } catch (error) {
-        console.log(error);
+        return error.response.data;
       }
     },
   },

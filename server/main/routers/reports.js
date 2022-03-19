@@ -20,5 +20,5 @@ router.use(authn);
 router.post("/weathers", weatherReportController.postWeatherReport);
 
 router.post("/earthquakes", eqReportController.createReport);
-router.post("/earthquakes/:id", eqReportController.removeReport);
+router.delete("/earthquakes/:id", eqReportController.removeReport);
 module.exports = router;

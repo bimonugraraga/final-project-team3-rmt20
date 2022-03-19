@@ -31,7 +31,6 @@ class reportController {
   static async createReport(req, res, next) {
     try {
       const { status, description, photoUrl, coordinate, date, hour, dateTime, coordinates, magnitude, depth, area, dirasakan, potensi, shakeMap } = req.body;
-      const { access_token } = req.headers;
       let { id } = req.loggedUser;
 
       // first findOrCreateEvents
@@ -51,14 +50,6 @@ class reportController {
           shakeMap,
         },
       });
-
-      if (!access_token) {
-        throw {
-          name: "Unauthorized",
-          code: 401,
-          message: "Invalid token",
-        };
-      }
 
       const payload = {
         status,

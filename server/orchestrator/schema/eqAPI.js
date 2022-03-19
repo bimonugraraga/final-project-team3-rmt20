@@ -53,7 +53,8 @@ const resolvers = {
         });
         return result;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
+        return error.response.data;
       }
     },
 
@@ -81,7 +82,7 @@ const resolvers = {
         };
         return result;
       } catch (error) {
-        console.log(error);
+        return error.response.data;
       }
     },
   },

@@ -73,7 +73,7 @@ const resolvers = {
         });
         return resp.data;
       } catch (error) {
-        console.log(error);
+        return error.response.data;
       }
     },
   },
@@ -102,7 +102,7 @@ const resolvers = {
         });
         return resp.data;
       } catch (error) {
-        console.log(error);
+        return error.response.data;
       }
     },
   },
