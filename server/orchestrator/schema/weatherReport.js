@@ -17,6 +17,7 @@ const typeDefs = gql`
     weatherDesc: String
     weatherIcon: String
     User: User
+    message: String
   }
 
   type User {
@@ -28,7 +29,7 @@ const typeDefs = gql`
     description: String
     photoUrl: String
     coordinate: String
-    temp: Float
+    temperature: Float
     pressure: Int
     uvi: Float
     humidity: Int
@@ -36,6 +37,8 @@ const typeDefs = gql`
     weatherMain: String
     weatherDesc: String
     weatherIcon: String
+    message: String
+    access_token: String
   }
 
   extend type Query {
@@ -80,7 +83,8 @@ const resolvers = {
 
   Mutation: {
     createWeatherReport: async (_, args) => {
-      const { status, description, photoUrl, coordinate, temp, uvi, pressure, humidity, windspeed, weatherMain, weatherDesc, weatherIcon } = args.data;
+      const { status, description, photoUrl, coordinate, temperature, uvi, pressure, humidity, windspeed, weatherMain, weatherDesc, weatherIcon, access_token } = args.data;
+
       try {
         const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ1c2VyMkBtYWlsLmNvbSIsImlhdCI6MTY0NzY3OTAyNX0.rXAXb_rfw2wRVBEtc5X1n0mBoWrLUgcsR6lXPFKT1-Q";
         const resp = await axios({
@@ -104,6 +108,9 @@ const resolvers = {
             weatherDesc,
             weatherIcon,
           },
+          headers: {
+            access_token
+          }
         });
         return resp.data;
       } catch (error) {

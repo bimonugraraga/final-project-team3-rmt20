@@ -103,6 +103,7 @@ describe("User Routes Test", () => {
         .end((err, res) => {
           if (err) return done(err);
           const { body, status } = res;
+          console.log(body)
           expect(status).toBe(200);
           expect(body).toHaveProperty("access_token", expect.any(String));
           return done();

@@ -8,6 +8,7 @@ const typeDefs = gql`
   }
   type token {
     access_token: String
+    message: String
   }
 
   type Mutation {

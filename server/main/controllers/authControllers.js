@@ -32,7 +32,6 @@ class AuthnController {
           email,
         },
       });
-
       if (!targetUser) {
         res.status(401).json({ message: "Invalid email/password!" });
         return;
@@ -43,11 +42,12 @@ class AuthnController {
         res.status(401).json({ message: "Invalid email/password!" });
         return;
       }
-
+      
       let payload = {
         id: targetUser.id,
         email: targetUser.email,
       };
+      console.log(payload, "<>")
 
       let access_token = signToken(payload);
       res.status(200).json({ access_token: access_token });
