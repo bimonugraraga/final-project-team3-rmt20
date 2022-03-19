@@ -1,5 +1,5 @@
 import { View, Text} from 'react-native'
-import { Box, Icon, Heading, VStack, FormControl, Input,WarningOutlineIcon, Button, Center, NativeBaseProvider, Select, CheckIcon, TextArea, Platform, Image, Form } from "native-base";
+import { Box, Modal, Divider, Icon, Heading, VStack, FormControl, Input, Button, Center, NativeBaseProvider, Select, CheckIcon, TextArea, Platform, Image, Form } from "native-base";
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from "@expo/vector-icons"
@@ -9,9 +9,11 @@ export default function FormGempa() {
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState('')
   const [status, setStatus] = useState('')
+  const [showModal, setShowModal] = useState(false)
 
   const ilanginFoto = (e) => {
     e.preventDefault()
+    setShowModal(false)
     setImage(null)
   }
 
@@ -28,6 +30,7 @@ export default function FormGempa() {
 
     if (!result.cancelled) {
       setImage(result.uri);
+      setShowModal(true)
     }
   };
 
@@ -55,6 +58,7 @@ export default function FormGempa() {
               silahkan isi pengaduan kamu disini
             </Heading>
             <VStack space={3} mt="5">
+            <Divider bg="#a1a1aa" thickness="1" />
 
               <FormControl>
                 <FormControl.Label>Status</FormControl.Label>
@@ -62,28 +66,41 @@ export default function FormGempa() {
                 bg: "teal.600",
                 endIcon: <CheckIcon size="5" />
               }} mt={1} >
-                <Select.Item label="Aman" value="aman" />
-                <Select.Item label="Bahaya" value="bahaya" />
+                <Select.Item label="Aman" value="safe" />
+                <Select.Item label="Bahaya" value="danger" />
                 </Select>
               </FormControl>
 
               <FormControl>
                 <FormControl.Label>Deskripsi</FormControl.Label>
-                <TextArea borderWidth={1} borderColor="black" bg="#f8fafc" name="description" onChangeText={newText => setDescription(newText)} h={20} placeholder="Deskripsi" />
+                <TextArea borderWidth={1} borderColor="black" bg="#f8fafc" name="Deskripsi" onChangeText={newText => setDescription(newText)} h={20} placeholder="Deskripsi" />
               </FormControl>
 
               <View justifyContent="center" alignItems="center">
                 <Button  leftIcon={<Icon as={Ionicons} name="cloud-upload-outline" size="sm" />}   mt="2" w="50%" colorScheme="indigo" title="Pick an image from camera roll" onPress={pickImage}> Upload Foto</Button>
-                  {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} alt="image" />}
-
-                {
-                  image?
-                  <Button mt="2" w="50%" title="Pick an" onPress={ilanginFoto}>ilangin foto</Button>
-                  :
-                  <Text></Text>
-                }
 
               </View>
+
+              <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+                <Modal.Content maxWidth="400px">
+                  <Modal.Header alignItems="center">Pilih gambar</Modal.Header>
+                  <Modal.Body>
+                  {image && <Image source={{ uri: image }} style={{ width: 300, height: 200 }} alt="image" />}
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button.Group space={2}>
+                      <Button variant="ghost" colorScheme="blueGray" onPress={ilanginFoto}>
+                        Cancel
+                      </Button>
+                      <Button onPress={() => {
+                      setShowModal(false);
+                    }}>
+                        Save
+                      </Button>
+                    </Button.Group>
+                  </Modal.Footer>
+                </Modal.Content>
+              </Modal>
 
               <Button mt="2" colorScheme="orange" onPress={submitHandler}>
                 Report
