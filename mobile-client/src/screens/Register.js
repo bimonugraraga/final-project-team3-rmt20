@@ -1,7 +1,17 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { Box, Heading, VStack, FormControl, HStack, Input, Button, Center, NativeBaseProvider, Text, Link } from "native-base";
 
 export default function Register( {navigation}) {
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    console.log('coba ditekan nih ya');
+    console.log(email);
+    console.log(password);
+  }
 
   return (
     <NativeBaseProvider>
@@ -21,13 +31,13 @@ export default function Register( {navigation}) {
         <VStack space={3} mt="5">
           <FormControl>
             <FormControl.Label>Email</FormControl.Label>
-            <Input />
+            <Input onChangeText={newText => setEmail(newText)} />
           </FormControl>
           <FormControl>
             <FormControl.Label>Password</FormControl.Label>
-            <Input type="password" />
+            <Input type="password" onChangeText={newText => setPassword(newText)} />
           </FormControl>
-          <Button mt="2" colorScheme="indigo">
+          <Button mt="2" colorScheme="indigo" onPress={submitHandler}>
             Daftar
           </Button>
             <HStack style={{flexDirection: 'row', alignItems: 'center'}} mt="6" justifyContent="center" >

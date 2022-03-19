@@ -7,6 +7,7 @@ import Home from './src/screens/Home';
 import LoginRouter from './src/navigation/LoginRouter';
 import GempaRouter from './src/navigation/EarthquakeRouter';
 import CuacaRouter from './src/navigation/WeatherRouter';
+import CobaMap from './src/screens/CobaMap';
 
 const Drawer = createDrawerNavigator();
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
           }}
           >
             <Drawer.Screen name="Home" component={Home} />
+            <Drawer.Screen name="Map" component={CobaMap} />
             <Drawer.Screen name="LoginRouter" options={{title: 'Masuk'}}  component={LoginRouter} />
             <Drawer.Screen name="GempaRouter" options={{title: 'Gempa'}} component={GempaRouter}/>
             <Drawer.Screen name="CuacaRouter" options={{title: 'Cuaca'}}  component={CuacaRouter}/>
