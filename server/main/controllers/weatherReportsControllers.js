@@ -1,86 +1,72 @@
-const {User, WeatherReport} = require('../models')
+const { User, WeatherReport } = require("../models");
 const { Op } = require("sequelize");
 class ReportController {
-  static async getAllWeatherReport(req, res, next){
-    console.log("GET ALL WEATHER REPORT")
-    let todayDate = new Date()
-    todayDate.setDate(todayDate.getDate() + 1)
-    let agoDate = new Date()
-    agoDate.setDate(agoDate.getDate() - 7)
-    console.log(todayDate, agoDate, "<<<<<")
+  static async getAllWeatherReport(req, res, next) {
+    // console.log("GET ALL WEATHER REPORT")
+    let todayDate = new Date();
+    todayDate.setDate(todayDate.getDate() + 1);
+    let agoDate = new Date();
+    agoDate.setDate(agoDate.getDate() - 7);
+    // console.log(todayDate, agoDate, "<<<<<")
     try {
       let allWeatherReport = await WeatherReport.findAll({
-        include:{
+        include: {
           model: User,
-          attribute :{
-            exclude: ['password']
+          attribute: {
+            exclude: ["password"],
           },
           where: {
             createdAt: {
-              [Op.between]: [agoDate, todayDate]
-            }
-          }
+              [Op.between]: [agoDate, todayDate],
+            },
+          },
         },
-        
-      })
+      });
 
       // let allWeatherReport = await sequelize.query('SELECT *')
 
-      console.log(allWeatherReport)
-      res.status(200).json(allWeatherReport)
+      // console.log(allWeatherReport)
+      res.status(200).json(allWeatherReport);
     } catch (error) {
-      res.status(500).json({"message": "Internal server error"})
+      res.status(500).json({ message: "Internal server error" });
     }
   }
 
-  static async getOneWeatherReport(req, res, next){
-    console.log("GET ONE WEATHER REPORT")
-    let {id} = req.params
+  static async getOneWeatherReport(req, res, next) {
+    console.log("GET ONE WEATHER REPORT");
+    let { id } = req.params;
     try {
       let oneWeatherReport = await WeatherReport.findOne({
-        include:{
+        include: {
           model: User,
-          attribute :{
-            exclude: ['password']
+          attribute: {
+            exclude: ["password"],
           },
         },
         where: {
-          id
-        }
-      })
+          id,
+        },
+      });
 
-      if (!oneWeatherReport){
-        res.status(404).json({message: "Weather Report Not Found!"})
-        return
+      if (!oneWeatherReport) {
+        res.status(404).json({ message: "Weather Report Not Found!" });
+        return;
       }
 
-      res.status(200).json(oneWeatherReport)
+      res.status(200).json(oneWeatherReport);
     } catch (error) {
-      res.status(500).json({"message": "Internal server error"})
+      res.status(500).json({ message: "Internal server error" });
     }
   }
 
-  static async postWeatherReport(req, res, next){
-    console.log("POST WEATHER REPORT")
-    let {id} = req.loggedUser
-    let {
-      status,
-      description,
-      photoUrl,
-      coordinate,
-      temperature,
-      uvi,
-      pressure,
-      humidity,
-      windspeed,
-      weatherMain,
-      weatherDesc,
-      weatherIcon
-    } = req.body
-    console.log(req.body)
+  static async postWeatherReport(req, res, next) {
+    // console.log("POST WEATHER REPORT")
+    let { id } = req.loggedUser;
+    let { status, description, photoUrl, coordinate, temperature, uvi, pressure, humidity, windspeed, weatherMain, weatherDesc, weatherIcon } = req.body;
+    // console.log(req.body)
 
     try {
-      let newWeatherReport = await WeatherReport.create({
+      await WeatherReport.create({
         status,
         description,
         photoUrl,
@@ -93,19 +79,18 @@ class ReportController {
         weatherMain,
         weatherDesc,
         weatherIcon,
-        UserId: id
-      })
+        UserId: id,
+      });
 
-      res.status(201).json({message: 'Laporan telah berhasil dibuat'})
+      res.status(201).json({ message: "Laporan telah berhasil dibuat" });
     } catch (error) {
-      if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError'){
-        res.status(400).json({"message":error.errors[0].message})
-      } else{
-  
-        res.status(500).json({"message": "Internal server error"})
+      if (error.name === "SequelizeValidationError" || error.name === "SequelizeUniqueConstraintError") {
+        res.status(400).json({ message: error.errors[0].message });
+      } else {
+        res.status(500).json({ message: "Internal server error" });
       }
     }
   }
 }
 
-module.exports = ReportController
+module.exports = ReportController;
