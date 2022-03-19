@@ -8,6 +8,8 @@ import LoginRouter from './src/navigation/LoginRouter';
 import GempaRouter from './src/navigation/EarthquakeRouter';
 import CuacaRouter from './src/navigation/WeatherRouter';
 import CobaMap from './src/screens/CobaMap';
+import { ApolloProvider } from '@apollo/client';
+import client from './lib/apollo/connection'
 
 const Drawer = createDrawerNavigator();
 export default function App() {

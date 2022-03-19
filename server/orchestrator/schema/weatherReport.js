@@ -17,6 +17,7 @@ const typeDefs = gql`
     weatherDesc: String
     weatherIcon: String
     User: User
+    message: String
   }
 
   type User {
@@ -36,6 +37,8 @@ const typeDefs = gql`
     weatherMain: String
     weatherDesc: String
     weatherIcon: String
+    message: String
+    access_token: String
   }
 
   extend type Query {
@@ -44,15 +47,16 @@ const typeDefs = gql`
   }
 
   extend type Mutation {
-    createWeatherReports(data: NewWeatherReport): message
+    createWeatherReport(data: NewWeatherReport): message
   }
 `;
 
-const baseUrl = "http://localhost:3000/reportsWeathers";
+const baseUrl = "http://localhost:3000/reports/weathers";
 
 const resolvers = {
   Query: {
     getWeatherReports: async () => {
+      console.log("WR")
       try {
         const resp = await axios({
           method: "GET",
@@ -73,14 +77,14 @@ const resolvers = {
         });
         return resp.data;
       } catch (error) {
-        console.log(error);
+        return error.response.data;
       }
     },
   },
 
   Mutation: {
-    createWeatherReports: async (_, args) => {
-      const { status, description, photoUrl, coordinate, temperature, uvi, pressure, humidity, windspeed, weatherMain, weatherDesc, weatherIcon } = args.data;
+    createWeatherReport: async (_, args) => {
+      const { status, description, photoUrl, coordinate, temperature, uvi, pressure, humidity, windspeed, weatherMain, weatherDesc, weatherIcon, access_token } = args.data;
       try {
         const resp = await axios({
           method: "POST",
@@ -99,10 +103,13 @@ const resolvers = {
             weatherDesc,
             weatherIcon,
           },
+          headers: {
+            access_token,
+          },
         });
         return resp.data;
       } catch (error) {
-        console.log(error);
+        return error.response.data;
       }
     },
   },

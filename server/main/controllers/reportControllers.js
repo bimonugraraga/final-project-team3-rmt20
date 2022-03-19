@@ -1,66 +1,44 @@
-const { EarthquakeReport, EarthquakeEvent, User } = require("../models");
+const { EarthquakeReport, EarthquakeEvent } = require("../models");
 
 class reportController {
   static async allEarthquakeReport(req, res, next) {
     try {
-      // first look for EQ event
-      const { dateTime, coordinates } = req.query;
-      const event = await EarthquakeEvent.findOne({
-        where: {
-          dateTime,
-          coordinates,
-        },
-      });
-
-      // then get all associated reports
-      const reports = await EarthquakeReport.findAll({
-        where: {
-          EventquakeId: event.id,
-        },
-        include: {
-          model: User,
-          attributes: ["email"],
-        },
-      });
+      const reports = await EarthquakeReport.findAll();
       res.status(200).json(reports);
     } catch (err) {
       next(err);
     }
   }
-
   static async createReport(req, res, next) {
     try {
-      const { status, description, photoUrl, coordinate, date, hour, dateTime, coordinates, magnitude, depth, area, dirasakan, potensi, shakeMap } = req.body;
-      let { id } = req.loggedUser;
+      const { status, description, photoUrl, coordinate } = req.body;
+      const { access_token } = req.headers;
+      // const { eventId } = req.params;
 
-      // first findOrCreateEvents
-      const [event] = await EarthquakeEvent.findOrCreate({
-        where: { dateTime, coordinates },
-        defaults: {
-          coordinate,
-          date,
-          hour,
-          dateTime,
-          coordinates,
-          magnitude,
-          depth,
-          area,
-          dirasakan,
-          potensi,
-          shakeMap,
-        },
-      });
+      if (!access_token) {
+        throw {
+          name: "Unauthorized",
+          code: 401,
+          message: "Invalid token",
+        };
+      }
 
       const payload = {
         status,
         description,
         photoUrl,
         coordinate,
-        UserId: +id,
-        EventquakeId: +event.id,
+        UserId: 1,
+        EventquakeId: 4,
       };
 
-      // then create report
+      // await EarthquakeEvent.findOrCreate({
+      //   where: { id: eventId },
+      //   defaults: {
+
+      //   },
+      // });
+
       const report = await EarthquakeReport.create(payload);
 
       res.status(201).json(report);

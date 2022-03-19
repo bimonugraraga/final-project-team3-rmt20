@@ -10,10 +10,18 @@
   {
     "UserId": 1,
     "EventquakeId": 2,
-    "status": "Warning",
+    "status": "Danger",
     "description": "disini sedikit kerassa",
     "photoUrl": "imageUrlContoh",
     "coordinate": "-12.94,106.94"
+  },
+  {
+    "UserId": 1,
+    "EventquakeId": 2,
+    "status": "Danger",
+    "description": "pohon tumbang",
+    "photoUrl": "imageUrlContoh",
+    "coordinate": "-12.64,106.533"
   },
   {
     "UserId": 1,
