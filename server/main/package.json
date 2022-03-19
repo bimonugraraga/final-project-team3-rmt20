@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --detectOpenHandles --forceExit --runInBand --verbose",
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "seed": "npx sequelize-cli --env=development db:drop && npx sequelize-cli --env=development  db:create && npx sequelize-cli --env=development  db:migrate && npx sequelize-cli --env=development  db:seed:all"
   },
   "keywords": [],
   "author": "",

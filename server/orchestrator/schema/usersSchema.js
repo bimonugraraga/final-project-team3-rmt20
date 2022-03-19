@@ -16,7 +16,7 @@ const typeDefs = gql`
   }
 `;
 
-const baseUrl = "http://localhost:3000";
+const baseUrl = "http://localhost:3000/users";
 
 const resolvers = {
   Mutation: {
@@ -25,7 +25,7 @@ const resolvers = {
         const { email, password } = args;
         const resp = await axios({
           method: "POST",
-          url: baseUrl,
+          url: baseUrl + "/register",
           data: {
             email,
             password,
@@ -42,7 +42,7 @@ const resolvers = {
         const { email, password } = args;
         const resp = await axios({
           method: "POST",
-          url: baseUrl,
+          url: baseUrl + "/login",
           data: {
             email,
             password,

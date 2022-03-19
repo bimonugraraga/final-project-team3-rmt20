@@ -44,11 +44,11 @@ const typeDefs = gql`
   }
 
   extend type Mutation {
-    createWeatherReports(data: NewWeatherReport): message
+    createWeatherReport(data: NewWeatherReport): message
   }
 `;
 
-const baseUrl = "http://localhost:3000/reportsWeathers";
+const baseUrl = "http://localhost:3000/reports/weathers";
 
 const resolvers = {
   Query: {
@@ -79,7 +79,7 @@ const resolvers = {
   },
 
   Mutation: {
-    createWeatherReports: async (_, args) => {
+    createWeatherReport: async (_, args) => {
       const { status, description, photoUrl, coordinate, temperature, uvi, pressure, humidity, windspeed, weatherMain, weatherDesc, weatherIcon } = args.data;
       try {
         const resp = await axios({
