@@ -29,7 +29,7 @@ const typeDefs = gql`
     description: String
     photoUrl: String
     coordinate: String
-    temperature: Float
+    temp: Float
     pressure: Int
     uvi: Float
     humidity: Int
@@ -104,8 +104,8 @@ const resolvers = {
             weatherIcon,
           },
           headers: {
-            access_token
-          }
+            access_token,
+          },
         });
         return resp.data;
       } catch (error) {
