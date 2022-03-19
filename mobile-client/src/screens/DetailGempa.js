@@ -1,45 +1,56 @@
 import react from 'react'
-import { View } from 'react-native'
+import { View, StyleSheet, Dimensions } from 'react-native'
 import { Box, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider, Button, Divider, Flex} from "native-base";
 import { useEffect, useState } from 'react';
-import { formatDistance, subHours } from 'date-fns'
+import { formatDistance, subHours, parseISO, format  } from 'date-fns'
 import {Feather, Ionicons, FontAwesome5} from 'react-native-vector-icons';
+import MapView, {Callout, Geojson, Marker }  from 'react-native-maps';
 
 export default function DetailGempa({navigation}) {
 
-  const [date, setDate] = useState('')
+  const [gempa, setGempa] = useState({})
   useEffect(() => {
-    const time = formatDistance(subHours(new Date(gempa.DateTime), 3), new Date(), { addSuffix: true })
-    setDate(time)
+    fetch('https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not OK');
+        } else {
+          return response.json()
+        }
+      })
+      .then(data => setGempa(data.Infogempa.gempa))
+      .catch(err => console.log(err))
   }, [])
 
-  const gempa = {
-    Tanggal: "18 Mar 2022",
-    Jam: "11:33:01 WIB",
-    DateTime: "2022-03-18T04:33:01+00:00",
-    Coordinates: "-9.91,120.56",
-    Lintang: "9.91 LS",
-    Bujur:" 120.56 BT",
-    Magnitude: "4.0",
-    Kedalaman: "18 km",
-    Wilayah: "Pusat gempa berada di darat 35 km Timurlaut Wula-Waijelu",
-    Potensi: "Gempa ini dirasakan untuk diteruskan pada masyarakat",
-    Dirasakan:" II-III Waingapu",
-    Shakemap: "20220318113301.mmi.jpg"
-  }
+
   return (
     <NativeBaseProvider>
       <Center flex={1} px="3" bg="#ffedd5">
 
         <Box borderWidth={2} rounded="md" borderColor="#f97316">
           <AspectRatio w="100%" ratio={4/4}>
-            <Image source={{
-            uri: "https://developers.google.com/maps/images/landing/hero_geocoding_api_480.png"
-          }} alt="image" />
+            <MapView
+              initialRegion={{
+                latitude: -1.93,
+                longitude: 133.32,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              >
+                <Marker 
+                coordinate={{
+                  latitude: -1.93,
+                  longitude: 133.32,
+                }}
+                pinColor="red"
+                >
+                  <Callout><Text>Pusat Gempa</Text></Callout>
+                </Marker>
+              </MapView>
           </AspectRatio>
         </Box>
 
-        <Box alignItems="center" mt="-4">
+        <Box alignItems="center" mt="2">
           <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
           borderColor: "coolGray.600",
           backgroundColor: "gray.700"
@@ -57,7 +68,8 @@ export default function DetailGempa({navigation}) {
                     <View justifyContent="center" alignItems="center">
                       <Text fontSize="xs" color="#fff">{gempa.Jam}</Text>
                       <Heading size="md" color="#fff">{gempa.Tanggal}</Heading>
-                      <Text fontSize="xs" color="#fff">{date}</Text>
+                      {/* <Text fontSize="xs" color="#fff">{date ? date : null}</Text> */}
+                      <Text fontSize="xs" color="#fff">{gempa.DateTime}</Text>
                     </View >
                     <Divider orientation="vertical" bg="#a1a1aa" thickness="2" mx="7" />
                     <View justifyContent="center" alignItems="center">

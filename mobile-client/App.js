@@ -7,31 +7,30 @@ import Home from './src/screens/Home';
 import LoginRouter from './src/navigation/LoginRouter';
 import GempaRouter from './src/navigation/EarthquakeRouter';
 import CuacaRouter from './src/navigation/WeatherRouter';
+import CobaMap from './src/screens/CobaMap';
 import { ApolloProvider } from '@apollo/client';
 import client from './lib/apollo/connection'
 
 const Drawer = createDrawerNavigator();
 export default function App() {
   return (
-    <ApolloProvider client={client}>
-
-      <SSRProvider>
-        <NativeBaseProvider>
-          <NavigationContainer>
-            <Drawer.Navigator useLegacyImplementation={true} initialRouteName="Home"
-            screenOptions={{
-              headerTitleAlign: 'center',
-            }}
-            >
-              <Drawer.Screen name="Home" component={Home} />
-              <Drawer.Screen name="LoginRouter" options={{title: 'Masuk'}}  component={LoginRouter} />
-              <Drawer.Screen name="GempaRouter" options={{title: 'Gempa'}} component={GempaRouter}/>
-              <Drawer.Screen name="CuacaRouter" options={{title: 'Cuaca'}}  component={CuacaRouter}/>
-            </Drawer.Navigator>
-          </NavigationContainer>
-        </NativeBaseProvider>
-      </SSRProvider>
-    </ApolloProvider>
+    <SSRProvider>
+      <NativeBaseProvider>
+        <NavigationContainer>
+          <Drawer.Navigator useLegacyImplementation={true} initialRouteName="Home"
+          screenOptions={{
+            headerTitleAlign: 'center',
+          }}
+          >
+            <Drawer.Screen name="Home" component={Home} />
+            <Drawer.Screen name="Map" component={CobaMap} />
+            <Drawer.Screen name="LoginRouter" options={{title: 'Masuk'}}  component={LoginRouter} />
+            <Drawer.Screen name="GempaRouter" options={{title: 'Gempa'}} component={GempaRouter}/>
+            <Drawer.Screen name="CuacaRouter" options={{title: 'Cuaca'}}  component={CuacaRouter}/>
+          </Drawer.Navigator>
+        </NavigationContainer>
+      </NativeBaseProvider>
+    </SSRProvider>
   );
 }
 

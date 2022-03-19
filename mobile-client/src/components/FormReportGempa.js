@@ -40,6 +40,7 @@ export default function FormGempa() {
   }
   
   return (
+    <NativeBaseProvider>
       <Center flex={1} px="3">
         <Center w="100%">
           <Box borderWidth={2} rounded="lg" safeArea p="2" w="90%" maxW="290" py="8">
@@ -91,5 +92,6 @@ export default function FormGempa() {
           </Box>
         </Center>
       </Center>
+      </NativeBaseProvider>
   )
 }
