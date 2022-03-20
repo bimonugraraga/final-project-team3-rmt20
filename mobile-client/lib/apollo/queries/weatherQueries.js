@@ -30,3 +30,29 @@ export const POST_WEATHER_REPORT = gql`
     }
   }
 `
+
+export const GET_CURRENT_WEATHER = gql `
+  query FetchCurrentWeather($lat: Float, $lon: Float) {
+    fetchCurrentWeather(lat: $lat, lon: $lon) {
+      lat
+      lon
+      timezone
+      current {
+        dt
+        temp
+        feels_like
+        pressure
+        humidity
+        uvi
+        visibility
+        wind_speed
+        weather {
+          id
+          main
+          description
+          icon
+        }
+      }
+    }
+  }
+`

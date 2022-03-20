@@ -8,6 +8,7 @@ const cors = require("cors");
 const router = require("./routers");
 const port = 3000
 const errorHandler = require("./middlewares/errorHandler");
+const port = 3000
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
