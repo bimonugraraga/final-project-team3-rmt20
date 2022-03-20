@@ -4,6 +4,14 @@ const axios = require("axios");
 
 const typeDefs = gql`
   type weatherDetailApi {
+    lat : Float
+    lon : Float
+    timezone : String
+    current : current
+    
+  }
+  
+  type current {
     dt: Int
     temp: Float
     feels_like: Float
@@ -35,7 +43,7 @@ const resolvers = {
       try {
         const { lat, lon } = args;
         const resp = await axios({ method: "GET", url: baseUrl + `&lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily` });
-        return resp.data.current;
+        return resp.data;
       } catch (error) {
         return error.response.data;
       }
