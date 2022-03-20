@@ -11,6 +11,7 @@ import Home from './src/screens/Home';
 import LoginRouter from './src/navigation/LoginRouter';
 import GempaRouter from './src/navigation/EarthquakeRouter';
 import CuacaRouter from './src/navigation/WeatherRouter';
+import client from './lib/apollo/connection'
 
 
 const Drawer = createDrawerNavigator();
@@ -54,6 +55,7 @@ export default function App() {
             <Drawer.Screen name="LoginRouter" options={{title: 'Masuk', drawerIcon: () => {
               return <MaterialCommunityIcons name="login" size={25} color="#fff" />
             }}}  component={LoginRouter} />
+
           </Drawer.Navigator>
         </NavigationContainer>
       </NativeBaseProvider>

@@ -1,18 +1,22 @@
 import React, { useState } from "react";
 import { Box, Heading, VStack, FormControl, HStack, Input, Button, Center, NativeBaseProvider, Text, Link } from "native-base";
+import { useMutation, useQuery } from '@apollo/client';
+import { USER_REGISTER } from "../../lib/apollo/queries/userQueries";
 
 export default function Register( {navigation}) {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const submitHandler = (e) => {
-    e.preventDefault()
-    console.log('coba ditekan nih ya');
-    console.log(email);
-    console.log(password);
-  }
 
+  let [submitHandler = () => {
+  }, {loading, error, data}] = useMutation(USER_REGISTER, {
+    variables: {
+      email: email,
+      password: password
+    }
+  })
+  console.log(loading, error, data, "<-->")
   return (
     <NativeBaseProvider>
     <Center flex={1} px="3">
