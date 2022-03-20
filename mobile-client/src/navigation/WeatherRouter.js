@@ -10,8 +10,8 @@ export default function CuacaRouter() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Cuaca" options={{headerShown: false}}  component={Weather} />
-      <Stack.Screen name="DetailCuaca"  component={DetailWeather} />
-      <Stack.Screen name="FormCuaca"  component={WeatherForm} />
+      <Stack.Screen name="DetailCuaca" options={{headerShown: false}}  component={DetailWeather} />
+      <Stack.Screen name="FormCuaca" options={{headerShown: false}}  component={WeatherForm} />
     </Stack.Navigator>
   );
 }

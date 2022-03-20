@@ -1,17 +1,20 @@
 import { View, Text} from 'react-native'
-import { Box, Icon, Heading, VStack, FormControl, Input, Button, Center, NativeBaseProvider, Select, CheckIcon, TextArea, Platform, Image} from "native-base";
+import { Box, Divider, Modal, Icon, Heading, VStack, FormControl, Input, Button, Center, NativeBaseProvider, Select, CheckIcon, TextArea, Platform, Image} from "native-base";
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from "@expo/vector-icons"
 
 export default function WeatherForm (){
+
     const [image, setImage] = useState(null);
     const [description,setDescription] = useState('')
     const [status,setStatus] = useState('')
+    const [showModal, setShowModal] = useState(false)
     
 
     const ilanginFoto = (e) => {
       e.preventDefault()
+      setShowModal(false)
       setImage(null)
     }
 
@@ -28,11 +31,13 @@ export default function WeatherForm (){
 
       if (!result.cancelled) {
         setImage(result.uri);
+        setShowModal(true)
       }
     };
 
     const submitHandler = (e) => {
       e.preventDefault()
+      console.log('coba ditekan nih ya');
       console.log(status)
       console.log(description)
       console.log(image)
@@ -42,7 +47,7 @@ export default function WeatherForm (){
       <NativeBaseProvider>
       <Center flex={1} px="3">
         <Center w="100%">
-          <Box  safeArea p="2" w="90%" maxW="290" py="8">
+          <Box borderWidth={2} rounded="lg" safeArea p="2" w="90%" maxW="290" py="8">
             <Heading textAlign="center"  size="lg" color="coolGray.800" _dark={{
             color: "warmGray.50"
           }} fontWeight="semibold">
@@ -54,10 +59,11 @@ export default function WeatherForm (){
               silahkan isi pengaduan kamu disini
             </Heading>
             <VStack space={3} mt="5">
+            <Divider bg="#a1a1aa" thickness="1" />
     
               <FormControl>
                 <FormControl.Label>Status</FormControl.Label>
-                <Select selectedValue={status} onValueChange={(itemValue, itemIndex) => setStatus(itemValue)} minWidth="200" accessibilityLabel="Choose Service" placeholder="Choose Service" _selectedItem={{
+                <Select borderWidth={1} borderColor="black" bg="#f8fafc" selectedValue={status} onValueChange={(itemValue, itemIndex) => setStatus(itemValue)} minWidth="200" accessibilityLabel="Choose Service" placeholder="Choose Service" _selectedItem={{
                 bg: "teal.600",
                 endIcon: <CheckIcon size="5" />
               }} mt={1} >
@@ -68,24 +74,36 @@ export default function WeatherForm (){
 
               <FormControl>
                 <FormControl.Label   placeholder="Deskripsi">Deskripsi</FormControl.Label>
-                <TextArea  h={20} placeholder="Deskripsi" name="description" onChangeText={newText => setDescription(newText)} />
+                <TextArea borderWidth={1} borderColor="black" bg="#f8fafc" h={20} placeholder="Deskripsi" name="description" onChangeText={newText => setDescription(newText)} />
               </FormControl>
 
               <View justifyContent="center" alignItems="center">
                 <Button leftIcon={<Icon as={Ionicons} name="cloud-upload-outline" size="sm" />} mt="2" w="50%" colorScheme="indigo" title="Pick an image from camera roll" onPress={pickImage}> Upload Foto</Button>
-                  {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-
-                {
-                  image?
-                  <Button mt="2" w="50%" title="Pick an" onPress={ilanginFoto}>ilangin foto</Button>
-                  :
-                  <Text></Text>
-                }
-
 
               </View>
 
-              <Button mt="2" colorScheme="indigo" onPress = {submitHandler}>
+              <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+                <Modal.Content maxWidth="400px">
+                  <Modal.Header alignItems="center">Pilih gambar</Modal.Header>
+                  <Modal.Body>
+                  {image && <Image source={{ uri: image }} style={{ width: 300, height: 200 }} alt="image" />}
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button.Group space={2}>
+                      <Button variant="ghost" colorScheme="blueGray" onPress={ilanginFoto}>
+                        Cancel
+                      </Button>
+                      <Button onPress={() => {
+                      setShowModal(false);
+                    }}>
+                        Save
+                      </Button>
+                    </Button.Group>
+                  </Modal.Footer>
+                </Modal.Content>
+              </Modal>
+
+              <Button mt="2" colorScheme="orange" onPress = {submitHandler}>
                 Report
               </Button>
             </VStack>
