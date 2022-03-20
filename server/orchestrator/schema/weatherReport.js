@@ -4,6 +4,7 @@ const axios = require("axios");
 
 const typeDefs = gql`
   type weatherReport {
+    id: ID
     status: String
     description: String
     photoUrl: String

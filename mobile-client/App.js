@@ -11,11 +11,33 @@ import Home from './src/screens/Home';
 import LoginRouter from './src/navigation/LoginRouter';
 import GempaRouter from './src/navigation/EarthquakeRouter';
 import CuacaRouter from './src/navigation/WeatherRouter';
-import client from './lib/apollo/connection'
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
 
 const Drawer = createDrawerNavigator();
 export default function App() {
+  let [access_token, setAT] = useState(null)
+  
+  useEffect(() => {
+    AsyncStorage.getItem('access_token')
+      .then((resp) => {
+        console.log(resp, "<<<>>>")
+        setAT(resp)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [access_token])
+
+  const loginDrawer = () => {
+    if (!access_token){
+      return (
+        <Drawer.Screen name="LoginRouter" options={{title: 'Masuk', drawerIcon: () => {
+          return <MaterialCommunityIcons name="login" size={25} color="#fff" />
+        }}}  component={LoginRouter} />
+      )
+    }
+  }
   return (
     <ApolloProvider client={client}>
     <SSRProvider>
@@ -52,10 +74,10 @@ export default function App() {
             <Drawer.Screen name="CuacaRouter" options={{title: 'Cuaca', drawerIcon: () => {
               return <MaterialCommunityIcons name="weather-pouring" size={25} color="#fff" />
             }}}  component={CuacaRouter} />
-            <Drawer.Screen name="LoginRouter" options={{title: 'Masuk', drawerIcon: () => {
+            {/* <Drawer.Screen name="LoginRouter" options={{title: 'Masuk', drawerIcon: () => {
               return <MaterialCommunityIcons name="login" size={25} color="#fff" />
-            }}}  component={LoginRouter} />
-
+            }}}  component={LoginRouter} /> */}
+            {loginDrawer()}
           </Drawer.Navigator>
         </NavigationContainer>
       </NativeBaseProvider>

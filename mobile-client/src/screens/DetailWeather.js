@@ -6,7 +6,8 @@ import {Entypo,MaterialCommunityIcons,Feather} from 'react-native-vector-icons';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/queries/weatherQueries";
 import MapView, {Callout, Geojson, Marker }  from 'react-native-maps';
-
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function DetailWeather({navigation,route}) {
 
   const lat = route.params.lat
@@ -22,7 +23,31 @@ export default function DetailWeather({navigation,route}) {
   })
   
   const todayDate = new Date().toLocaleString('en-US', { hour: 'numeric', hour12: true })
+  let [access_token, setAT] = useState(null)
+  const getAccessToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem('access_token')
+      if(value !== null) {
+        console.log(value, "<----->")
+        setAT(value)
+      }
+    } catch(e) {
+      // error reading value
+    }
+  }
+  useEffect(() => {
+    getAccessToken()
+  }, [])
 
+  const pengaduanButton = () => {
+    if (access_token){
+      return (
+        <TouchableOpacity><Button style={{backgroundColor: "#22d3ee"}} mt="0"
+          onPress={() => navigation.navigate('FormCuaca')}
+        >Report Cuaca</Button></TouchableOpacity>
+      )
+    }
+  }
   if (error) {
     return <Center style ={{backgroundColor : "#fef3c7"}}>
       <Text>Something When Wrong</Text>
@@ -117,19 +142,13 @@ export default function DetailWeather({navigation,route}) {
                         <MaterialCommunityIcons name = "air-humidifier"><Text fontWeight="400" style={{marginStart: 10}}>
                             {data.fetchCurrentWeather.current.humidity} %</Text> </MaterialCommunityIcons>
                       </View>
-                      <TouchableOpacity><Button style={{backgroundColor: "#22d3ee"}} mt="0"
+                      {/* <TouchableOpacity><Button style={{backgroundColor: "#22d3ee"}} mt="0"
                         onPress={() => navigation.navigate('FormCuaca')}
-                      >Report Cuaca</Button></TouchableOpacity>
+                      >Report Cuaca</Button></TouchableOpacity> */}
+                      {pengaduanButton()}
                     </Stack>
                   </Box>
                 </Box>
-              <Box alignItems="center" mt="2">
-                <Box bg="#e2e8f0" rounded="lg">
-                  <Stack p="4" space={3}>
-                    <Button style={{backgroundColor: "#22d3ee"}} w="100%" onPress={() => navigation.navigate('FormCuaca')}>Pengaduan Pengguna</Button>
-                  </Stack>
-                </Box>
-              </Box>
             </View>
           )
         }

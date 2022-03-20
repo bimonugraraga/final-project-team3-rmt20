@@ -17,6 +17,13 @@ export default function Register( {navigation}) {
     }
   })
   console.log(loading, error, data, "<-->")
+  if (data) {
+    if (data.register.message === `${email} telah berhasil terdaftar`){
+      navigation.navigate('Masuk')
+    } else{
+      console.log(data)
+    }
+  }
   return (
     <NativeBaseProvider>
     <Center flex={1} px="3">
