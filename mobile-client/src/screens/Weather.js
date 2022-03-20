@@ -18,6 +18,11 @@ import { useQuery } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/queries/weatherQueries";
 import MapView, {Callout, Geojson, Marker }  from 'react-native-maps';
 import * as Location from 'expo-location';
+import CardWeatherJakarta from '../components/CardWeatherJakarta'
+import CardWeatherBandung from '../components/CardWeatherBandung'
+import CardWeatherYogyakarta from '../components/CardWeatherYogyakarta'
+import CardWeatherBali from '../components/CardWeatherBali'
+import CardWeatherLombok from "../components/CardWeatherLombok"
 
 export default function Weather({ navigation }) {
 
@@ -75,36 +80,6 @@ export default function Weather({ navigation }) {
   })
 
   // console.log(loading, error, data, "<--->")
-
-  const cuaca = {
-    lat: -6.0398,
-    lon: 107.2456,
-    timezone: "Asia/Jakarta",
-    current: {
-      dt: 1647478187,
-      sunrise: 1647471334,
-      sunset: 1647515010,
-      temp: 27.14,
-      feels_like: 29.65,
-      pressure: 1009,
-      humidity: 76,
-      dew_point: 22.54,
-      uvi: 3.1,
-      clouds: 100,
-      visibility: 10000,
-      wind_speed: 2.37,
-      wind_deg: 103,
-      wind_gust: 3.5,
-      weather: [
-        {
-          id: 804,
-          main: "Clouds",
-          description: "awan mendung",
-          icon: "http://openweathermap.org/img/wn/04d@2x.png",
-        },
-      ],
-    },
-  };
 
   if (error) {
     return <View style ={{backgroundColor : "#fef3c7"}}>
@@ -201,139 +176,11 @@ export default function Weather({ navigation }) {
           
             <Text style={{textAlign : "center", marginBottom: 5, fontSize: 23, fontWeight: "bold", color: "#525252" }}>Lokasi Lain</Text>
             <Center  px="3" >
-            <TouchableOpacity onPress={() => navigation.navigate("DetailCuaca")}>
-              <Box alignItems="center" style={styles.boxlokasilain}>
-                <Box
-                  maxW="80"
-                  rounded="lg"
-                  overflow="hidden"
-                  borderColor="coolGray.200"
-                  borderWidth="1"
-                  marginBottom= "5"
-                  _dark={{
-                    borderColor: "coolGray.600",
-                    backgroundColor: "gray.700",
-                  }}
-                  _web={{
-                    shadow: 2,
-                    borderWidth: 0,
-                  }}
-                  _light={{
-                    backgroundColor: "#22d3ee",
-                  }}
-                >
-                  <Stack p="4" space={3}>
-                    <Stack space={2}>
-                      <Heading size="md" ml="-1" color="white">
-                        {cuaca.timezone}
-                      </Heading>
-                    </Stack>
-                    <Box style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                      <AspectRatio w="30%" ratio={16 / 9}>
-                        <Image
-                          source={{ uri: cuaca.current.weather[0].icon }}
-                          alt="image"
-                        />
-                      </AspectRatio>
-                      <Text style={{fontSize: 21, fontWeight: "bold", color: "white"}}>{cuaca.current.temp}°C</Text>
-                    </Box>
-                    <View>
-                      <Text fontWeight="bold" color="#f0f9ff" marginBottom= "1.5">
-                        Terasa {cuaca.current.feels_like}°C. Kondisi: {cuaca.current.weather[0].description}
-                      </Text>
-                    </View>
-                  </Stack>
-                </Box>
-              </Box>
-              </TouchableOpacity>
-              
-              <Box alignItems="center"  >
-                <Box
-                  maxW="80"
-                  rounded="lg"
-                  overflow="hidden"
-                  borderColor="coolGray.200"
-                  borderWidth="1"
-                  marginBottom="5"
-                  _dark={{
-                    borderColor: "coolGray.600",
-                    backgroundColor: "gray.700",
-                  }}
-                  _web={{
-                    shadow: 2,
-                    borderWidth: 0,
-                  }}
-                  _light={{
-                    backgroundColor: "#22d3ee",
-                  }}
-                >
-                  <Stack p="4" space={3}>
-                    <Stack space={2}>
-                      <Heading size="md" ml="-1" color="white">
-                        {cuaca.timezone}
-                      </Heading>
-                    </Stack>
-                    <Box style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                      <AspectRatio w="30%" ratio={16 / 9}>
-                        <Image
-                          source={{ uri: cuaca.current.weather[0].icon }}
-                          alt="image"
-                        />
-                      </AspectRatio>
-                      <Text style={{fontSize: 21, fontWeight: "bold", color: "white"}}>{cuaca.current.temp}°C</Text>
-                    </Box>
-                    <View>
-                      <Text fontWeight="bold" color="#f0f9ff" marginBottom= "1.5">
-                        Terasa {cuaca.current.feels_like}°C. Kondisi: {cuaca.current.weather[0].description}
-                      </Text>
-                    </View>
-                  </Stack>
-                </Box>
-              </Box>
-              
-              <Box alignItems="center"  >
-                <Box
-                  maxW="80"
-                  rounded="lg"
-                  overflow="hidden"
-                  borderColor="coolGray.200"
-                  borderWidth="1"
-                  marginBottom="5"
-                  _dark={{
-                    borderColor: "coolGray.600",
-                    backgroundColor: "gray.700",
-                  }}
-                  _web={{
-                    shadow: 2,
-                    borderWidth: 0,
-                  }}
-                  _light={{
-                    backgroundColor: "#22d3ee",
-                  }}
-                >
-                  <Stack p="4" space={3}>
-                    <Stack space={2}>
-                      <Heading size="md" ml="-1" color="white">
-                        {cuaca.timezone}
-                      </Heading>
-                    </Stack>
-                    <Box style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                      <AspectRatio w="30%" ratio={16 / 9}>
-                        <Image
-                          source={{ uri: cuaca.current.weather[0].icon }}
-                          alt="image"
-                        />
-                      </AspectRatio>
-                      <Text style={{fontSize: 21, fontWeight: "bold", color: "white"}}>{cuaca.current.temp}°C</Text>
-                    </Box>
-                    <View>
-                      <Text fontWeight="bold" color="#f0f9ff" marginBottom= "1.5">
-                        Terasa {cuaca.current.feels_like}°C. Kondisi: {cuaca.current.weather[0].description}
-                      </Text>
-                    </View>
-                  </Stack>
-                </Box>
-              </Box>
+              <CardWeatherJakarta></CardWeatherJakarta>
+              <CardWeatherBandung></CardWeatherBandung>
+              <CardWeatherYogyakarta></CardWeatherYogyakarta>
+              <CardWeatherBali></CardWeatherBali>
+              <CardWeatherLombok></CardWeatherLombok>
             </Center>
           </NativeBaseProvider>
         )
