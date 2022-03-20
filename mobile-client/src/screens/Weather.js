@@ -17,8 +17,26 @@ import {
 import {Entypo} from 'react-native-vector-icons';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT } from "../../lib/apollo/queries/weatherQueries";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from "react";
+
 
 export default function Weather({ navigation }) {
+  
+const getData = async () => {
+  try {
+    const value = await AsyncStorage.getItem('access_token')
+    if(value !== null) {
+      console.log(value, "<----->")
+    }
+  } catch(e) {
+    // error reading value
+  }
+}
+
+  useEffect(() => {
+    getData()
+  }, [])
 
   let {loading, error, data} = useQuery(GET_ALL_WEATHERS_REPORT)
   console.log(loading, error, data, "<--->")
