@@ -65,7 +65,6 @@ const resolvers = {
           url: baseUrl + "autogempa.json",
         });
         const data = resp.data?.Infogempa.gempa;
-        console.log(data);
         const result = {
           date: data.Tanggal,
           hour: data.Jam,

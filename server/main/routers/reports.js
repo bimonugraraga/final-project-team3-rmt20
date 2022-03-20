@@ -9,6 +9,7 @@ router.get("/weathers", weatherReportController.getAllWeatherReport);
 
 router.get("/earthquakes", eqReportController.allEarthquakeReport);
 router.get("/earthquakes/:id", eqReportController.earthquakeReportById);
+router.delete("/earthquakes/:id", eqReportController.removeReport);
 
 //!Get One Weather report
 router.get("/weathers/:id", weatherReportController.getOneWeatherReport);

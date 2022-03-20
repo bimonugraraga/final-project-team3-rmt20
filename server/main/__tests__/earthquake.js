@@ -535,12 +535,16 @@ describe("Earthquake Reports /reports/earthquakes", () => {
   describe("DELETE", () => {
     it("200 success to delete report with access token", (done) => {
       request(app)
-        .post("/reports/earthquakes/1")
+        .delete("/reports/earthquakes/1")
         .set("access_token", validToken)
         .send(report)
         .end((err, res) => {
           if (err) done(err);
           const { body, status } = res;
+          console.log(
+            "🚀 ~ file: earthquake.js ~ line 544 ~ .end ~ body",
+            body
+          );
 
           expect(status).toBe(200);
           expect(body).toHaveProperty("message", "Report has been deleted");
