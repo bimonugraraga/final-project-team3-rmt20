@@ -1,19 +1,38 @@
 import React, { useState } from 'react'
 import { View} from 'react-native'
 import { Box, Text, Heading, VStack, FormControl, Input, Link, Button, HStack, Center, NativeBaseProvider } from "native-base";
+import { useMutation, useQuery } from '@apollo/client';
+import { USER_LOGIN } from '../../lib/apollo/queries/userQueries';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 export default function Login({navigation}) {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  
+  let [submitHandler = () => {
+  }, {loading, error, data}] = useMutation(USER_LOGIN, {
+    variables: {
+      email: email,
+      password: password
+    }
+  })
 
-  const submitHandler = (e) => {
-    e.preventDefault()
-    console.log('coba ditekan nih ya');
-    console.log(email);
-    console.log(password);
+  console.log(loading, error, data, "<-->")
+  if (data) {
+    AsyncStorage.setItem('access_token', data.login.access_token)
+      .then((resp) => {
+
+        console.log(resp, ">>>>>")
+      })
+
   }
 
+  
+
+  
   return (
 
     <NativeBaseProvider>

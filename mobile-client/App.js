@@ -9,8 +9,12 @@ import GempaRouter from './src/navigation/EarthquakeRouter';
 import CuacaRouter from './src/navigation/WeatherRouter';
 import CobaMap from './src/screens/CobaMap';
 import { ApolloProvider } from '@apollo/client';
+
+
+
 import client from './lib/apollo/connection'
 import CurrentLocation from './src/geoLocation/CurrentLocation'
+
 
 const Drawer = createDrawerNavigator();
 export default function App() {
@@ -34,6 +38,7 @@ export default function App() {
         </NavigationContainer>
       </NativeBaseProvider>
     </SSRProvider>
+
     </ApolloProvider>
   );
 }

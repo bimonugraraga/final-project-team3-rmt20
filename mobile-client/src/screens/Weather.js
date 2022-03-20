@@ -15,6 +15,11 @@ import {
 
 import {Entypo} from 'react-native-vector-icons';
 import { useQuery } from '@apollo/client';
+
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/queries/weatherQueries";
 import MapView, {Callout, Geojson, Marker }  from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -24,7 +29,23 @@ import CardWeatherYogyakarta from '../components/CardWeatherYogyakarta'
 import CardWeatherBali from '../components/CardWeatherBali'
 import CardWeatherLombok from "../components/CardWeatherLombok"
 
+
 export default function Weather({ navigation }) {
+  
+const getData = async () => {
+  try {
+    const value = await AsyncStorage.getItem('access_token')
+    if(value !== null) {
+      console.log(value, "<----->")
+    }
+  } catch(e) {
+    // error reading value
+  }
+}
+
+  useEffect(() => {
+    getData()
+  }, [])
 
   // let {loading, error, data} = useQuery(GET_ALL_WEATHERS_REPORT)
   // console.log(loading, error, data, "<--->")

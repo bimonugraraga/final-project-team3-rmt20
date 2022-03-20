@@ -23,6 +23,14 @@ export const GET_ALL_WEATHERS_REPORT = gql`
   }
 `
 
+export const POST_WEATHER_REPORT = gql`
+  mutation($data: NewWeatherReport){
+    createWeatherReport(data: $data) {
+      message
+    }
+  }
+`
+
 export const GET_CURRENT_WEATHER = gql `
   query FetchCurrentWeather($lat: Float, $lon: Float) {
     fetchCurrentWeather(lat: $lat, lon: $lon) {
