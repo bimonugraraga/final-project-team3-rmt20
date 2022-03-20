@@ -4,13 +4,12 @@ const axios = require("axios");
 
 const typeDefs = gql`
   type weatherDetailApi {
-    lat : Float
-    lon : Float
-    timezone : String
-    current : current
-    
+    lat: Float
+    lon: Float
+    timezone: String
+    current: current
   }
-  
+
   type current {
     dt: Int
     temp: Float
