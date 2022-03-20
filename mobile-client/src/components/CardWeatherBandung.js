@@ -1,5 +1,5 @@
 import React from "react"
-import {View, StyleSheet,ActivityIndicator} from 'react-native'
+import {View, StyleSheet,ActivityIndicator,Dimensions} from 'react-native'
 import { 
   Box,
   Heading,
@@ -14,7 +14,7 @@ import {
 import { useQuery } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/queries/weatherQueries";
 
-
+const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 export default function CardWeatherBandung (){
 
   let latJakarta = -6.200000
@@ -49,10 +49,11 @@ export default function CardWeatherBandung (){
 
   return (
     <View>
-     {
+      {
         loading ? <ActivityIndicator size="small" color="#0000ff" /> : (
         <Box alignItems="center" style={styles.boxlokasilain}>
         <Box
+          style = {styles.boxwidth}
           maxW="80"
           rounded="lg"
           overflow="hidden"
@@ -129,5 +130,8 @@ const styles = StyleSheet.create ({
 
     elevation: 24,
 
+  },
+  boxwidth : {
+    width: windowWidth * 0.9
   }
 })

@@ -11,7 +11,6 @@ import Home from './src/screens/Home';
 import LoginRouter from './src/navigation/LoginRouter';
 import GempaRouter from './src/navigation/EarthquakeRouter';
 import CuacaRouter from './src/navigation/WeatherRouter';
-import client from './lib/apollo/connection'
 
 
 const Drawer = createDrawerNavigator();
@@ -40,7 +39,8 @@ export default function App() {
               drawerLabelStyle: {
                 marginLeft: -25,
                 fontSize: 20
-              }
+              },
+              
           }}
           >
             <Drawer.Screen name="Home" options={{title: 'Beranda', drawerIcon: () => {

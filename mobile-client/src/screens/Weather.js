@@ -69,7 +69,7 @@ const getData = async () => {
       setCity(city);
     })();
   }, []);
-
+  
   let text = 'Waiting..';
   let lati = 0
   let long = 0
@@ -84,9 +84,6 @@ const getData = async () => {
     lati = location.coords.latitude
     long = location.coords.longitude
   }
-    // console.log(lati, 1)
-    // console.log(long, 2)
-    // console.log(city)
   const currentCity = citycur
   const currentDistrict = dis
   const lat = lati

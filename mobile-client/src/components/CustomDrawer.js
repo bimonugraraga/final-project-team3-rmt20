@@ -20,33 +20,17 @@ const CustomDrawer = (props) => {
         </View>
 
         <DrawerItemList {...props} />
-
-
-        <View>
-
-          <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: 40,
-            marginLeft: 20
-          }}
-          >
-            <AntDesign name="logout" size={25} color="#fff"/>
-            <Button size="lg" variant="ghost" colorScheme="orange"><Text fontSize={20} ml="-2" fontWeight="bold" color="#fff">Logout</Text></Button>
-          </View>
-          <View
-          style={{
-            alignItems: 'center',
-            marginTop: 250
-          }}
-          >
-            <Divider mb="2"></Divider>
-            <Text color="#fff" >Final Project Hactiv8 Team 3</Text>
-          </View>
-        
+        <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginTop: 40,
+          marginLeft: 20
+        }}
+        >
+          <AntDesign name="logout" size={25} color="#fff"/>
+          <Button size="lg" variant="ghost" colorScheme="orange"><Text fontSize={20} ml="-2" fontWeight="bold" color="#fff">Logout</Text></Button>
         </View>
-
 
       </DrawerContentScrollView>
     </View>
