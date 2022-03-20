@@ -11,6 +11,7 @@ import {
   HStack,
   Stack,
   NativeBaseProvider,
+  Spinner
 } from "native-base";
 
 import {Entypo} from 'react-native-vector-icons';
@@ -100,11 +101,16 @@ const getData = async () => {
     }
   })
 
-  // console.log(loading, error, data, "<--->")
+  console.log(loading, error, data, "<--->")
 
   if (error) {
     return <View style ={{backgroundColor : "#fef3c7"}}>
-      <Text>Something When Wrong</Text>
+      <NativeBaseProvider>
+        <Center flex={1} px="3">
+          <MaterialIcons name="error" size={30} />
+          <Text>Something Went Wrong</Text>
+        </Center>
+      </NativeBaseProvider>
     </View>
   }
 
@@ -113,9 +119,20 @@ const getData = async () => {
       <View style ={{backgroundColor : "#fef3c7"}}>
 
       {
-        loading ? <ActivityIndicator size="small" color="#0000ff" /> : (
+        loading ? <Center flex={1} px="3" style ={{backgroundColor : "#fef3c7"}}>
+              <HStack space={2} justifyContent="center">
+                <Spinner accessibilityLabel="Loading posts" />
+                <Heading color="emerald.500" fontSize="md">
+                  Loading
+                </Heading>
+              </HStack>
+            </Center> : (
           <NativeBaseProvider>
-            <Text style={{textAlign : "center", marginTop: 10, marginBottom: 5, fontSize: 23, fontWeight: "bold", color: "#525252" }}>Lokasi Saat Ini</Text>
+            <Center flex={1} px="3" bg="#fef3c7">
+              <Box mb="2" mt="2" width="100%" rounded="lg" bg="#14b8a6" justifyContent="center" alignItems="center" p="2" shadow={2}>
+                <Heading size="md" color="#fff">Lokasi Saat Ini</Heading>
+              </Box>
+            </Center>
             {/* <TouchableOpacity onPress={() => navigation.navigate("DetailCuaca")}> */}
             <Center px="3" style={styles.lokasisaatini} >
               <Box alignItems="center" style = {styles.boxcuacasataini}>
@@ -183,6 +200,7 @@ const getData = async () => {
                     <Button colorScheme='orange' mt="2" onPress={() => navigation.navigate("DetailCuaca", {
                       lat : data.fetchCurrentWeather.lat,
                       lon : data.fetchCurrentWeather.lon,
+                      // item : data.fetchCurrentWeather,
                       currentCity: currentCity,
                       currentDistrict : currentDistrict
                       })}>
@@ -195,7 +213,11 @@ const getData = async () => {
             </Center>
             {/* </TouchableOpacity> */}
           
-            <Text style={{textAlign : "center", marginBottom: 5, fontSize: 23, fontWeight: "bold", color: "#525252" }}>Lokasi Lain</Text>
+            <Center flex={1} px="3" bg="#fef3c7">
+              <Box mb="2" mt="2" width="100%" rounded="lg" bg="#14b8a6" justifyContent="center" alignItems="center" p="2" shadow={2}>
+                <Heading size="md" color="#fff">Lokasi Lain</Heading>
+              </Box>
+            </Center>
             <Center  px="3" >
               <CardWeatherJakarta></CardWeatherJakarta>
               <CardWeatherBandung></CardWeatherBandung>

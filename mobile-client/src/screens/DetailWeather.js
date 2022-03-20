@@ -1,13 +1,29 @@
-import react from 'react'
-import { View,TouchableOpacity,ActivityIndicator} from 'react-native'
+import React from 'react'
+import { View,TouchableOpacity,ActivityIndicator, StyleSheet,Dimensions,FlatList,ScrollView, RefreshControl, LogBox} from 'react-native'
 import { Button} from "native-base";
-import { Box, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider } from "native-base";
+import { Box, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider,Spinner } from "native-base";
 import {Entypo,MaterialCommunityIcons,Feather} from 'react-native-vector-icons';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/queries/weatherQueries";
 import MapView, {Callout, Geojson, Marker }  from 'react-native-maps';
+import CardReportUser from '../components/CardReportUser'
+
+const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
+
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 export default function DetailWeather({navigation,route}) {
+
+
+  // console.log(route.params)
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   const lat = route.params.lat
   const lon = route.params.lon
@@ -20,6 +36,11 @@ export default function DetailWeather({navigation,route}) {
       lon : lon
     }
   })
+
+  // console.log(loading, error, data, "<--->")
+
+  let {loading: loading2, error : error2, data: data2} = useQuery(GET_ALL_WEATHERS_REPORT)
+  // console.log(loading2, error2, data2, "<--->")
   
   const todayDate = new Date().toLocaleString('en-US', { hour: 'numeric', hour12: true })
 
@@ -29,15 +50,25 @@ export default function DetailWeather({navigation,route}) {
     </Center>
   }
 
+  const renderItem = ({ item }) => (
+    <CardReportUser item={item}/>
+  )
+
   return (
-    
+    <ScrollView nestedScrollEnabled={true}
+    refreshControl={
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+      />
+    }>
     <NativeBaseProvider >
       <Center flex={1} px="3" style ={{backgroundColor : "#fef3c7"}}>
         {
           loading ? <ActivityIndicator size="small" color="#0000ff" /> : (
-            <View>
-               <Box alignItems="center" >
-                  <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
+            <View style = {{marginBottom : 10}}> 
+               <Box alignItems="center" style={styles.boxlokasilain} mt="10">
+                  <Box mb= "5" maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
                     borderColor: "coolGray.600",
                     backgroundColor: "gray.700"
                   }} _web={{
@@ -118,30 +149,66 @@ export default function DetailWeather({navigation,route}) {
                             {data.fetchCurrentWeather.current.humidity} %</Text> </MaterialCommunityIcons>
                       </View>
                       <TouchableOpacity><Button style={{backgroundColor: "#22d3ee"}} mt="0"
-                        onPress={() => navigation.navigate('FormCuaca')}
+                        onPress={() => navigation.navigate('FormCuaca', {item: data.fetchCurrentWeather})}
                       >Report Cuaca</Button></TouchableOpacity>
                     </Stack>
                   </Box>
                 </Box>
-              <Box alignItems="center" mt="2">
-                <Box bg="#e2e8f0" rounded="lg">
-                  <Stack p="4" space={3}>
-                    <Button style={{backgroundColor: "#22d3ee"}} w="100%" onPress={() => navigation.navigate('FormCuaca')}>Pengaduan Pengguna</Button>
-                  </Stack>
-                </Box>
-              </Box>
+
+                <Center flex={1} px="3" bg="#fef3c7">
+                  <Box mb="2" width="100%" rounded="lg" bg="#14b8a6" justifyContent="center" alignItems="center" p="2" shadow={2}>
+                    <Heading size="md" color="#fff">Laporan Pengguna</Heading>
+                  </Box>
+                </Center>
+
+                {
+                  loading2 ?
+                  <Center flex={1} px="3">
+                    <HStack space={2} justifyContent="center">
+                      <Spinner accessibilityLabel="Loading posts" />
+                      <Heading color="emerald.500" fontSize="md">
+                        Loading
+                      </Heading>
+                    </HStack>
+                  </Center>
+                  :
+                  
+                  (
+                  <ScrollView horizontal={true} style={{ width: "100%" }}>
+                    <Center flex={1} px="2.5" bg="#ffedd5">
+                      <FlatList 
+                        data={data2.getWeatherReports}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.id}
+                        
+                      />
+                    </Center>
+                  </ScrollView>
+                  )
+        }
             </View>
           )
         }
       </Center>
     </NativeBaseProvider>
-   
-
-    // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    //   <Text>Detail Cuaca</Text>
-    //   <Button mt="2"
-    //     onPress={() => navigation.navigate('FormCuaca')}
-    //   >Report Cuaca</Button>
-    // </View>
+    </ScrollView>
   )
 }
+
+
+const styles = StyleSheet.create ({
+  boxlokasilain : {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.00,
+
+    elevation: 24,
+    marginBottom: 5,
+    width : windowWidth * 0.9
+
+  }
+})
