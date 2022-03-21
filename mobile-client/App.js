@@ -12,7 +12,6 @@ import LoginRouter from './src/navigation/LoginRouter';
 import GempaRouter from './src/navigation/EarthquakeRouter';
 import CuacaRouter from './src/navigation/WeatherRouter';
 
-
 const Drawer = createDrawerNavigator();
 export default function App() {
   return (

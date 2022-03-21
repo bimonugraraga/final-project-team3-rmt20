@@ -15,6 +15,7 @@ import { useQuery } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/queries/weatherQueries";
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
+
 export default function CardWeatherYogyakarta (){
 
   let latJakarta = -6.200000

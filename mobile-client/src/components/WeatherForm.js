@@ -3,13 +3,22 @@ import { Box, Divider, Modal, Icon, Heading, VStack, FormControl, Input, Button,
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from "@expo/vector-icons"
+import { useQuery,useMutation } from '@apollo/client';
+import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER,POST_WEATHER_REPORT  } from "../../lib/apollo/queries/weatherQueries";
 
-export default function WeatherForm (){
+
+export default function WeatherForm ({route,navigation}){
+
+  const {item} = route.params
+  // console.log(item)
+  // console.log(item.current.temp)
+  
 
     const [image, setImage] = useState(null);
     const [description,setDescription] = useState('')
     const [status,setStatus] = useState('')
     const [showModal, setShowModal] = useState(false)
+    // console.log(status, description)
     
 
     const ilanginFoto = (e) => {
@@ -35,14 +44,33 @@ export default function WeatherForm (){
       }
     };
 
-    const submitHandler = (e) => {
-      e.preventDefault()
-      console.log('coba ditekan nih ya');
-      console.log(status)
-      console.log(description)
-      console.log(image)
-    }
+     let [submitHandler = () => {
+      }, {loading, error, data}] = useMutation(POST_WEATHER_REPORT, {
+        variables: {
+          data :{
+            status : status ,
+            description : description ,
+            photoUrl : "https://www.borneonews.co.id/images/upload/wa/2022/01/28/1643369345-untitled-1.jpg", 
+            coordinate : `${item.lat},${item.lon}`, 
+            temperature : item.current.temp, 
+            uvi : item.current.uvi, 
+            pressure : item.current.pressure, 
+            humidity : item.current.humidity, 
+            windspeed : item.current.wind_speed, 
+            weatherMain :item.current.weather[0].main, 
+            weatherDesc :item.current.weather[0].description, 
+            weatherIcon :item.current.weather[0].icon, 
+            access_token : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTYsImVtYWlsIjoiYUBhLmNvbSIsImlhdCI6MTY0Nzc4NDg3MH0.w-4vbxAgq2acPj-bjXI7ilhdW7BSPldBVUtoSdmABP0"
+          }
+        }
+      })
 
+      // if (data){
+      //   if (data.createWeatherReport.message === "Laporan telah berhasil dibuat") {
+      //     navigation.navigate('DetailCuaca')
+      //   }
+      // }
+      // "message": "Laporan telah berhasil dibuat"
   return (
       <NativeBaseProvider>
       <Center flex={1} px="3">
