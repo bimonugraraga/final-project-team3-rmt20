@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Login({navigation}) {
-
+  // let navigate = navigation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   
@@ -24,8 +24,11 @@ export default function Login({navigation}) {
   if (data) {
     AsyncStorage.setItem('access_token', data.login.access_token)
       .then((resp) => {
-
-        console.log(resp, ">>>>>")
+        navigation.navigate('Home')
+        
+      })
+      .catch((err) => {
+        console.log(err, "<><><>")
       })
 
   }
