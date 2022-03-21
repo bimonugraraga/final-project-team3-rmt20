@@ -65,6 +65,7 @@ const resolvers = {
     createEqReports: async (_, args) => {
       try {
         let { status, description, photoUrl, coordinate, date, hour, dateTime, coordinates, magnitude, depth, area, dirasakan, potensi, shakeMap, access_token } = args.data;
+        console.log(args.data);
         // const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ1c2VyMkBtYWlsLmNvbSIsImlhdCI6MTY0NzY3OTAyNX0.rXAXb_rfw2wRVBEtc5X1n0mBoWrLUgcsR6lXPFKT1-Q";
         const resp = await axios({
           method: "POST",

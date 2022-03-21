@@ -4,11 +4,12 @@ const axios = require("axios");
 
 const typeDefs = gql`
   type weatherReport {
+    id : ID
     status: String
     description: String
     photoUrl: String
     coordinate: String
-    temp: Float
+    temperature: Float
     pressure: Int
     uvi: Float
     humidity: Int
@@ -18,6 +19,7 @@ const typeDefs = gql`
     weatherIcon: String
     User: User
     message: String
+    createdAt : String
   }
 
   type User {
@@ -29,7 +31,7 @@ const typeDefs = gql`
     description: String
     photoUrl: String
     coordinate: String
-    temp: Float
+    temperature: Float
     pressure: Int
     uvi: Float
     humidity: Int
@@ -85,6 +87,7 @@ const resolvers = {
   Mutation: {
     createWeatherReport: async (_, args) => {
       const { status, description, photoUrl, coordinate, temperature, uvi, pressure, humidity, windspeed, weatherMain, weatherDesc, weatherIcon, access_token } = args.data;
+      console.log(args, 34324)
       try {
         const resp = await axios({
           method: "POST",
