@@ -10,19 +10,21 @@ import { GET_GEMPA, GET_USER_REPORT_GEMPA } from "../../lib/apollo/queries/eqQue
 import { MaterialIcons } from "react-native-vector-icons";
 import { Svg, Image as ImageSvg } from "react-native-svg";
 
-export default function DetailGempa({ navigation }) {
-  const { loading, error, data } = useQuery(GET_GEMPA);
-  let coor;
-  let time;
-  let ltd;
-  let lng;
-  if (data.getRecentEarthquake) {
-    coor = data.getRecentEarthquake?.coordinates;
-    time = data.getRecentEarthquake?.dateTime;
-    const a = data.getRecentEarthquake?.coordinates;
-    const b = a.split(",");
-    ltd = Number(b[0]);
-    lng = Number(b[1]);
+
+export default function DetailGempa({navigation}) {
+
+  const { loading, error, data } = useQuery(GET_GEMPA)
+  let coor
+  let time
+  let ltd
+  let lng
+  if(data.getRecentEarthquake) {
+    coor = data.getRecentEarthquake?.coordinates
+    time = data.getRecentEarthquake?.dateTime
+    const a =  data.getRecentEarthquake?.coordinates
+    const b = a.split(',')
+    ltd = Number(b[0])
+    lng = Number(b[1])
   }
 
   const {
@@ -31,12 +33,12 @@ export default function DetailGempa({ navigation }) {
     data: data1,
   } = useQuery(GET_USER_REPORT_GEMPA, {
     variables: {
-      coordinates: coor,
-      dateTime: time,
-      // coordinates: "-6.93,105.37",
+      coordinates: coor, 
+      dateTime: time
+      // coordinates: "-6.93,105.37", 
       // dateTime: "2022-03-19 21:10:16.000 +0700"
-    },
-  });
+    }
+  })
 
   let markers;
   if (data1) {
@@ -118,7 +120,6 @@ export default function DetailGempa({ navigation }) {
                       <Text>Pusat Gempa</Text>
                     </Callout>
                   </Marker>
-
                   {markers?.map((marker, index) => (
                     <Marker
                       key={index}
@@ -144,10 +145,10 @@ export default function DetailGempa({ navigation }) {
                       </Callout>
                     </Marker>
                   ))}
-                </MapView>
-              )}
-            </AspectRatio>
-          </Box>
+              </MapView>
+            }
+          </AspectRatio>
+        </Box>
 
           <Box alignItems="center" mt="2">
             <Box
