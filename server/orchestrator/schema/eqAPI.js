@@ -1,6 +1,8 @@
 const { gql } = require("apollo-server");
-
 const axios = require("axios");
+const Queue = require("bull");
+
+const eqQueue = new Queue("feltEarthquakes", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
 
 const typeDefs = gql`
   type earthQuake {
@@ -65,7 +67,6 @@ const resolvers = {
           url: baseUrl + "autogempa.json",
         });
         const data = resp.data?.Infogempa.gempa;
-        console.log(data);
         const result = {
           date: data.Tanggal,
           hour: data.Jam,
@@ -80,6 +81,12 @@ const resolvers = {
           dirasakan: data.Dirasakan,
           shakemap: data.Shakemap,
         };
+        // const cacheItem = await redis.get("recentEarthquakes");
+        // if (cacheItem) {
+        //   const item = JSON.parse(cacheItem);
+        //   // console.log(cacheItem);
+        // }
+        console.log(result);
         return result;
       } catch (error) {
         return error.response.data;
@@ -87,6 +94,24 @@ const resolvers = {
     },
   },
 };
+
+// console.log(resolvers.Query.getEarthQuakes());
+// resolvers.Query.getEarthQuakes.add()
+
+eqQueue.process(async () => {
+  return await resolvers.Query.getRecentEarthquake();
+  // console.log(job, "masuk");
+  // return await resolvers.Query.getEarthQuakes()
+});
+eqQueue.add(
+  {},
+  {
+    repeat: {
+      every: 60000,
+      // limit: 10,
+    },
+  }
+);
 
 module.exports = {
   typeDefs,

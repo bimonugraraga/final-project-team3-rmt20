@@ -14,6 +14,8 @@ import CuacaRouter from './src/navigation/WeatherRouter';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 
+
+
 const Drawer = createDrawerNavigator();
 export default function App() {
   let [access_token, setAT] = useState(null)

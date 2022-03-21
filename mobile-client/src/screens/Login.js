@@ -34,8 +34,6 @@ export default function Login({navigation}) {
   }
 
   
-
-  
   return (
 
     <NativeBaseProvider>
