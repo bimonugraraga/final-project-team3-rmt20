@@ -6,8 +6,6 @@ import {Entypo,MaterialCommunityIcons,Feather} from 'react-native-vector-icons';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/queries/weatherQueries";
 import MapView, {Callout, Geojson, Marker }  from 'react-native-maps';
-import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import CardReportUser from '../components/CardReportUser'
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
@@ -45,31 +43,7 @@ export default function DetailWeather({navigation,route}) {
   // console.log(loading2, error2, data2, "<--->")
   
   const todayDate = new Date().toLocaleString('en-US', { hour: 'numeric', hour12: true })
-  let [access_token, setAT] = useState(null)
-  const getAccessToken = async () => {
-    try {
-      const value = await AsyncStorage.getItem('access_token')
-      if(value !== null) {
-        console.log(value, "<----->")
-        setAT(value)
-      }
-    } catch(e) {
-      // error reading value
-    }
-  }
-  useEffect(() => {
-    getAccessToken()
-  }, [])
 
-  const pengaduanButton = () => {
-    if (access_token){
-      return (
-        <TouchableOpacity><Button style={{backgroundColor: "#22d3ee"}} mt="0"
-          onPress={() => navigation.navigate('FormCuaca')}
-        >Report Cuaca</Button></TouchableOpacity>
-      )
-    }
-  }
   if (error) {
     return <Center style ={{backgroundColor : "#fef3c7"}}>
       <Text>Something When Wrong</Text>
@@ -174,13 +148,44 @@ export default function DetailWeather({navigation,route}) {
                         <MaterialCommunityIcons name = "air-humidifier"><Text fontWeight="400" style={{marginStart: 10}}>
                             {data.fetchCurrentWeather.current.humidity} %</Text> </MaterialCommunityIcons>
                       </View>
-                      {/* <TouchableOpacity><Button style={{backgroundColor: "#22d3ee"}} mt="0"
-                        onPress={() => navigation.navigate('FormCuaca')}
-                      >Report Cuaca</Button></TouchableOpacity> */}
-                      {pengaduanButton()}
+                      <TouchableOpacity><Button style={{backgroundColor: "#22d3ee"}} mt="0"
+                        onPress={() => navigation.navigate('FormCuaca', {item: data.fetchCurrentWeather})}
+                      >Report Cuaca</Button></TouchableOpacity>
                     </Stack>
                   </Box>
                 </Box>
+
+                <Center flex={1} px="3" bg="#fef3c7">
+                  <Box mb="2" width="100%" rounded="lg" bg="#14b8a6" justifyContent="center" alignItems="center" p="2" shadow={2}>
+                    <Heading size="md" color="#fff">Laporan Pengguna</Heading>
+                  </Box>
+                </Center>
+
+                {
+                  loading2 ?
+                  <Center flex={1} px="3">
+                    <HStack space={2} justifyContent="center">
+                      <Spinner accessibilityLabel="Loading posts" />
+                      <Heading color="emerald.500" fontSize="md">
+                        Loading
+                      </Heading>
+                    </HStack>
+                  </Center>
+                  :
+                  
+                  (
+                  <ScrollView horizontal={true} style={{ width: "100%" }}>
+                    <Center flex={1} px="2.5" bg="#ffedd5">
+                      <FlatList 
+                        data={data2.getWeatherReports}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.id}
+                        
+                      />
+                    </Center>
+                  </ScrollView>
+                  )
+        }
             </View>
           )
         }
