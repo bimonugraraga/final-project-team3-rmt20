@@ -93,8 +93,8 @@ const CustomDrawer = (props) => {
             <Text color="#fff" >Final Project Hactiv8 Team 3</Text>
           </View>
         
-        </View>
 
+        </View>
 
       </DrawerContentScrollView>
     </View>

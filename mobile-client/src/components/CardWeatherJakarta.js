@@ -51,7 +51,7 @@ export default function CardWeatherJakarta (){
 
   return (
     <View>
-     {
+      {
         loading ? <ActivityIndicator size="small" color="#0000ff" /> : (
         <Box alignItems="center" style={styles.boxlokasilain}>
         <Box
