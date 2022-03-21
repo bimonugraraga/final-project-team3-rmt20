@@ -13,9 +13,13 @@ import {Svg, Image as ImageSvg} from 'react-native-svg';
 export default function DetailGempa({navigation}) {
 
   const { loading, error, data } = useQuery(GET_GEMPA)
+  let coor
+  let time
   let ltd
   let lng
   if(data.getRecentEarthquake) {
+    coor = data.getRecentEarthquake?.coordinates
+    time = data.getRecentEarthquake?.dateTime
     const a =  data.getRecentEarthquake?.coordinates
     const b = a.split(',')
     ltd = Number(b[0])
@@ -24,8 +28,10 @@ export default function DetailGempa({navigation}) {
 
   const { loading: loading1, error: error1, data: data1 } = useQuery(GET_USER_REPORT_GEMPA, {
     variables: {
-      coordinates: "-6.93,105.37", 
-      dateTime: "2022-03-19 21:10:16.000 +0700"
+      coordinates: coor, 
+      dateTime: time
+      // coordinates: "-6.93,105.37", 
+      // dateTime: "2022-03-19 21:10:16.000 +0700"
     }
   })
 
@@ -109,8 +115,8 @@ export default function DetailGempa({navigation}) {
                   >
                     <Callout><Text>Pusat Gempa</Text></Callout>
                   </Marker>
-
-                  {markers.map((marker, index) => (
+                  
+                  {markers?.map((marker, index) => (
                     <Marker
                       key={index}
                       coordinate={{ latitude : Number(marker.coordinate.split(',')[0]) , longitude : Number(marker.coordinate.split(',')[1]) }}
@@ -140,6 +146,9 @@ export default function DetailGempa({navigation}) {
                       </Callout>
                     </Marker>
                   ))}
+                    
+                
+                
               </MapView>
             }
           </AspectRatio>

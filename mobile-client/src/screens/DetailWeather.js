@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState,useEffect} from 'react'
 import { View,TouchableOpacity,ActivityIndicator, StyleSheet,Dimensions,FlatList,ScrollView, RefreshControl, LogBox} from 'react-native'
 import { Button} from "native-base";
 import { Box, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider,Spinner } from "native-base";
@@ -6,9 +6,8 @@ import {Entypo,MaterialCommunityIcons,Feather} from 'react-native-vector-icons';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/queries/weatherQueries";
 import MapView, {Callout, Geojson, Marker }  from 'react-native-maps';
-import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import CardReportUser from '../components/CardReportUser'
+import * as Location from 'expo-location';
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
@@ -20,6 +19,47 @@ export default function DetailWeather({navigation,route}) {
 
 
   // console.log(route.params)
+
+  const [location, setLocation] = useState(null);
+  const [city, setCity] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  useEffect(() => {
+    (async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Lowest });
+      setLocation(location);
+
+      let city = await Location.reverseGeocodeAsync({latitude : location.coords.latitude, longitude :location.coords.longitude});
+      setCity(city);
+    })();
+    }, []);
+    
+    let text = 'Waiting..';
+    let lati = 0
+    let long = 0
+    let citycur = ''
+    let dis = ''
+    if (errorMsg) {
+      text = errorMsg;
+    } else if (location && city) {
+      text = JSON.stringify(location);
+      citycur = city[0].city
+      dis = city[0].district
+      lati = location.coords.latitude
+      long = location.coords.longitude
+    }
+    const currentCity = citycur
+    const currentDistrict = dis
+    const lat = lati
+    const lon = long
+
+
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -27,10 +67,10 @@ export default function DetailWeather({navigation,route}) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const lat = route.params.lat
-  const lon = route.params.lon
-  const currentCity = route.params.currentCity
-  const currentDistrict = route.params.currentDistrict
+  // const lat = route.params.lat
+  // const lon = route.params.lon
+  // const currentCity = route.params.currentCity
+  // const currentDistrict = route.params.currentDistrict
   
   let {loading, error, data} = useQuery(GET_CURRENT_WEATHER, {
     variables: {
@@ -45,31 +85,7 @@ export default function DetailWeather({navigation,route}) {
   // console.log(loading2, error2, data2, "<--->")
   
   const todayDate = new Date().toLocaleString('en-US', { hour: 'numeric', hour12: true })
-  let [access_token, setAT] = useState(null)
-  const getAccessToken = async () => {
-    try {
-      const value = await AsyncStorage.getItem('access_token')
-      if(value !== null) {
-        console.log(value, "<----->")
-        setAT(value)
-      }
-    } catch(e) {
-      // error reading value
-    }
-  }
-  useEffect(() => {
-    getAccessToken()
-  }, [])
 
-  const pengaduanButton = () => {
-    if (access_token){
-      return (
-        <TouchableOpacity><Button style={{backgroundColor: "#22d3ee"}} mt="0"
-          onPress={() => navigation.navigate('FormCuaca')}
-        >Report Cuaca</Button></TouchableOpacity>
-      )
-    }
-  }
   if (error) {
     return <Center style ={{backgroundColor : "#fef3c7"}}>
       <Text>Something When Wrong</Text>
@@ -148,14 +164,23 @@ export default function DetailWeather({navigation,route}) {
                             {todayDate}
                           </Text>
                         </Stack>
-                        <AspectRatio w="30%" ratio={16 / 9}>
+                        {/* <AspectRatio w="30%" ratio={16 / 9}>
+                          <Image
+                            source={{ uri: `http://openweathermap.org/img/wn/${data.fetchCurrentWeather.current.weather[0].icon}@2x.png` }}
+                            alt="image"
+                          />
+                        </AspectRatio>
+                        <Text style={{fontSize: 17, fontWeight: "bold", color: "#1e293b", marginStart: 5}}>{data.fetchCurrentWeather.current.temp}°C</Text> */}
+                      </View>
+                      <View style ={{alignItems: "center"}}>
+                      <AspectRatio w="30%" ratio={16 / 9}>
                           <Image
                             source={{ uri: `http://openweathermap.org/img/wn/${data.fetchCurrentWeather.current.weather[0].icon}@2x.png` }}
                             alt="image"
                           />
                         </AspectRatio>
                         <Text style={{fontSize: 17, fontWeight: "bold", color: "#1e293b", marginStart: 5}}>{data.fetchCurrentWeather.current.temp}°C</Text>
-                      </View>
+                        </View>
                       <Text fontWeight="bold" color="#1e293b" marginBottom= "1.5" style= {{textAlign: "center"}}>
                           Terasa {data.fetchCurrentWeather.current.feels_like}°C. Kondisi: {data.fetchCurrentWeather.current.weather[0].description}</Text>
                       <View style= {{flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
@@ -174,13 +199,44 @@ export default function DetailWeather({navigation,route}) {
                         <MaterialCommunityIcons name = "air-humidifier"><Text fontWeight="400" style={{marginStart: 10}}>
                             {data.fetchCurrentWeather.current.humidity} %</Text> </MaterialCommunityIcons>
                       </View>
-                      {/* <TouchableOpacity><Button style={{backgroundColor: "#22d3ee"}} mt="0"
-                        onPress={() => navigation.navigate('FormCuaca')}
-                      >Report Cuaca</Button></TouchableOpacity> */}
-                      {pengaduanButton()}
+                      <TouchableOpacity><Button style={{backgroundColor: "#22d3ee"}} mt="0"
+                        onPress={() => navigation.navigate('FormCuaca', {item: data.fetchCurrentWeather})}
+                      >Report Cuaca</Button></TouchableOpacity>
                     </Stack>
                   </Box>
                 </Box>
+
+                <Center flex={1} px="3" bg="#fef3c7">
+                  <Box mb="2" width="100%" rounded="lg" bg="#14b8a6" justifyContent="center" alignItems="center" p="2" shadow={2}>
+                    <Heading size="md" color="#fff">Laporan Pengguna</Heading>
+                  </Box>
+                </Center>
+
+                {
+                  loading2 ?
+                  <Center flex={1} px="3">
+                    <HStack space={2} justifyContent="center">
+                      <Spinner accessibilityLabel="Loading posts" />
+                      <Heading color="emerald.500" fontSize="md">
+                        Loading
+                      </Heading>
+                    </HStack>
+                  </Center>
+                  :
+                  
+                  (
+                  <ScrollView horizontal={true} style={{ width: "100%" }}>
+                    <Center flex={1} px="2.5" bg="#ffedd5">
+                      <FlatList 
+                        data={data2.getWeatherReports}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.id}
+                        
+                      />
+                    </Center>
+                  </ScrollView>
+                  )
+        }
             </View>
           )
         }

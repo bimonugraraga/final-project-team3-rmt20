@@ -11,7 +11,8 @@ import {
   HStack,
   Stack,
   NativeBaseProvider,
-  Spinner
+  Spinner,
+  MaterialIcons
 } from "native-base";
 
 import {Entypo} from 'react-native-vector-icons';
@@ -98,7 +99,7 @@ const getData = async () => {
     }
   })
 
-  console.log(loading, error, data, "<--->")
+  // console.log(loading, error, data, "<--->")
 
   if (error) {
     return <View style ={{backgroundColor : "#fef3c7"}}>

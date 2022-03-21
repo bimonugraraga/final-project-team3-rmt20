@@ -5,9 +5,26 @@ import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from "@expo/vector-icons"
 import { useMutation } from '@apollo/client';
 import * as Location from 'expo-location';
-import { USER_REPORT_GEMPA } from '../../lib/apollo/queries/eqQuery';
+import { USER_REPORT_GEMPA,GET_USER_REPORT_GEMPA } from '../../lib/apollo/queries/eqQuery';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function FormGempa({route, navigation}) {
+
+  let [access_token, setAT] = useState(null)
+
+  useEffect(() => {
+    AsyncStorage.getItem('access_token')
+      .then((resp) => {
+        console.log(resp, "<<<>>>")
+        setAT(resp)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [access_token])
+
+
 
   const { item } = route.params
   const [image, setImage] = useState(null);
@@ -60,6 +77,14 @@ export default function FormGempa({route, navigation}) {
 
   let [submitHandler = () => {
   }, {loading, error, data}] = useMutation(USER_REPORT_GEMPA, {
+    refetchQueries : [
+      GET_USER_REPORT_GEMPA , {
+        variables : {
+          coordinates: item.coordinates, 
+          dateTime: item.dateTime
+        }
+      }
+    ] ,
     variables: {
       data : { 
         status : status, 
@@ -76,10 +101,18 @@ export default function FormGempa({route, navigation}) {
         dirasakan : item.dirasakan, 
         potensi : item.potensi, 
         shakeMap: item.shakeMap, 
-        access_token : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhYWFAYWFhLmNvbSIsImlhdCI6MTY0Nzc3MjI4Nn0.-xa0hWjHWmuHsil0fsEIVKQSxhrNhlVdjvr2BjlRzcA"
+        access_token : access_token
       }
     }
   })
+
+  if (data){
+    if (data.createEqReports.message === "Laporan telah berhasil dibuat") {
+      navigation.navigate('DetailGempa')
+    }
+  }
+
+  console.log(loading,error,data, "<<<<<<<<")
   
   return (
     <NativeBaseProvider>
