@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Box, Heading, VStack, FormControl, HStack, Input, Button, Center, NativeBaseProvider, Text, Link } from "native-base";
+import React, { useState, useEffect } from "react";
+import { Box, Heading, VStack, FormControl, HStack, Input, Button, Center, NativeBaseProvider, Text, Link} from "native-base";
 import { useMutation, useQuery } from '@apollo/client';
 import { USER_REGISTER } from "../../lib/apollo/queries/userQueries";
 
@@ -16,7 +16,8 @@ export default function Register( {navigation}) {
       password: password
     }
   })
-  console.log(loading, error, data, "<-->")
+ 
+  
   return (
     <NativeBaseProvider>
     <Center flex={1} px="3">
