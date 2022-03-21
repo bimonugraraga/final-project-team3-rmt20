@@ -126,5 +126,22 @@ describe("User Routes Test", () => {
           return done();
         });
     });
+
+    test("401 Failed login - should return error", (done) => {
+      request(app)
+        .post("/users/login")
+        .send({
+          email: "user.test@mail.com",
+          password: "salahpassword",
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(401);
+          expect(body).toHaveProperty("message", "Invalid email/password!");
+          return done();
+        });
+    });
   });
 });
