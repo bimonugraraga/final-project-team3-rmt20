@@ -13,7 +13,7 @@ import { MaterialIcons } from 'react-native-vector-icons';
 export default function Gempa({navigation}) {
 
   const { loading, error, data } = useQuery(GET_GEMPA)
-  console.log(loading, error, data)
+  
   let ltd
   let lng
   if(data) {
