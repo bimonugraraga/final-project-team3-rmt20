@@ -12,12 +12,10 @@ import * as Location from 'expo-location';
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
 const wait = (timeout) => {
-  return new Promise(resolve => setTimeout(resolve, timeout));
-}
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 
-export default function DetailWeather({navigation,route}) {
-
-
+export default function DetailWeather({ navigation, route }) {
   // console.log(route.params)
 
   const [location, setLocation] = useState(null);
@@ -74,72 +72,122 @@ export default function DetailWeather({navigation,route}) {
   
   let {loading, error, data} = useQuery(GET_CURRENT_WEATHER, {
     variables: {
-      lat : lat,
-      lon : lon
-    }
-  })
+      lat: lat,
+      lon: lon,
+    },
+  });
 
   // console.log(loading, error, data, "<--->")
 
-  let {loading: loading2, error : error2, data: data2} = useQuery(GET_ALL_WEATHERS_REPORT)
+  let { loading: loading2, error: error2, data: data2 } = useQuery(GET_ALL_WEATHERS_REPORT);
   // console.log(loading2, error2, data2, "<--->")
   
   const todayDate = new Date().toLocaleString('en-US', { hour: 'numeric', hour12: true })
 
   if (error) {
-    return <Center style ={{backgroundColor : "#fef3c7"}}>
-      <Text>Something When Wrong</Text>
-    </Center>
+    return (
+      <Center style={{ backgroundColor: "#fef3c7" }}>
+        <Text>Something When Wrong</Text>
+      </Center>
+    );
   }
 
-  const renderItem = ({ item }) => (
-    <CardReportUser item={item}/>
-  )
+  const renderItem = ({ item }) => <CardReportUser item={item} />;
 
   return (
-    <ScrollView nestedScrollEnabled={true}
-    refreshControl={
-      <RefreshControl
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-      />
-    }>
-    <NativeBaseProvider >
-      <Center flex={1} px="3" style ={{backgroundColor : "#fef3c7"}}>
-        {
-          loading ? <ActivityIndicator size="small" color="#0000ff" /> : (
-            <View style = {{marginBottom : 10}}> 
-               <Box alignItems="center" style={styles.boxlokasilain} mt="10">
-                  <Box mb= "5" maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
+    <ScrollView nestedScrollEnabled={true} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+      <NativeBaseProvider>
+        <Center flex={1} px="3" style={{ backgroundColor: "#fef3c7" }}>
+          {loading ? (
+            <ActivityIndicator size="small" color="#0000ff" />
+          ) : (
+            <View style={{ marginBottom: 10 }}>
+              <Box alignItems="center" style={styles.boxlokasilain} mt="10">
+                <Box
+                  mb="5"
+                  maxW="80"
+                  rounded="lg"
+                  overflow="hidden"
+                  borderColor="coolGray.200"
+                  borderWidth="1"
+                  _dark={{
                     borderColor: "coolGray.600",
-                    backgroundColor: "gray.700"
-                  }} _web={{
+                    backgroundColor: "gray.700",
+                  }}
+                  _web={{
                     shadow: 2,
-                    borderWidth: 0
-                  }} _light={{
-                    backgroundColor: "gray.50"
-                  }}>
-                    <Box style={{backgroundColor: "#22d3ee"}}>
-                      <AspectRatio w="100%" >
-                        <MapView
-                          initialRegion={{
+                    borderWidth: 0,
+                  }}
+                  _light={{
+                    backgroundColor: "gray.50",
+                  }}
+                >
+                  <Box style={{ backgroundColor: "#22d3ee" }}>
+                    <AspectRatio w="100%">
+                      <MapView
+                        initialRegion={{
+                          latitude: data.fetchCurrentWeather.lat,
+                          longitude: data.fetchCurrentWeather.lon,
+                          latitudeDelta: 0.0922,
+                          longitudeDelta: 0.0421,
+                        }}
+                      >
+                        <Marker
+                          coordinate={{
                             latitude: data.fetchCurrentWeather.lat,
                             longitude: data.fetchCurrentWeather.lon,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
                           }}
-                          >
-                          <Marker 
-                            coordinate={{
-                              latitude: data.fetchCurrentWeather.lat,
-                              longitude:  data.fetchCurrentWeather.lon,
-                            }}
-                            pinColor="red"
-                            >
-                            <Callout><Text>Lokasi Saat Ini</Text></Callout>
-                          </Marker>
-                        </MapView>
+                          pinColor="red"
+                        >
+                          <Callout>
+                            <Text>Lokasi Saat Ini</Text>
+                          </Callout>
+                        </Marker>
+                      </MapView>
+                    </AspectRatio>
+                    <Center
+                      bg="#3f3f46"
+                      _dark={{
+                        bg: "#3f3f46",
+                      }}
+                      _text={{
+                        color: "warmGray.50",
+                        fontWeight: "700",
+                        fontSize: "xs",
+                      }}
+                      position="absolute"
+                      bottom="0"
+                      px="3"
+                      py="1.5"
+                    >
+                      {data.fetchCurrentWeather.current.weather[0].description}
+                    </Center>
+                  </Box>
+                  <Stack p="4" space={3} style={{ backgroundColor: "#e2e8f0" }}>
+                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
+                      <Stack space={2}>
+                        <Heading size="md" ml="-1">
+                          {currentCity}, {currentDistrict}
+                        </Heading>
+                        <Text
+                          fontSize="xs"
+                          _light={{
+                            color: "violet.500",
+                          }}
+                          _dark={{
+                            color: "violet.400",
+                          }}
+                          fontWeight="500"
+                          ml="-0.5"
+                          mt="-1"
+                        >
+                          {todayDate}
+                        </Text>
+                      </Stack>
+                      <AspectRatio w="30%" ratio={16 / 9}>
+                        <Image source={{ uri: `http://openweathermap.org/img/wn/${data.fetchCurrentWeather.current.weather[0].icon}@2x.png` }} alt="image" />
                       </AspectRatio>
+
                       <Center bg="#3f3f46" _dark={{
                         bg: "#3f3f46"
                         }} _text={{
@@ -238,28 +286,25 @@ export default function DetailWeather({navigation,route}) {
                   )
         }
             </View>
-          )
-        }
-      </Center>
-    </NativeBaseProvider>
+          )}
+        </Center>
+      </NativeBaseProvider>
     </ScrollView>
-  )
+  );
 }
 
-
-const styles = StyleSheet.create ({
-  boxlokasilain : {
+const styles = StyleSheet.create({
+  boxlokasilain: {
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 12,
     },
     shadowOpacity: 0.58,
-    shadowRadius: 16.00,
+    shadowRadius: 16.0,
 
     elevation: 24,
     marginBottom: 5,
-    width : windowWidth * 0.9
-
-  }
-})
+    width: windowWidth * 0.9,
+  },
+});
