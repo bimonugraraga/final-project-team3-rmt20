@@ -9,6 +9,8 @@ import { USER_REPORT_GEMPA,GET_USER_REPORT_GEMPA } from '../../lib/apollo/querie
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import mime from "mime"
+
 export default function FormGempa({route, navigation}) {
 
   let [access_token, setAT] = useState(null)
@@ -32,6 +34,7 @@ export default function FormGempa({route, navigation}) {
   const [status, setStatus] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [location, setLocation] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -52,6 +55,32 @@ export default function FormGempa({route, navigation}) {
   if(location) {
     coor = `${location.coords.latitude},${location.coords.longitude} `
   }
+
+  let userCoor = coor
+
+  const cloudinaryUpload = (photo) => {
+    const data = new FormData();
+    data.append("file", photo);
+    data.append("upload_preset", "jwudmtq3");
+    data.append("cloud_name", "ridhasidi");
+    fetch(`https://api.cloudinary.com/v1_1/ridhasidi/image/upload`, {
+      method: "POST",
+      body: data,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setPhotoUrl(data.secure_url);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const ilanginFoto = (e) => {
     e.preventDefault()
     setShowModal(false)
@@ -70,8 +99,18 @@ export default function FormGempa({route, navigation}) {
     console.log(result);
 
     if (!result.cancelled) {
+      const uri = result.uri;
+      const arr = result.uri.split("/");
+      const type = mime.getType(arr[arr.length - 1]);
+      const newName = new Date().toISOString().split("T")[0] + "_" + arr[arr.length - 1];
+      const source = {
+        uri,
+        type,
+        name: newName,
+      };
       setImage(result.uri);
       setShowModal(true)
+      cloudinaryUpload(source);
     }
   };
 
@@ -89,8 +128,8 @@ export default function FormGempa({route, navigation}) {
       data : { 
         status : status, 
         description: description , 
-        photoUrl: image , 
-        coordinate : coor, 
+        photoUrl: photoUrl , 
+        coordinate : userCoor, 
         date : item.date, 
         hour : item.hour, 
         dateTime : item.dateTime, 
@@ -107,7 +146,7 @@ export default function FormGempa({route, navigation}) {
   })
 
   if (data){
-    if (data.createEqReports.message === "Laporan telah berhasil dibuat") {
+    if (data.createEqReports.message === "Laporan berhasil dibuat") {
       navigation.navigate('DetailGempa')
     }
   }

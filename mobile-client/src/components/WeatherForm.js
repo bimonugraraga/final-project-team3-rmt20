@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { useQuery,useMutation } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER,POST_WEATHER_REPORT  } from "../../lib/apollo/queries/weatherQueries";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import mime from "mime"
 
 export default function WeatherForm ({route,navigation}){
 
@@ -30,12 +31,36 @@ export default function WeatherForm ({route,navigation}){
   // console.log(item)
   // console.log(item.current.temp)
   
-
     const [image, setImage] = useState(null);
     const [description,setDescription] = useState('')
     const [status,setStatus] = useState('')
     const [showModal, setShowModal] = useState(false)
     // console.log(status, description)
+
+    const [photoUrl, setPhotoUrl] = useState("");
+
+    const cloudinaryUpload = (photo) => {
+      const data = new FormData();
+      data.append("file", photo);
+      data.append("upload_preset", "jwudmtq3");
+      data.append("cloud_name", "ridhasidi");
+      fetch(`https://api.cloudinary.com/v1_1/ridhasidi/image/upload`, {
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setPhotoUrl(data.secure_url);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
     
 
     const ilanginFoto = (e) => {
@@ -56,8 +81,18 @@ export default function WeatherForm ({route,navigation}){
       console.log(result);
 
       if (!result.cancelled) {
+        const uri = result.uri;
+        const arr = result.uri.split("/");
+        const type = mime.getType(arr[arr.length - 1]);
+        const newName = new Date().toISOString().split("T")[0] + "_" + arr[arr.length - 1];
+        const source = {
+          uri,
+          type,
+          name: newName,
+        };
         setImage(result.uri);
         setShowModal(true)
+        cloudinaryUpload(source);
       }
     };
 
@@ -70,7 +105,7 @@ export default function WeatherForm ({route,navigation}){
           data :{
             status : status ,
             description : description ,
-            photoUrl : "https://www.borneonews.co.id/images/upload/wa/2022/01/28/1643369345-untitled-1.jpg", 
+            photoUrl : photoUrl, 
             coordinate : `${item.lat},${item.lon}`, 
             temperature : item.current.temp, 
             uvi : item.current.uvi, 
