@@ -5,9 +5,26 @@ import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from "@expo/vector-icons"
 import { useQuery,useMutation } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER,POST_WEATHER_REPORT  } from "../../lib/apollo/queries/weatherQueries";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function WeatherForm ({route,navigation}){
+
+  // console.log(route, 1)
+  // console.log(navigation, 2)
+  // let {navigate} = props.navigation
+  let [access_token, setAT] = useState(null)
+
+  useEffect(() => {
+    AsyncStorage.getItem('access_token')
+      .then((resp) => {
+        console.log(resp, "<<<>>>")
+        setAT(resp)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [access_token])
+
 
   const {item} = route.params
   // console.log(item)
@@ -46,6 +63,9 @@ export default function WeatherForm ({route,navigation}){
 
      let [submitHandler = () => {
       }, {loading, error, data}] = useMutation(POST_WEATHER_REPORT, {
+        refetchQueries : [
+          GET_ALL_WEATHERS_REPORT
+        ] ,
         variables: {
           data :{
             status : status ,
@@ -60,16 +80,18 @@ export default function WeatherForm ({route,navigation}){
             weatherMain :item.current.weather[0].main, 
             weatherDesc :item.current.weather[0].description, 
             weatherIcon :item.current.weather[0].icon, 
-            access_token : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTYsImVtYWlsIjoiYUBhLmNvbSIsImlhdCI6MTY0Nzc4NDg3MH0.w-4vbxAgq2acPj-bjXI7ilhdW7BSPldBVUtoSdmABP0"
+            access_token : access_token
           }
         }
       })
+      console.log(loading,error,data, "<<<<<<<<")
 
-      // if (data){
-      //   if (data.createWeatherReport.message === "Laporan telah berhasil dibuat") {
-      //     navigation.navigate('DetailCuaca')
-      //   }
-      // }
+      if (data){
+        if (data.createWeatherReport.message === "Laporan telah berhasil dibuat") {
+          
+          navigation.navigate('DetailCuaca')
+        }
+      }
       // "message": "Laporan telah berhasil dibuat"
   return (
       <NativeBaseProvider>

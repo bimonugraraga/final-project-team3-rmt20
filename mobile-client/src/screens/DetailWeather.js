@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState,useEffect} from 'react'
 import { View,TouchableOpacity,ActivityIndicator, StyleSheet,Dimensions,FlatList,ScrollView, RefreshControl, LogBox} from 'react-native'
 import { Button} from "native-base";
 import { Box, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider,Spinner } from "native-base";
@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/queries/weatherQueries";
 import MapView, {Callout, Geojson, Marker }  from 'react-native-maps';
 import CardReportUser from '../components/CardReportUser'
+import * as Location from 'expo-location';
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
@@ -18,6 +19,47 @@ export default function DetailWeather({navigation,route}) {
 
 
   // console.log(route.params)
+
+  const [location, setLocation] = useState(null);
+  const [city, setCity] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  useEffect(() => {
+    (async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Lowest });
+      setLocation(location);
+
+      let city = await Location.reverseGeocodeAsync({latitude : location.coords.latitude, longitude :location.coords.longitude});
+      setCity(city);
+    })();
+    }, []);
+    
+    let text = 'Waiting..';
+    let lati = 0
+    let long = 0
+    let citycur = ''
+    let dis = ''
+    if (errorMsg) {
+      text = errorMsg;
+    } else if (location && city) {
+      text = JSON.stringify(location);
+      citycur = city[0].city
+      dis = city[0].district
+      lati = location.coords.latitude
+      long = location.coords.longitude
+    }
+    const currentCity = citycur
+    const currentDistrict = dis
+    const lat = lati
+    const lon = long
+
+
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -25,10 +67,10 @@ export default function DetailWeather({navigation,route}) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const lat = route.params.lat
-  const lon = route.params.lon
-  const currentCity = route.params.currentCity
-  const currentDistrict = route.params.currentDistrict
+  // const lat = route.params.lat
+  // const lon = route.params.lon
+  // const currentCity = route.params.currentCity
+  // const currentDistrict = route.params.currentDistrict
   
   let {loading, error, data} = useQuery(GET_CURRENT_WEATHER, {
     variables: {
@@ -122,14 +164,23 @@ export default function DetailWeather({navigation,route}) {
                             {todayDate}
                           </Text>
                         </Stack>
-                        <AspectRatio w="30%" ratio={16 / 9}>
+                        {/* <AspectRatio w="30%" ratio={16 / 9}>
+                          <Image
+                            source={{ uri: `http://openweathermap.org/img/wn/${data.fetchCurrentWeather.current.weather[0].icon}@2x.png` }}
+                            alt="image"
+                          />
+                        </AspectRatio>
+                        <Text style={{fontSize: 17, fontWeight: "bold", color: "#1e293b", marginStart: 5}}>{data.fetchCurrentWeather.current.temp}°C</Text> */}
+                      </View>
+                      <View style ={{alignItems: "center"}}>
+                      <AspectRatio w="30%" ratio={16 / 9}>
                           <Image
                             source={{ uri: `http://openweathermap.org/img/wn/${data.fetchCurrentWeather.current.weather[0].icon}@2x.png` }}
                             alt="image"
                           />
                         </AspectRatio>
                         <Text style={{fontSize: 17, fontWeight: "bold", color: "#1e293b", marginStart: 5}}>{data.fetchCurrentWeather.current.temp}°C</Text>
-                      </View>
+                        </View>
                       <Text fontWeight="bold" color="#1e293b" marginBottom= "1.5" style= {{textAlign: "center"}}>
                           Terasa {data.fetchCurrentWeather.current.feels_like}°C. Kondisi: {data.fetchCurrentWeather.current.weather[0].description}</Text>
                       <View style= {{flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
