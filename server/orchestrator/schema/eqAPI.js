@@ -1,8 +1,11 @@
 const { gql } = require("apollo-server");
 const axios = require("axios");
 const Queue = require("bull");
+const { redis } = require("../config/connectRedis");
 
 const eqQueue = new Queue("feltEarthquakes", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
+const sendEqNotif = new Queue("notif", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
+const mockNotif = new Queue("mockNotif", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
 
 const typeDefs = gql`
   type earthQuake {
@@ -22,10 +25,13 @@ const typeDefs = gql`
   type Query {
     getEarthQuakes: [earthQuake]
     getRecentEarthquake: earthQuake
+    newEarthquakeNotif: earthQuake
+    mockupNotif: message
   }
 `;
 
 const baseUrl = "https://data.bmkg.go.id/DataMKG/TEWS/";
+let recentEq;
 
 const resolvers = {
   Query: {
@@ -81,34 +87,65 @@ const resolvers = {
           dirasakan: data.Dirasakan,
           shakemap: data.Shakemap,
         };
-        // const cacheItem = await redis.get("recentEarthquakes");
-        // if (cacheItem) {
-        //   const item = JSON.parse(cacheItem);
-        //   // console.log(cacheItem);
-        // }
-        console.log(result);
+        // console.log("<<<<<<<<<<<");
+        recentEq = result;
         return result;
       } catch (error) {
         return error.response.data;
       }
     },
+
+    newEarthquakeNotif: async () => {
+      const cacheEq = await redis.get("recentEarthquake");
+      const eq = JSON.parse(cacheEq);
+      return eq;
+    },
+    mockupNotif: async () => {
+      return {
+        message: "Gempa baru!",
+      };
+    },
   },
 };
 
-// console.log(resolvers.Query.getEarthQuakes());
-// resolvers.Query.getEarthQuakes.add()
-
 eqQueue.process(async () => {
   return await resolvers.Query.getRecentEarthquake();
-  // console.log(job, "masuk");
-  // return await resolvers.Query.getEarthQuakes()
 });
-eqQueue.add(
+
+sendEqNotif.process(async () => {
+  const cacheEq = await redis.get("recentEarthquake");
+  const eq = JSON.parse(cacheEq);
+  if (recentEq.dateTime !== eq.dateTime) {
+    console.log(recentEq, eq);
+    await redis.set("recentEarthquake", JSON.stringify(recentEq));
+    return await resolvers.Query.newEqNotif();
+  }
+});
+
+mockNotif.process(async () => {
+  return await resolvers.Query.mockupNotif();
+});
+
+mockNotif.add(
   {},
   {
     repeat: {
       every: 60000,
-      // limit: 10,
+    },
+  }
+);
+
+sendEqNotif.add(recentEq, {
+  repeat: {
+    every: 60000,
+  },
+});
+
+eqQueue.add(
+  {},
+  {
+    repeat: {
+      every: 59000,
     },
   }
 );
