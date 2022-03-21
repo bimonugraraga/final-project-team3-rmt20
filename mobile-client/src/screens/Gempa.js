@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ScrollView, FlatList} from 'react-native'
+import { View, ScrollView, FlatList, LogBox} from 'react-native'
 import { Box, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider, Button, Divider, Flex, Spinner} from "native-base";
 import { useEffect, useState } from 'react';
 import {Feather, Ionicons} from 'react-native-vector-icons';
@@ -62,7 +62,7 @@ export default function Gempa({navigation}) {
         :
         
     
-      <ScrollView>
+      <ScrollView nestedScrollEnabled={true} style={{ width: "100%" }}>
       <Center flex={1} px="3" bg="#ffedd5">
 
         <Box mb="2" mt="2" width="100%" rounded="lg" bg="primary.500" alignItems="center" p="2" shadow={2}>
@@ -150,11 +150,15 @@ export default function Gempa({navigation}) {
             </HStack>
           </Center>
           :
-          <FlatList
-            data={data2.getEarthQuakes}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.dateTime}
-          />
+          <ScrollView horizontal={true}>
+            <Center flex={1} px="2.5" bg="#ffedd5">
+              <FlatList
+                data={data2.getEarthQuakes}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.dateTime}
+                />
+              </Center>
+          </ScrollView>
 
         }
 
@@ -165,3 +169,5 @@ export default function Gempa({navigation}) {
     </NativeBaseProvider>
   )
 }
+
+// LogBox.ignoreLogs(["VirtualizedLists should never be nested"])

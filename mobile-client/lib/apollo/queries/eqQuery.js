@@ -37,3 +37,26 @@ export const GET_ALL_GEMPA = gql`
     }
   }
 `
+
+export const USER_REPORT_GEMPA = gql`
+  mutation($data: NewEqReport) {
+    createEqReports(data: $data) {
+      message
+    }
+  }
+`
+
+export const GET_USER_REPORT_GEMPA = gql`
+  query($dateTime: String, $coordinates: String){
+    getEqReports(dateTime: $dateTime, coordinates: $coordinates) {
+      id
+      status
+      description
+      photoUrl
+      coordinate
+      User {
+        email
+      }
+    }
+  }
+`
