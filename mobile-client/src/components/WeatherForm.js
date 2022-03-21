@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { useQuery,useMutation } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER,POST_WEATHER_REPORT  } from "../../lib/apollo/queries/weatherQueries";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import mime from "mime"
+const mime = require("mime");
 
 export default function WeatherForm ({route,navigation}){
 
