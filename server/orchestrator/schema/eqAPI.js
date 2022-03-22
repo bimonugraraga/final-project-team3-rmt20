@@ -3,11 +3,8 @@ const axios = require("axios");
 const Queue = require("bull");
 const { redis } = require("../config/connectRedis");
 const userMongoDb = require("./userMongoDb");
-// const
 
-// const eqQueue = new Queue("feltEarthquakes", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
 const sendEqNotif = new Queue("notif", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
-// const mockNotif = new Queue("mockNotif", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
 
 const typeDefs = gql`
   type earthQuake {
@@ -60,7 +57,6 @@ const resolvers = {
         });
         return result;
       } catch (error) {
-        // console.log(error);
         return error.response.data;
       }
     },
@@ -91,24 +87,8 @@ const resolvers = {
         return error.response.data;
       }
     },
-    // newEarthquakeNotif: async () => {
-    //   const cacheEq = await redis.get("recentEarthquake");
-    //   const eq = JSON.parse(cacheEq);
-    //   return eq;
-    // },
-    // mockupNotif: async () => {
-    //   return {
-    //     message: "Gempa baru!",
-    //   };
-    // },
   },
 };
-
-// eqQueue.process(async () => {
-//   const result = await resolvers.Query.getRecentEarthquake();
-//   console.log(result);
-//   return await resolvers.Query.getRecentEarthquake();
-// });
 
 sendEqNotif.process(async () => {
   const recentEq = await resolvers.Query.getRecentEarthquake();
@@ -119,16 +99,19 @@ sendEqNotif.process(async () => {
     console.log(recentEq, eq);
     await redis.set("recentEarthquake", JSON.stringify(recentEq));
     // get user data
-    const user = await userMongoDb.resolvers.Query.getAllMongoUsers();
+    const users = await userMongoDb.resolvers.Query.getAllMongoUsers();
+    let expoTokens = users.map((el) => {
+      return el.expoToken;
+    });
     // send notif
     // harusnya kirim recent earthquake
     let message = {
-      to: user.expoToken,
+      to: expoTokens,
       sound: "default",
-      title: "Ramalan cuaca hari ini",
-      body: "Ini masih trial",
+      title: "Info Gempa",
+      body: `Gempa bermagnitude ${recentEq.magnitude}. ${recentEq.area}. Potensi: ${recentEq.potensi}`,
     };
-    await axios({
+    return axios({
       method: "POST",
       url: expoUrl,
       headers: {
@@ -138,22 +121,8 @@ sendEqNotif.process(async () => {
       },
       data: JSON.stringify(message),
     });
-    // return await resolvers.Query.newEqNotif();
   }
 });
-
-// mockNotif.process(async () => {
-//   return await resolvers.Query.mockupNotif();
-// });
-
-// mockNotif.add(
-//   {},
-//   {
-//     repeat: {
-//       every: 60000,
-//     },
-//   }
-// );
 
 sendEqNotif.add(
   {},
@@ -163,15 +132,6 @@ sendEqNotif.add(
     },
   }
 );
-
-// eqQueue.add(
-//   {},
-//   {
-//     repeat: {
-//       every: 59000,
-//     },
-//   }
-// );
 
 module.exports = {
   typeDefs,
