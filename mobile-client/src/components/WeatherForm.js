@@ -14,6 +14,7 @@ export default function WeatherForm ({route,navigation}){
   // console.log(navigation, 2)
   // let {navigate} = props.navigation
   let [access_token, setAT] = useState(null)
+  console.log(access_token, 'dari form gempa');
 
   useEffect(() => {
     AsyncStorage.getItem('access_token')
@@ -187,7 +188,6 @@ export default function WeatherForm ({route,navigation}){
 
               <View justifyContent="center" alignItems="center">
                 <Button leftIcon={<Icon as={Ionicons} name="cloud-upload-outline" size="sm" />} mt="2" w="50%" colorScheme="indigo" title="Pick an image from camera roll" onPress={pickImage}>
-                  {" "}
                   Upload Foto
                 </Button>
                 {image ? (

@@ -9,6 +9,7 @@ import { formatDistance, subHours } from "date-fns";
 import { MaterialIcons, Ionicons, FontAwesome5, Feather, Entypo, MaterialCommunityIcons } from "react-native-vector-icons";
 import { useEffect, useState } from "react";
 import * as Location from 'expo-location';
+import ModalForm from '../components/Modal';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -20,7 +21,6 @@ const wait = (timeout) => {
 export default function Home() {
 
   const [shouldShow, setShouldShow] = useState(false)
-
   const { loading, error, data } = useQuery(GET_GEMPA)
 
   let ltd
@@ -31,7 +31,6 @@ export default function Home() {
     ltd = Number(b[0])
     lng = Number(b[1])
   }
-  console.log(ltd, lng);
 
   const [location, setLocation] = useState(null);
   const [city, setCity] = useState(null);
@@ -116,6 +115,8 @@ export default function Home() {
       </Center> 
         :
       <Center flex={1} >
+        <ModalForm/>
+
         <Box position="absolute">
           <AspectRatio w="100%" ratio={windowWidth / windowHeight }>
             <MapView

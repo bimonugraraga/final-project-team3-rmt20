@@ -86,7 +86,7 @@ export default function App() {
                 <Drawer.Screen
                   name="Home"
                   options={{
-                    title: "Beranda",
+                    title: "AlertMe!",
                     drawerIcon: () => {
                       return <Ionicons name="home" size={25} color="#fff" />;
                     },
