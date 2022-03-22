@@ -16,7 +16,15 @@ import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
-export default function CardWeatherYogyakarta (){
+const LinearGradient = require("expo-linear-gradient").LinearGradient;
+
+const config = {
+  dependencies: {
+    "linear-gradient": LinearGradient
+  }
+};
+
+export default function CardWeatherJakarta (){
 
   let latJakarta = -6.200000
   let lonJakarta = 106.816666
@@ -27,8 +35,8 @@ export default function CardWeatherYogyakarta (){
   let latYogyakarta = -7.797068
   let lonYogyakarta = 110.370529
 
-  let latYSurabaya = -7.250445
-  let lonSurabaya = 112.768845
+  let latYLombok = -8.650979
+  let lonLombok = 116.324944
 
   let latBali = -8.409518
   let lonBali = 115.188919
@@ -49,9 +57,11 @@ export default function CardWeatherYogyakarta (){
   }
 
   return (
-    <View>
+    <NativeBaseProvider config={config}>
+    <Center flex={1}  px="3" >
       {
         loading ? <ActivityIndicator size="small" color="#0000ff" /> : (
+        
         <Box alignItems="center" style={styles.boxlokasilain}>
         <Box
           style = {styles.boxwidth}
@@ -62,16 +72,16 @@ export default function CardWeatherYogyakarta (){
           borderColor="coolGray.200"
           borderWidth="1"
           marginBottom= "5"
-          _dark={{
-            borderColor: "coolGray.600",
-            backgroundColor: "gray.700",
-          }}
-          _web={{
-            shadow: 2,
-            borderWidth: 0,
-          }}
-          _light={{
-            backgroundColor: "#06b6d4",
+          bg={{
+            linearGradient: {
+              colors: ["#191645", "#43C6AC"],
+              start: [0, 0],
+              end: [0, 1]
+            }
+          }}   _text={{
+            fontSize: "md",
+            fontWeight: "bold",
+            color: "white"
           }}
         >
           <Stack p="4" space={3}>
@@ -98,8 +108,8 @@ export default function CardWeatherYogyakarta (){
         </Box>
         </Box>
         )}
-    
-    </View>
+    </Center>
+  </NativeBaseProvider>
   )
 }
 
@@ -134,6 +144,7 @@ const styles = StyleSheet.create ({
 
   },
   boxwidth : {
-    width: windowWidth * 0.9
+    width: windowWidth * 0.9,
+    // height: windowHeight* 0.3
   }
 })

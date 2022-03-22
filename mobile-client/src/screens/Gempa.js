@@ -10,6 +10,14 @@ import { useQuery } from '@apollo/client';
 import { GET_GEMPA, GET_ALL_GEMPA } from '../../lib/apollo/queries/eqQuery';
 import { MaterialIcons } from 'react-native-vector-icons';
 
+const LinearGradient = require("expo-linear-gradient").LinearGradient;
+
+const config = {
+  dependencies: {
+    "linear-gradient": LinearGradient
+  }
+};
+
 export default function Gempa({navigation}) {
 
   const { loading, error, data } = useQuery(GET_GEMPA)
@@ -48,7 +56,7 @@ export default function Gempa({navigation}) {
   }
 
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider  config={config}>
 
       {
         loading ?
@@ -64,22 +72,25 @@ export default function Gempa({navigation}) {
         
     
       <ScrollView nestedScrollEnabled={true} style={{ width: "100%" }}>
-      <Center flex={1} px="3" bg="#ffedd5">
+      <Center flex={1} px="3" bg="#e4e4e7">
 
-        <Box mb="2" mt="2" width="100%" rounded="lg" bg="primary.500" alignItems="center" p="2" shadow={2}>
+        <Box mb="2" mt="2" width="100%" rounded="lg" bg="#191645" alignItems="center" p="2" shadow={2}>
           <Heading size="md" color="#fff">Gempa Terkini</Heading>
         </Box>
 
         <Box alignItems="center">
-          <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
-          borderColor: "coolGray.600",
-          backgroundColor: "gray.700"
-        }} _web={{
-          shadow: 2,
-          borderWidth: 0
-        }} _light={{
-          backgroundColor: "#14b8a6"
-        }}>
+          <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" 
+          bg={{
+            linearGradient: {
+              colors: ["#191645", "#43C6AC"],
+              start: [0, 0],
+              end: [0, 1]
+            }
+          }}   _text={{
+            fontSize: "md",
+            fontWeight: "bold",
+            color: "white"
+          }}>
             <Box borderWidth={2} borderColor="red.400">
             <AspectRatio w="100%" ratio={16/9}>
               <MapView
@@ -136,7 +147,7 @@ export default function Gempa({navigation}) {
         </Box>
 
 
-        <Box mt="5" mb="2" width="100%" rounded="lg" bg="primary.500" alignItems="center" p="2" shadow={2}>
+        <Box mt="5" mb="2" width="100%" rounded="lg" bg="#191645" alignItems="center" p="2" shadow={2}>
           <Heading size="md" color="#fff">Gempa Terakhir</Heading>
         </Box>
         
@@ -152,7 +163,7 @@ export default function Gempa({navigation}) {
           </Center>
           :
           <ScrollView horizontal={true}>
-            <Center flex={1} px="2.5" bg="#ffedd5">
+            <Center flex={1} px="2.5" bg="#e4e4e7">
               <FlatList
                 data={data2.getEarthQuakes}
                 renderItem={renderItem}

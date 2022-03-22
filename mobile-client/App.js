@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 
 import * as Notifications from 'expo-notifications'
 import * as Permissions from 'expo-permissions'
-
+import Gradient from './src/geoLocation/Gradient';
 const Drawer = createDrawerNavigator();
 export default function App() {
   let [access_token, setAT] = useState(null)
@@ -93,6 +93,9 @@ export default function App() {
             <Drawer.Screen name="CuacaRouter" options={{title: 'Cuaca', drawerIcon: () => {
               return <MaterialCommunityIcons name="weather-pouring" size={25} color="#fff" />
             }}}  component={CuacaRouter} />
+            <Drawer.Screen name="Gradient" options={{title: 'Gradient', drawerIcon: () => {
+              return <MaterialCommunityIcons name="weather-pouring" size={25} color="#fff" />
+            }}}  component={Gradient} />
             {/* <Drawer.Screen name="LoginRouter" options={{title: 'Masuk', drawerIcon: () => {
               return <MaterialCommunityIcons name="login" size={25} color="#fff" />
             }}}  component={LoginRouter} /> */}
