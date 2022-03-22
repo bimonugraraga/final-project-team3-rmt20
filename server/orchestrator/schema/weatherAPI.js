@@ -2,9 +2,9 @@ const { gql } = require("apollo-server");
 const axios = require("axios");
 const Queue = require("bull");
 const userMongoDb = require("./userMongoDb");
-const earthQuake = require("./eqAPI");
-const corn = require("./percobaan");
-const { redis } = require("../config/connectRedis");
+// const earthQuake = require("./eqAPI");
+// const corn = require("./percobaan");
+// const { redis } = require("../config/connectRedis");
 
 // nama redis dengan function
 // cobacoba=2menit
@@ -79,6 +79,7 @@ const resolvers = {
         });
         return data;
       } catch (error) {
+        // console.log(error);
         return error.response.data;
       }
     },
@@ -86,29 +87,34 @@ const resolvers = {
 };
 
 weatherForecast.process(async () => {
-  // // get user data
-  const users = await userMongoDb.resolvers.Query.getAllMongoUsers();
-  let temp = users.map((el) => {
-    return el.expoToken;
+  // get user data
+  let users = await userMongoDb.resolvers.Query.getAllMongoUsers();
+  // console.log(users);
+  users.forEach(async (el) => {
+    const lat = el.recentCoordinates.split(",")[0];
+    const lon = el.recentCoordinates.split(",")[1];
+    // get weather info
+    const result = await resolvers.Query.weatherNotif(+lat, +lon);
+    // console.log(result, "??????????");
+    if (result.length === 0) {
+      el.body = "Cuaca hari ini diprediksi tidak akan hujan, cek AlertMe! untuk melihat kondisi di sekitar Anda";
+    } else {
+      el.body = "Hujan diprediksi akan turun pada hari ini, siapkan payung dan jas hujan Anda dan cek AlertMe! untuk melihat kondisi di sekitar Anda";
+    }
   });
-  // console.log(temp);
-  // const lat = user.recentCoordinate.split(",")[0];
-  // const lon = user.recentCoordinate.split(",")[1];
-  // const recentEq = await eq.resolvers.Query.getRecentEarthquake();
-  // console.log(recentEq);
-  // console.log(user)
-  // get weather info
-  // const result = await resolvers.Query.weatherNotif(lat, lon);
+  console.log(users);
 
-  // console.log(el.expoToken, "<<<<");
-  // const lat = el.recentCoordinate.split(",")[0];
-  // const lon = el.recentCoordinate.split(",")[1];
-  let message = {
-    to: temp,
-    sound: "default",
-    title: "Ramalan cuaca hari ini",
-    body: "HAI",
-  };
+  let message = users.map((el) => {
+    let obj = {
+      to: el.expoToken,
+      sound: "default",
+      title: "Ramalan cuaca hari ini",
+      body: users.body,
+    };
+    return obj;
+  });
+  console.log(message, "<<<<<<<<<<<");
+
   return axios({
     method: "POST",
     url: expoUrl,
@@ -119,11 +125,6 @@ weatherForecast.process(async () => {
     },
     data: JSON.stringify(message),
   });
-
-  // return data
-  // // send notif
-  // const result = await earthQuake.resolvers.Query.getRecentEarthquake()
-  // console.log(result)
 });
 
 weatherForecast.add(
