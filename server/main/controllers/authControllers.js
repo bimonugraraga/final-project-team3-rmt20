@@ -28,7 +28,16 @@ class AuthnController {
 
   static async loginUser(req, res, next) {
     let { email, password } = req.body;
-
+    console.log(
+      "🚀 ~ file: authControllers.js ~ line 28 ~ AuthnController ~ loginUser ~ req.body",
+      req.body
+    );
+    console.log(
+      "🚀 ~ file: authControllers.js ~ line 28 ~ AuthnController ~ loginUser ~ email, password",
+      email,
+      password
+    );
+    
     try {
       let targetUser = await User.findOne({
         where: {

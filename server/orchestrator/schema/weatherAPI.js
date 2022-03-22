@@ -1,7 +1,7 @@
 const { gql } = require("apollo-server");
 const axios = require("axios");
 const Queue = require("bull");
-const { redis } = require("../config/connectRedis");
+const userMongoDb = require("./userMongoDb");
 
 const weatherForecast = new Queue("weatherForecast", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
 
@@ -45,8 +45,8 @@ const typeDefs = gql`
   }
 `;
 
-const weatherKey = process.env.OWKEY;
-let baseUrl = `https://api.openweathermap.org/data/2.5/onecall?appid=${weatherKey}&lang=id&units=metric`;
+const expoUrl = "https://exp.host/--/api/v2/push/send";
+let baseUrl = `https://api.openweathermap.org/data/2.5/onecall?appid=${process.env.OWKEY}&lang=id&units=metric`;
 
 const resolvers = {
   Query: {
@@ -70,9 +70,6 @@ const resolvers = {
             data.push(e);
           }
         });
-        // const result = {
-        //   hourly: data,
-        // };
         return data;
       } catch (error) {
         return error.response.data;
@@ -82,9 +79,37 @@ const resolvers = {
 };
 
 weatherForecast.process(async () => {
-  const lat = -6.1753942;
-  const lon = 106.827183;
-  return await resolvers.Query.weatherNotif(lat, lon);
+  // get user data
+  const user = await userMongoDb.resolvers.Query.getAllMongoUsers();
+  const lat = user.recentCoordinate.split(",")[0];
+  const lon = user.recentCoordinate.split(",")[1];
+  // const recentEq = await eq.resolvers.Query.getRecentEarthquake();
+  // console.log(recentEq);
+
+  // get weather info
+  const result = await resolvers.Query.weatherNotif(lat, lon);
+  let message = {
+    to: user.expoToken,
+    sound: "default",
+    title: "Ramalan cuaca hari ini",
+  };
+  if (result.length === 0) {
+    message.body = "Cuaca hari ini diprediksi tidak akan hujan, cek AlertMe! untuk melihat kondisi di sekitar Anda";
+  } else {
+    message.body = "Hujan diprediksi akan turun pada hari ini, siapkan payung dan jas hujan Anda dan cek AlertMe! untuk melihat kondisi di sekitar Anda";
+  }
+
+  // send notif
+  await axios({
+    method: "POST",
+    url: expoUrl,
+    headers: {
+      Accept: "application/json",
+      "Accept-encoding": "gzip, deflate",
+      "Content-Type": "application/json",
+    },
+    data: JSON.stringify(message),
+  });
 });
 
 weatherForecast.add(
@@ -93,6 +118,7 @@ weatherForecast.add(
     repeat: {
       // every 6AM
       cron: `0 6 * * *`,
+      // every: 30000,
     },
   }
 );
