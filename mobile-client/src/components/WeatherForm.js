@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { useQuery,useMutation } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER,POST_WEATHER_REPORT  } from "../../lib/apollo/queries/weatherQueries";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const mime = require("mime");
+import mime from "mime"
 
 export default function WeatherForm ({route,navigation}){
 
@@ -68,31 +68,6 @@ export default function WeatherForm ({route,navigation}){
     setImage(null);
   };
 
-  const cloudinaryUpload = (photo) => {
-    const data = new FormData();
-    data.append("file", photo);
-    data.append("upload_preset", "jwudmtq3");
-    data.append("cloud_name", "ridhasidi");
-    console.log(data, "data<<<<<");
-    fetch(`https://api.cloudinary.com/v1_1/ridhasidi/image/upload`, {
-      method: "POST",
-      body: data,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((res) => {
-        console.log(res);
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data, "<<<<<<<<<");
-        setPhotoUrl(data.secure_url);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -118,6 +93,8 @@ export default function WeatherForm ({route,navigation}){
         cloudinaryUpload(source);
       }
     };
+
+    console.log(photoUrl, "<<<<<")
 
      let [submitHandler = () => {
       }, {loading, error, data}] = useMutation(POST_WEATHER_REPORT, {

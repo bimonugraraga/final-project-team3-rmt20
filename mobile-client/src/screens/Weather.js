@@ -139,6 +139,7 @@ const getData = async () => {
               <Box alignItems="center" style = {styles.boxcuacasataini}>
                 <Box
                   maxW="80"
+                  shadow={2}
                   rounded="lg"
                   overflow="hidden"
                   borderColor="coolGray.200"
@@ -152,7 +153,7 @@ const getData = async () => {
                     borderWidth: 0,
                   }}
                   _light={{
-                    backgroundColor: "#22d3ee",
+                    backgroundColor: "#06b6d4",
                   }}
                 >
               <Box borderWidth={2} rounded="md">
@@ -265,4 +266,3 @@ const styles = StyleSheet.create ({
 
   }
 })
-
