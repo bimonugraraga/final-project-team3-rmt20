@@ -1,26 +1,29 @@
-const express = require('express')
-const app = express()
-const port = 4001
-let cors = require('cors');
-const {connectMongo} = require('./config/mongoConnection')
-const routes = require('./routes')
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 4001;
+let cors = require("cors");
+const { connectMongo } = require("./config/mongoConnection");
+const routes = require("./routes");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
-app.use('/', routes)
+app.use("/", routes);
 
 connectMongo()
   .then(() => {
     app.listen(port, () => {
-      console.log(`Example app listening on port ${port}`)
-    })
+      console.log(`Example app listening on port ${port}`);
+    });
   })
   .catch((err) => {
-    console.log(err, "<<<")
-  })
+    console.log(err, "<<<");
+  });
