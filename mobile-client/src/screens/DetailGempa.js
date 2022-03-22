@@ -10,6 +10,14 @@ import { GET_GEMPA, GET_USER_REPORT_GEMPA } from '../../lib/apollo/queries/eqQue
 import { MaterialIcons } from 'react-native-vector-icons';
 import {Svg, Image as ImageSvg} from 'react-native-svg';
 
+const LinearGradient = require("expo-linear-gradient").LinearGradient;
+
+const config = {
+  dependencies: {
+    "linear-gradient": LinearGradient
+  }
+};
+
 export default function DetailGempa({navigation}) {
 
   const { loading, error, data } = useQuery(GET_GEMPA)
@@ -72,7 +80,7 @@ export default function DetailGempa({navigation}) {
   }
 
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider  config={config}>
       {
         loading ?
         <Center flex={1} px="3">
@@ -85,7 +93,7 @@ export default function DetailGempa({navigation}) {
         </Center>
         :
 
-      <Center flex={1} px="3" bg="#ffedd5">
+      <Center flex={1} px="3" bg="#e4e4e7">
         <Box borderWidth={2} rounded="md" borderColor="#f97316">
           <AspectRatio w="100%" ratio={4/4}>
             {loading1 ?
@@ -155,15 +163,18 @@ export default function DetailGempa({navigation}) {
         </Box>
 
         <Box alignItems="center" mt="2">
-          <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
-          borderColor: "coolGray.600",
-          backgroundColor: "gray.700"
-        }} _web={{
-          shadow: 2,
-          borderWidth: 0
-        }} _light={{
-          backgroundColor: "#14b8a6"
-        }}>
+          <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" 
+            bg={{
+              linearGradient: {
+                colors: ["#191645", "#43C6AC"],
+                start: [0, 0],
+                end: [0, 1]
+              }
+            }}   _text={{
+              fontSize: "md",
+              fontWeight: "bold",
+              color: "white"
+            }}>
             <Stack p="4" space={3}>
               <Box alignItems="center">
                 <Box w="100%">

@@ -21,7 +21,6 @@ import { useQuery } from '@apollo/client';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/queries/weatherQueries";
 import MapView, {Callout, Geojson, Marker }  from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -31,6 +30,13 @@ import CardWeatherYogyakarta from '../components/CardWeatherYogyakarta'
 import CardWeatherBali from '../components/CardWeatherBali'
 import CardWeatherLombok from "../components/CardWeatherLombok"
 
+const LinearGradient = require("expo-linear-gradient").LinearGradient;
+
+const config = {
+  dependencies: {
+    "linear-gradient": LinearGradient
+  }
+};
 
 export default function Weather({ navigation }) {
   
@@ -105,7 +111,7 @@ const getData = async () => {
   // console.log(loading, error, data, "<--->")
 
   if (error) {
-    return <View style ={{backgroundColor : "#fef3c7"}}>
+    return <View style ={{backgroundColor : "#e4e4e7"}}>
       <NativeBaseProvider>
         <Center flex={1} px="3">
           <MaterialIcons name="error" size={30} />
@@ -117,7 +123,7 @@ const getData = async () => {
 
   return (
     <ScrollView>
-      <View style ={{backgroundColor : "#fef3c7"}}>
+      <View style ={{backgroundColor : "#e4e4e7"}}>
 
       {
         loading ? <Center flex={1} px="3" style ={{backgroundColor : "#fef3c7"}}>
@@ -128,9 +134,9 @@ const getData = async () => {
                 </Heading>
               </HStack>
             </Center> : (
-          <NativeBaseProvider>
-            <Center flex={1} px="3" bg="#fef3c7">
-              <Box mb="2" mt="2" width="100%" rounded="lg" bg="#14b8a6" justifyContent="center" alignItems="center" p="2" shadow={2}>
+          <NativeBaseProvider config={config}>
+            <Center flex={1} px="3" bg="#e4e4e7">
+              <Box mb="2" mt="2" width="100%" rounded="lg" bg="#191645" justifyContent="center" alignItems="center" p="2" shadow={2}>
                 <Heading size="md" color="#fff">Lokasi Saat Ini</Heading>
               </Box>
             </Center>
@@ -144,16 +150,16 @@ const getData = async () => {
                   overflow="hidden"
                   borderColor="coolGray.200"
                   borderWidth="1"
-                  _dark={{
-                    borderColor: "coolGray.600",
-                    backgroundColor: "gray.700",
-                  }}
-                  _web={{
-                    shadow: 2,
-                    borderWidth: 0,
-                  }}
-                  _light={{
-                    backgroundColor: "#06b6d4",
+                  bg={{
+                    linearGradient: {
+                      colors: ["#191645", "#43C6AC"],
+                      start: [0, 0],
+                      end: [0, 1]
+                    }
+                  }}   _text={{
+                    fontSize: "md",
+                    fontWeight: "bold",
+                    color: "white"
                   }}
                 >
               <Box borderWidth={2} rounded="md">
@@ -215,12 +221,12 @@ const getData = async () => {
             </Center>
             {/* </TouchableOpacity> */}
           
-            <Center flex={1} px="3" bg="#fef3c7">
-              <Box mb="2" mt="2" width="100%" rounded="lg" bg="#14b8a6" justifyContent="center" alignItems="center" p="2" shadow={2}>
+            <Center flex={1} px="3" bg="#e4e4e7">
+              <Box mb="5" mt="2" width="100%" rounded="lg" bg="#191645" justifyContent="center" alignItems="center" p="2" shadow={2}>
                 <Heading size="md" color="#fff">Lokasi Lain</Heading>
               </Box>
             </Center>
-            <Center  px="3" >
+            <Center flex={1} px="3" >
               <CardWeatherJakarta></CardWeatherJakarta>
               <CardWeatherBandung></CardWeatherBandung>
               <CardWeatherYogyakarta></CardWeatherYogyakarta>

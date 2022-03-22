@@ -15,6 +15,14 @@ const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
+const LinearGradient = require("expo-linear-gradient").LinearGradient;
+
+const config = {
+  dependencies: {
+    "linear-gradient": LinearGradient
+  }
+};
+
 export default function DetailWeather({navigation,route}) {
 
 
@@ -109,7 +117,7 @@ export default function DetailWeather({navigation,route}) {
         onRefresh={onRefresh}
       />
     }>
-    <NativeBaseProvider >
+    <NativeBaseProvider config={config}>
         {
           loading ? 
             <Center flex={1} px="3">
@@ -123,9 +131,10 @@ export default function DetailWeather({navigation,route}) {
         
           : (
             <View style = {{marginBottom : 10}}> 
-            <Center flex={1} px="3" style ={{backgroundColor : "#fef3c7"}}>
+            <Center flex={1} px="3" style ={{backgroundColor : "#e4e4e7"}}>
                <Box alignItems="center" style={styles.boxlokasilain} mt="5">
-                  <Box mb= "5" maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
+                  <Box mb= "5" maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" 
+                  _dark={{
                     borderColor: "coolGray.600",
                     backgroundColor: "gray.700"
                   }} _web={{
@@ -134,7 +143,7 @@ export default function DetailWeather({navigation,route}) {
                   }} _light={{
                     backgroundColor: "gray.50"
                   }}>
-                    <Box style={{backgroundColor: "#22d3ee"}}>
+                    <Box >
                       <AspectRatio w="100%" >
                         <MapView
                           initialRegion={{
@@ -155,7 +164,8 @@ export default function DetailWeather({navigation,route}) {
                           </Marker>
                         </MapView>
                       </AspectRatio>
-                      <Center bg="#3f3f46" _dark={{
+                      <Center bg="#3f3f46" 
+                      _dark={{
                         bg: "#3f3f46"
                         }} _text={{
                           color: "warmGray.50",
@@ -165,16 +175,27 @@ export default function DetailWeather({navigation,route}) {
                         {data.fetchCurrentWeather.current.weather[0].description}
                       </Center>
                     </Box>
-                    <Stack p="4" space={3} style={{backgroundColor: "#e2e8f0"}}>
+                    <Stack p="4" space={3} 
+                    bg={{
+                      linearGradient: {
+                        colors: ["#191645", "#43C6AC"],
+                        start: [0, 0],
+                        end: [0, 1]
+                      }
+                    }}   _text={{
+                      fontSize: "md",
+                      fontWeight: "bold",
+                      color: "white"
+                    }}>
                       <View style= {{flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
                         <Stack space={2}>
-                          <Heading size="md" ml="-1">
+                          <Heading size="md" ml="-1" color = "white">
                             {currentCity}, {currentDistrict}
                           </Heading>
                           <Text fontSize="xs" _light={{
-                            color: "violet.500"
+                            color: "#e4e4e7"
                             }} _dark={{
-                              color: "violet.400"
+                              color: "#e4e4e7"
                             }} fontWeight="500" ml="-0.5" mt="-1">
                             {todayDate}
                           </Text>
@@ -195,36 +216,36 @@ export default function DetailWeather({navigation,route}) {
                             alt="image"
                           />
                         </AspectRatio>
-                        <Text style={{fontSize: 17, fontWeight: "bold", color: "#1e293b", marginStart: 5}}>{data.fetchCurrentWeather.current.temp}°C</Text>
+                        <Text style={{fontSize: 17, fontWeight: "bold", color: "white", marginStart: 5}}>{data.fetchCurrentWeather.current.temp}°C</Text>
                         </View>
-                      <Text fontWeight="bold" color="#1e293b" marginBottom= "1.5" style= {{textAlign: "center"}}>
+                      <Text fontWeight="bold" color="#1e293b" marginBottom= "1.5" style= {{textAlign: "center", color : "white"}}>
                           Terasa {data.fetchCurrentWeather.current.feels_like}°C. Kondisi: {data.fetchCurrentWeather.current.weather[0].description}</Text>
                       <Divider bg="#a1a1aa" thickness="2" />
                       <View style= {{flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
                         <View style= {{flexDirection: "row", alignItems: "center"}}>
-                          <Entypo name = "direction"  />
-                          <Text fontWeight="400" style={{marginStart: 5}}>
+                          <Entypo color = "white" name = "direction"  />
+                          <Text fontWeight="400" style={{marginStart: 5, color : "white"}}>
                             {data.fetchCurrentWeather.current.wind_speed} m/s WSW
                           </Text>
                         </View>
-                        <Entypo name = "air"> <Text fontWeight="400" style={{marginStart: 5}}>
+                        <Entypo color= "white" name = "air"> <Text fontWeight="400" style={{marginStart: 5 , color : "white"}}>
                           {data.fetchCurrentWeather.current.pressure} hPa
                         </Text></Entypo>
                       </View>
-                      <View style= {{flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
-                        <Text fontWeight="400" style={{marginStart: 5}}> Jarak Pandang: {(data.fetchCurrentWeather.current.visibility)/1000} Km </Text>
-                        <MaterialCommunityIcons name = "air-humidifier"><Text fontWeight="400" style={{marginStart: 10}}>
+                      <View style= {{flexDirection: "row", alignItems: "center", justifyContent: "space-around" , color : "white"}}>
+                        <Text fontWeight="400" style={{marginStart: 5,color : "white"}}> Jarak Pandang: {(data.fetchCurrentWeather.current.visibility)/1000} Km </Text>
+                        <MaterialCommunityIcons color= "white" name = "air-humidifier"><Text fontWeight="400" style={{marginStart: 10 , color : "white"}}>
                             {data.fetchCurrentWeather.current.humidity} %</Text> </MaterialCommunityIcons>
                       </View>
-                      <TouchableOpacity><Button style={{backgroundColor: "#06b6d4"}} mt="0"
+                      <TouchableOpacity><Button colorScheme='orange'  mt="0"
                         onPress={() => navigation.navigate('FormCuaca', {item: data.fetchCurrentWeather})}
                       >Report Cuaca</Button></TouchableOpacity>
                     </Stack>
                   </Box>
                 </Box>
 
-                <Center flex={1} px="3" bg="#fef3c7">
-                  <Box mb="2" width="100%" rounded="lg" bg="#14b8a6" justifyContent="center" alignItems="center" p="2" shadow={2}>
+                <Center flex={1} px="3" bg="#e4e4e7">
+                  <Box  mb="2" width="100%" rounded="lg" bg="#191645" justifyContent="center" alignItems="center" p="2" shadow={2}>
                     <Heading size="md" color="#fff">Laporan Pengguna</Heading>
                   </Box>
                 </Center>
@@ -243,7 +264,7 @@ export default function DetailWeather({navigation,route}) {
                   
                   (
                   <ScrollView horizontal={true} style={{ width: "100%" }}>
-                    <Center flex={1} px="2.5" bg="#ffedd5">
+                    <Center flex={1} px="2.5" bg="#e4e4e7">
                       <FlatList 
                         data={data2.getWeatherReports}
                         renderItem={renderItem}
