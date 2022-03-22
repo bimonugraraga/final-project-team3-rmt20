@@ -44,7 +44,7 @@ export default function CardReportUser ({item}) {
     }} _light={{
       backgroundColor: "#14b8a6"
     }}>
-      <Stack p="4" space={3} style ={{backgroundColor : "#22d3ee"}}>
+      <Stack p="4" space={3} style ={{backgroundColor : "#06b6d4"}}>
         <Box alignItems="center">
           <Box w="100%">
             <Flex mx="1" direction="row" justify="space-evenly" h="50">
