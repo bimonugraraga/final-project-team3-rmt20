@@ -14,6 +14,7 @@ import mime from "mime"
 export default function FormGempa({route, navigation}) {
 
   let [access_token, setAT] = useState(null)
+  console.log(access_token);
 
   useEffect(() => {
     AsyncStorage.getItem('access_token')

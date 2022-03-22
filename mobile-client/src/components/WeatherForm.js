@@ -68,31 +68,6 @@ export default function WeatherForm ({route,navigation}){
     setImage(null);
   };
 
-  const cloudinaryUpload = (photo) => {
-    const data = new FormData();
-    data.append("file", photo);
-    data.append("upload_preset", "jwudmtq3");
-    data.append("cloud_name", "ridhasidi");
-    console.log(data, "data<<<<<");
-    fetch(`https://api.cloudinary.com/v1_1/ridhasidi/image/upload`, {
-      method: "POST",
-      body: data,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((res) => {
-        console.log(res);
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data, "<<<<<<<<<");
-        setPhotoUrl(data.secure_url);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library

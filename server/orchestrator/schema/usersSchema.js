@@ -41,6 +41,7 @@ const resolvers = {
     login: async (_, args) => {
       try {
         const { email, password } = args;
+        console.log(args);
         const resp = await axios({
           method: "POST",
           url: baseUrl + "/login",
