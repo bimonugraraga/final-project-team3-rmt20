@@ -56,6 +56,7 @@ export default function CardWeatherBali (){
         <Box
           style = {styles.boxwidth}
           maxW="80"
+          shadow={2}
           rounded="lg"
           overflow="hidden"
           borderColor="coolGray.200"
@@ -70,7 +71,7 @@ export default function CardWeatherBali (){
             borderWidth: 0,
           }}
           _light={{
-            backgroundColor: "#22d3ee",
+            backgroundColor: "#06b6d4",
           }}
         >
           <Stack p="4" space={3}>
