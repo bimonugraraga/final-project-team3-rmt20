@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { useQuery,useMutation } from '@apollo/client';
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER,POST_WEATHER_REPORT  } from "../../lib/apollo/queries/weatherQueries";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const mime = require("mime");
+import mime from "mime"
 
 export default function WeatherForm ({route,navigation}){
 
@@ -68,7 +68,6 @@ export default function WeatherForm ({route,navigation}){
     setImage(null);
   };
 
-
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -93,6 +92,8 @@ export default function WeatherForm ({route,navigation}){
         cloudinaryUpload(source);
       }
     };
+
+    console.log(photoUrl, "<<<<<")
 
      let [submitHandler = () => {
       }, {loading, error, data}] = useMutation(POST_WEATHER_REPORT, {

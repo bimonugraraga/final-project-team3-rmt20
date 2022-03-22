@@ -17,91 +17,149 @@ import { useEffect, useState } from 'react';
 
 import * as Notifications from 'expo-notifications'
 import * as Permissions from 'expo-permissions'
-
+import Gradient from './src/geoLocation/Gradient';
+import AuthContext from "./src/context";
 const Drawer = createDrawerNavigator();
+
 export default function App() {
-  let [access_token, setAT] = useState(null)
-  
+  let [access_token, setAT] = useState(null);
 
-
-
-  useEffect(() => {
-    AsyncStorage.getItem('access_token')
-      .then((resp) => {
-        console.log(resp, "<<<>>>")
-        setAT(resp)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-
-
-
-  }, [access_token])
-
-
-
-
-
+  // useEffect(() => {
+  //   AsyncStorage.getItem("access_token")
+  //     .then((resp) => {
+  //       console.log(resp, "<<<>>>");
+  //       setAT(resp);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [access_token]);
 
   const loginDrawer = () => {
-    if (!access_token){
+    if (!access_token) {
       return (
-        <Drawer.Screen name="LoginRouter" options={{title: 'Masuk', drawerIcon: () => {
-          return <MaterialCommunityIcons name="login" size={25} color="#fff" />
-        }}}  component={LoginRouter} />
-      )
+        <Drawer.Screen
+          name="LoginRouter"
+          options={{
+            title: "Masuk",
+            drawerIcon: () => {
+              return (
+                <MaterialCommunityIcons name="login" size={25} color="#fff" />
+              );
+            },
+          }}
+          component={LoginRouter}
+        />
+      );
     }
-  }
+  };
   return (
     <ApolloProvider client={client}>
-    <SSRProvider>
-      <NativeBaseProvider>
-        <NavigationContainer>
-          <Drawer.Navigator useLegacyImplementation={true} initialRouteName="Home"
-          drawerContent={(props) => <CustomDrawer {...props} />}
-          screenOptions={{
-            headerTitleAlign: 'center',
-              headerStyle: {
-                backgroundColor: '#34495e'
-              },
-              headerTitleStyle: {
-                fontWeight: 'bold',
-              },
-              headerTintColor: '#fff',
-              drawerStyle: {
-                backgroundColor: '#34495e',
-              },
-              drawerActiveTintColor: '#fff',
-              drawerInactiveTintColor: '#fff',
-              drawerLabelStyle: {
-                marginLeft: -25,
-                fontSize: 20
-              },
-              
-          }}
-          >
-            <Drawer.Screen name="Home" options={{title: 'Beranda', drawerIcon: () => {
-              return <Ionicons name="home" size={25} color="#fff" />
-            }}}  component={Home} />
-            <Drawer.Screen name="EqNotif" options={{title: 'Notif', drawerIcon: () => {
-              return <Ionicons name="home" size={25} color="#fff" />
-            }}}  component={EqNotif}/>
-            <Drawer.Screen name="GempaRouter" options={{title: 'Gempa', drawerIcon: () => {
-              return <MaterialCommunityIcons name="alert-octagram-outline" size={25} color="#fff" />
-            }}}  component={GempaRouter} />
-            <Drawer.Screen name="CuacaRouter" options={{title: 'Cuaca', drawerIcon: () => {
-              return <MaterialCommunityIcons name="weather-pouring" size={25} color="#fff" />
-            }}}  component={CuacaRouter} />
-            {/* <Drawer.Screen name="LoginRouter" options={{title: 'Masuk', drawerIcon: () => {
+      <AuthContext.Provider value={{ access_token, setAT }}>
+        <SSRProvider>
+          <NativeBaseProvider>
+            <NavigationContainer>
+              <Drawer.Navigator
+                useLegacyImplementation={true}
+                initialRouteName="Home"
+                drawerContent={(props) => <CustomDrawer {...props} />}
+                screenOptions={{
+                  headerTitleAlign: "center",
+                  headerStyle: {
+                    backgroundColor: "#34495e",
+                  },
+                  headerTitleStyle: {
+                    fontWeight: "bold",
+                  },
+                  headerTintColor: "#fff",
+                  drawerStyle: {
+                    backgroundColor: "#34495e",
+                  },
+                  drawerActiveTintColor: "#fff",
+                  drawerInactiveTintColor: "#fff",
+                  drawerLabelStyle: {
+                    marginLeft: -25,
+                    fontSize: 20,
+                  },
+                }}
+              >
+                <Drawer.Screen
+                  name="Home"
+                  options={{
+                    title: "Beranda",
+                    drawerIcon: () => {
+                      return <Ionicons name="home" size={25} color="#fff" />;
+                    },
+                  }}
+                  component={Home}
+                />
+                <Drawer.Screen
+                  name="EqNotif"
+                  options={{
+                    title: "Notif",
+                    drawerIcon: () => {
+                      return <Ionicons name="home" size={25} color="#fff" />;
+                    },
+                  }}
+                  component={EqNotif}
+                />
+                <Drawer.Screen
+                  name="GempaRouter"
+                  options={{
+                    title: "Gempa",
+                    drawerIcon: () => {
+                      return (
+                        <MaterialCommunityIcons
+                          name="alert-octagram-outline"
+                          size={25}
+                          color="#fff"
+                        />
+                      );
+                    },
+                  }}
+                  component={GempaRouter}
+                />
+                <Drawer.Screen
+                  name="CuacaRouter"
+                  options={{
+                    title: "Cuaca",
+                    drawerIcon: () => {
+                      return (
+                        <MaterialCommunityIcons
+                          name="weather-pouring"
+                          size={25}
+                          color="#fff"
+                        />
+                      );
+                    },
+                  }}
+                  component={CuacaRouter}
+                />
+                <Drawer.Screen
+                  name="Gradient"
+                  options={{
+                    title: "Gradient",
+                    drawerIcon: () => {
+                      return (
+                        <MaterialCommunityIcons
+                          name="weather-pouring"
+                          size={25}
+                          color="#fff"
+                        />
+                      );
+                    },
+                  }}
+                  component={Gradient}
+                />
+                {/* <Drawer.Screen name="LoginRouter" options={{title: 'Masuk', drawerIcon: () => {
               return <MaterialCommunityIcons name="login" size={25} color="#fff" />
             }}}  component={LoginRouter} /> */}
-            {loginDrawer()}
-          </Drawer.Navigator>
-        </NavigationContainer>
-      </NativeBaseProvider>
-    </SSRProvider>
+                {loginDrawer()}
+              </Drawer.Navigator>
+            </NavigationContainer>
+          </NativeBaseProvider>
+        </SSRProvider>
+      </AuthContext.Provider>
     </ApolloProvider>
   );
 }
-

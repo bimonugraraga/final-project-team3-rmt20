@@ -16,6 +16,14 @@ import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
+const LinearGradient = require("expo-linear-gradient").LinearGradient;
+
+const config = {
+  dependencies: {
+    "linear-gradient": LinearGradient
+  }
+};
+
 export default function CardWeatherJakarta (){
 
   let latJakarta = -6.200000
@@ -48,36 +56,38 @@ export default function CardWeatherJakarta (){
     </View>
   }
 
-
   return (
-    <View>
+    <NativeBaseProvider config={config}>
+    <Center flex={1}  px="3" >
       {
         loading ? <ActivityIndicator size="small" color="#0000ff" /> : (
+        
         <Box alignItems="center" style={styles.boxlokasilain}>
         <Box
           style = {styles.boxwidth}
           maxW="80"
+          shadow={2}
           rounded="lg"
           overflow="hidden"
           borderColor="coolGray.200"
           borderWidth="1"
           marginBottom= "5"
-          _dark={{
-            borderColor: "coolGray.600",
-            backgroundColor: "gray.700",
-          }}
-          _web={{
-            shadow: 2,
-            borderWidth: 0,
-          }}
-          _light={{
-            backgroundColor: "#22d3ee",
+          bg={{
+            linearGradient: {
+              colors: ["#191645", "#43C6AC"],
+              start: [0, 0],
+              end: [0, 1]
+            }
+          }}   _text={{
+            fontSize: "md",
+            fontWeight: "bold",
+            color: "white"
           }}
         >
           <Stack p="4" space={3}>
             <Stack space={2}>
               <Heading size="md" ml="-1" color="white">
-                DKI Jakarta
+                Jakarta
               </Heading>
             </Stack>
             <Box style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
@@ -98,8 +108,8 @@ export default function CardWeatherJakarta (){
         </Box>
         </Box>
         )}
-    
-    </View>
+    </Center>
+  </NativeBaseProvider>
   )
 }
 
@@ -134,6 +144,7 @@ const styles = StyleSheet.create ({
 
   },
   boxwidth : {
-    width: windowWidth * 0.9
+    width: windowWidth * 0.9,
+    // height: windowHeight* 0.3
   }
 })

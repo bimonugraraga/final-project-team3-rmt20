@@ -5,6 +5,7 @@ class EventController {
   static async createEventEq(req, res, next) {
     try {
       const { earthquakeEvent } = req.body;
+      // console.log(earthquakeEvent)
       const earthquake = await EarthquakeEvent.create(earthquakeEvent);
       res.status(201).json(earthquake);
     } catch (err) {

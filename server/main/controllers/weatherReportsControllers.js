@@ -28,7 +28,7 @@ class ReportController {
       // console.log(allWeatherReport)
       res.status(200).json(allWeatherReport);
     } catch (error) {
-      res.status(500).json({ message: "Internal server error" });
+      next(error)
     }
   }
 
@@ -49,13 +49,17 @@ class ReportController {
       });
 
       if (!oneWeatherReport) {
-        res.status(404).json({ message: "Weather Report Not Found!" });
-        return;
+        throw{
+          name: "NOT FOUND",
+          code: 404,
+          message: "Weather Report Not Found!"
+        }
+        
       }
 
       res.status(200).json(oneWeatherReport);
     } catch (error) {
-      res.status(500).json({ message: "Internal server error" });
+      next(error)
     }
   }
 
@@ -84,11 +88,7 @@ class ReportController {
 
       res.status(201).json({ message: "Laporan telah berhasil dibuat" });
     } catch (error) {
-      if (error.name === "SequelizeValidationError" || error.name === "SequelizeUniqueConstraintError") {
-        res.status(400).json({ message: error.errors[0].message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
-      }
+      next(error)
     }
   }
 }

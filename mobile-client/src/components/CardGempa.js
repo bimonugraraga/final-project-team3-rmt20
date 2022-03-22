@@ -1,10 +1,17 @@
 import react from 'react'
 import { View } from 'react-native'
-import { Box, Heading, Text, Stack, Divider, Flex} from "native-base";
+import { Box, Heading, Text, Stack, Divider, Flex, NativeBaseProvider, Center} from "native-base";
 import { useEffect, useState } from 'react';
 import { formatDistance, subHours } from 'date-fns'
 import {Feather, Ionicons} from 'react-native-vector-icons';
 
+const LinearGradient = require("expo-linear-gradient").LinearGradient;
+
+const config = {
+  dependencies: {
+    "linear-gradient": LinearGradient
+  }
+};
 export default function CardGempa({item}) {
 
   const [date, setDate] = useState('')
@@ -14,15 +21,20 @@ export default function CardGempa({item}) {
   }, [])
 
   return (
+    <NativeBaseProvider config={config}>
+    <Center>
     <Box alignItems="center">
-      <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
-      borderColor: "coolGray.600",
-      backgroundColor: "gray.700"
-      }} _web={{
-        shadow: 2,
-        borderWidth: 0
-      }} _light={{
-        backgroundColor: "#14b8a6"
+      <Box mb="2" maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1"
+       bg={{
+        linearGradient: {
+          colors: ["#191645", "#43C6AC"],
+          start: [0, 0],
+          end: [0, 1]
+        }
+      }}   _text={{
+        fontSize: "md",
+        fontWeight: "bold",
+        color: "white"
       }}>
         <Stack p="4" space={3}>
           <Box alignItems="center">
@@ -55,5 +67,7 @@ export default function CardGempa({item}) {
         </Stack>
       </Box>
     </Box>
+    </Center>
+    </NativeBaseProvider>
   )
 }

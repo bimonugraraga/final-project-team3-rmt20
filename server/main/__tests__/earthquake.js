@@ -125,31 +125,7 @@ describe("Earthquake Events from Database /events/:id", () => {
           done();
         });
     });
-    it("200 success to create Earthquake Event", (done) => {
-      request(app)
-        .post("/events/earthquake")
-        .send({
-          earthquakeEvent: {
-            date: "16 Mar 2022",
-            hour: "21:12:00 WIB",
-            dateTime: "2022-03-16T14:12:00+00:00",
-            coordinates: "-3.70,128.12",
-            magnitude: "2.7",
-            depth: 10,
-            area: "Pusat gempa berada di laut 47 km Baratdaya Kairatu",
-            dirasakan: "II-III Ambon",
-            potensi: "Tidak berpotensi tsunami",
-          },
-        })
-        .end(function (err, res) {
-          const { body, status } = res;
-          expect(status).toBe(201);
-          expect(body).toEqual(expect.any(Object));
-          expect(body).toHaveProperty("id", expect.any(Number));
-          expect(body).toHaveProperty("area", expect.any(String));
-          done();
-        });
-    });
+
     it("400 failed to create Earthquake Event because Invalid Date input", (done) => {
       request(app)
         .post("/events/earthquake")
@@ -170,7 +146,7 @@ describe("Earthquake Events from Database /events/:id", () => {
           const { body, status } = res;
           expect(status).toBe(400);
           expect(body).toEqual(expect.any(Object));
-          expect(body[0]).toBe("Date is required");
+          expect(body).toHaveProperty("message", "Date is required");
           done();
         });
     });
@@ -194,7 +170,7 @@ describe("Earthquake Events from Database /events/:id", () => {
           const { body, status } = res;
           expect(status).toBe(400);
           expect(body).toEqual(expect.any(Object));
-          expect(body[0]).toBe("Hour is required");
+          expect(body).toHaveProperty("message", "Hour is required");
           done();
         });
     });
@@ -218,7 +194,7 @@ describe("Earthquake Events from Database /events/:id", () => {
           const { body, status } = res;
           expect(status).toBe(400);
           expect(body).toEqual(expect.any(Object));
-          expect(body[0]).toBe("Date Time is required");
+          expect(body).toHaveProperty("message", "Date Time is required");
           done();
         });
     });
@@ -242,7 +218,7 @@ describe("Earthquake Events from Database /events/:id", () => {
           const { body, status } = res;
           expect(status).toBe(400);
           expect(body).toEqual(expect.any(Object));
-          expect(body[0]).toBe("Coordinates is required");
+          expect(body).toHaveProperty("message", "Coordinates is required");
           done();
         });
     });
@@ -266,7 +242,7 @@ describe("Earthquake Events from Database /events/:id", () => {
           const { body, status } = res;
           expect(status).toBe(400);
           expect(body).toEqual(expect.any(Object));
-          expect(body[0]).toBe("Magnitude is required");
+          expect(body).toHaveProperty("message", "Magnitude is required");
           done();
         });
     });
@@ -290,7 +266,7 @@ describe("Earthquake Events from Database /events/:id", () => {
           const { body, status } = res;
           expect(status).toBe(400);
           expect(body).toEqual(expect.any(Object));
-          expect(body[0]).toBe("Depth is required");
+          expect(body).toHaveProperty("message", "Depth is required");
           done();
         });
     });
@@ -314,7 +290,7 @@ describe("Earthquake Events from Database /events/:id", () => {
           const { body, status } = res;
           expect(status).toBe(400);
           expect(body).toEqual(expect.any(Object));
-          expect(body[0]).toBe("Area is required");
+          expect(body).toHaveProperty("message", "Area is required");
           done();
         });
     });
@@ -338,7 +314,7 @@ describe("Earthquake Events from Database /events/:id", () => {
           const { body, status } = res;
           expect(status).toBe(400);
           expect(body).toEqual(expect.any(Object));
-          expect(body[0]).toBe("Dirasakan is required");
+          expect(body).toHaveProperty("message", "Dirasakan is required");
           done();
         });
     });
@@ -362,7 +338,7 @@ describe("Earthquake Events from Database /events/:id", () => {
           const { body, status } = res;
           expect(status).toBe(400);
           expect(body).toEqual(expect.any(Object));
-          expect(body[0]).toBe("Potensi is required");
+          expect(body).toHaveProperty("message", "Potensi is required");
           done();
         });
     });
@@ -434,7 +410,7 @@ describe("Earthquake Reports /reports/earthquakes", () => {
           const { body, status } = res;
 
           expect(status).toBe(401);
-          expect(body).toHaveProperty("message", "Invalid token");
+          expect(body).toHaveProperty("message", "Invalid Token");
           done();
         });
     });
@@ -464,8 +440,8 @@ describe("Earthquake Reports /reports/earthquakes", () => {
           if (err) return done(err);
           const { body, status } = res;
           expect(status).toBe(400);
-          expect(body).toEqual(expect.any(Array));
-          expect(body[0]).toBe("Status is required");
+          expect(body).toEqual(expect.any(Object));
+          expect(body).toHaveProperty("message", "Status is required");
           done();
         });
     });
@@ -495,8 +471,8 @@ describe("Earthquake Reports /reports/earthquakes", () => {
           if (err) return done(err);
           const { body, status } = res;
           expect(status).toBe(400);
-          expect(body).toEqual(expect.any(Array));
-          expect(body[0]).toBe("Description is required");
+          expect(body).toEqual(expect.any(Object));
+          expect(body).toHaveProperty("message", "Description is required");
           done();
         });
     });
@@ -526,8 +502,8 @@ describe("Earthquake Reports /reports/earthquakes", () => {
           if (err) return done(err);
           const { body, status } = res;
           expect(status).toBe(400);
-          expect(body).toEqual(expect.any(Array));
-          expect(body[0]).toBe("Coordinate is required");
+          expect(body).toEqual(expect.any(Object));
+          expect(body).toHaveProperty("message", "Coordinate is required");
           done();
         });
     });
@@ -535,7 +511,7 @@ describe("Earthquake Reports /reports/earthquakes", () => {
   describe("DELETE", () => {
     it("200 success to delete report with access token", (done) => {
       request(app)
-        .post("/reports/earthquakes/1")
+        .delete("/reports/earthquakes/1")
         .set("access_token", validToken)
         .send(report)
         .end((err, res) => {
@@ -556,7 +532,7 @@ describe("Earthquake Reports /reports/earthquakes", () => {
           const { body, status } = res;
           expect(status).toBe(401);
           expect(body).toEqual(expect.any(Object));
-          expect(body).toHaveProperty("message", "Invalid token");
+          expect(body).toHaveProperty("message", "Invalid Token");
           done();
         });
     });
@@ -570,16 +546,18 @@ describe("Earthquake Reports /reports/earthquakes", () => {
           const { body, status } = res;
           expect(status).toBe(401);
           expect(body).toEqual(expect.any(Object));
-          expect(body).toHaveProperty("message", "Invalid token");
+          expect(body).toHaveProperty("message", "Invalid Token");
           done();
         });
     });
     it("404 failed to delete report because report not found", (done) => {
       request(app)
-        .post("/reports/earthquakes/200")
-        .send(report)
+        .delete("/reports/earthquakes/200")
+        .set("access_token", validToken)
         .end((err, res) => {
-          if (err) done(err);
+          const { body, status } = res;
+          expect(status).toBe(404);
+          expect(body).toHaveProperty("message", "Report not found");
           done();
         });
     });

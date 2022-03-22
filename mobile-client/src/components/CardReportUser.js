@@ -11,6 +11,14 @@ import {Entypo,MaterialCommunityIcons} from 'react-native-vector-icons';
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
+const LinearGradient = require("expo-linear-gradient").LinearGradient;
+
+const config = {
+  dependencies: {
+    "linear-gradient": LinearGradient
+  }
+};
+
 export default function CardReportUser ({item}) {
   // console.log(item, 74982374982374)
 
@@ -34,6 +42,8 @@ export default function CardReportUser ({item}) {
   const [showModal, setShowModal] = useState(false);
 
   return (
+    <NativeBaseProvider config={config}>
+    <Center>
     <Box alignItems="center">
     <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" marginBottom= "2" _dark={{
     borderColor: "coolGray.600",
@@ -44,7 +54,18 @@ export default function CardReportUser ({item}) {
     }} _light={{
       backgroundColor: "#14b8a6"
     }}>
-      <Stack p="4" space={3} style ={{backgroundColor : "#22d3ee"}}>
+      <Stack p="4" space={3} 
+      bg={{
+        linearGradient: {
+          colors: ["#191645", "#43C6AC"],
+          start: [0, 0],
+          end: [0, 1]
+        }
+      }}   _text={{
+        fontSize: "md",
+        fontWeight: "bold",
+        color: "white"
+      }}>
         <Box alignItems="center">
           <Box w="100%">
             <Flex mx="1" direction="row" justify="space-evenly" h="50">
@@ -181,6 +202,9 @@ export default function CardReportUser ({item}) {
       </Modal>
     </Box>
   </Box>
+  </Center>
+  </NativeBaseProvider>
+  
   )
 }
 const styles = StyleSheet.create ({

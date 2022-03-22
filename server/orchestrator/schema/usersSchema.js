@@ -24,6 +24,7 @@ const resolvers = {
     register: async (_, args) => {
       try {
         const { email, password } = args;
+        console.log("🚀 ~ file: usersSchema.js ~ line 27 ~ register: ~ email, password", email, password)
         const resp = await axios({
           method: "POST",
           url: baseUrl + "/register",
@@ -40,8 +41,13 @@ const resolvers = {
 
     login: async (_, args) => {
       try {
+        console.log("apakah masuk sini?");
         const { email, password } = args;
+<<<<<<< HEAD
         console.log(args);
+=======
+        console.log("🚀 ~ file: usersSchema.js ~ line 45 ~ login: ~ email, password", email, password)
+>>>>>>> 47b5a95e8a3fdf7790454e52e81573bc86fd0b71
         const resp = await axios({
           method: "POST",
           url: baseUrl + "/login",
