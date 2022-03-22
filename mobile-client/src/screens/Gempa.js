@@ -49,9 +49,7 @@ export default function Gempa({navigation}) {
 
   return (
     <NativeBaseProvider>
-
-      {
-        loading ?
+      {loading ? (
         <Center flex={1} px="3">
           <HStack space={2} justifyContent="center">
             <Spinner accessibilityLabel="Loading posts" />
@@ -60,115 +58,193 @@ export default function Gempa({navigation}) {
             </Heading>
           </HStack>
         </Center>
-        :
-        
-    
-      <ScrollView nestedScrollEnabled={true} style={{ width: "100%" }}>
-      <Center flex={1} px="3" bg="#ffedd5">
-
-        <Box mb="2" mt="2" width="100%" rounded="lg" bg="primary.500" alignItems="center" p="2" shadow={2}>
-          <Heading size="md" color="#fff">Gempa Terkini</Heading>
-        </Box>
-
-        <Box alignItems="center">
-          <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
-          borderColor: "coolGray.600",
-          backgroundColor: "gray.700"
-        }} _web={{
-          shadow: 2,
-          borderWidth: 0
-        }} _light={{
-          backgroundColor: "#14b8a6"
-        }}>
-            <Box borderWidth={2} borderColor="red.400">
-            <AspectRatio w="100%" ratio={16/9}>
-              <MapView
-                initialRegion={{
-                  latitude: ltd,
-                  longitude: lng,
-                  latitudeDelta: 0.0922,
-                  longitudeDelta: 0.0421,
-                }}
-                >
-                <Marker 
-                coordinate={{
-                  latitude: ltd,
-                  longitude: lng,
-                }}
-                pinColor="red"
-                >
-                  <Callout><Text>Pusat Gempa</Text></Callout>
-                </Marker>
-              </MapView>
-              </AspectRatio>
-            </Box>
-            <Stack p="4" space={3}>
-              <Box alignItems="center">
-                <Box w="100%">
-                  <Flex mx="1" direction="row" justify="space-evenly" h="50">
-                    <View justifyContent="center" alignItems="center">
-                      <Text fontSize="xs" color="#fff">{data.getRecentEarthquake.hour}</Text>
-                      <Heading size="md" color="#fff">{data.getRecentEarthquake.date}</Heading>
-                      <Text fontSize="xs" color="#fff">{date ? date: null}</Text>
-                    </View >
-                    <Divider orientation="vertical" bg="#a1a1aa" thickness="2" mx="7" />
-                    <View justifyContent="center" alignItems="center">
-                      <Feather color="#dc2626" name="activity" />
-                      <Heading size="md" color="#fff">{data.getRecentEarthquake.magnitude}</Heading>
-                      <Text color="#fff">Magnitude</Text>
-                    </View>
-                    <Divider orientation="vertical" bg="#a1a1aa" thickness="2" mx="7" />
-                    <View justifyContent="center" alignItems="center">
-                      <Feather color="#fbbf24" name="radio" />
-                      <Heading size="sm" color="#fff">{data.getRecentEarthquake.depth}</Heading>
-                      <Text color="#fff">Kedalaman</Text>
-                    </View>
-                  </Flex>
-                  <Divider mt="4" mb="2" bg="#a1a1aa" thickness="2" />
-                  <View m="2">
-                    <Ionicons color="#f97316" name="location"><Text fontSize="xs" color="#fff"> {data.getRecentEarthquake.area}</Text></Ionicons>
-                  </View>
-                  <Button colorScheme='orange' mt="2" onPress={() => navigation.navigate('DetailGempa')}>Detail Gempa</Button>
-                </Box>
-              </Box>
-            </Stack>
-          </Box>
-        </Box>
-
-
-        <Box mt="5" mb="2" width="100%" rounded="lg" bg="primary.500" alignItems="center" p="2" shadow={2}>
-          <Heading size="md" color="#fff">Gempa Terakhir</Heading>
-        </Box>
-        
-        {
-          loading2 ?
-          <Center flex={1} px="3">
-            <HStack space={2} justifyContent="center">
-              <Spinner accessibilityLabel="Loading posts" />
-              <Heading color="emerald.500" fontSize="md">
-                Loading
+      ) : (
+        <ScrollView nestedScrollEnabled={true} style={{ width: "100%" }}>
+          <Center flex={1} px="3" bg="#ffedd5">
+            <Box
+              mb="4"
+              mt="5"
+              width="100%"
+              rounded="lg"
+              bg="primary.500"
+              alignItems="center"
+              p="2"
+              style={{
+                backgroundColor: "#828282",
+              }}
+              shadow={2}
+            >
+              <Heading size="md" color="#fff">
+                Gempa Terkini
               </Heading>
-            </HStack>
-          </Center>
-          :
-          <ScrollView horizontal={true}>
-            <Center flex={1} px="2.5" bg="#ffedd5">
-              <FlatList
-                data={data2.getEarthQuakes}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.dateTime}
-                />
+            </Box>
+
+            <Box alignItems="center">
+              <Box
+                maxW="80"
+                rounded="lg"
+                overflow="hidden"
+                borderColor="coolGray.200"
+                borderWidth="1"
+                _dark={{
+                  borderColor: "coolGray.600",
+                  backgroundColor: "gray.700",
+                }}
+                _web={{
+                  shadow: 2,
+                  borderWidth: 0,
+                }}
+                _light={{
+                  backgroundColor: "#14b8a6",
+                }}
+              >
+                <Box borderWidth={2} borderColor="red.400">
+                  <AspectRatio w="100%" ratio={16 / 9}>
+                    <MapView
+                      initialRegion={{
+                        latitude: ltd,
+                        longitude: lng,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                      }}
+                    >
+                      <Marker
+                        coordinate={{
+                          latitude: ltd,
+                          longitude: lng,
+                        }}
+                        pinColor="red"
+                      >
+                        <Callout>
+                          <Text>Pusat Gempa</Text>
+                        </Callout>
+                      </Marker>
+                    </MapView>
+                  </AspectRatio>
+                </Box>
+                <Stack
+                  p="4"
+                  space={3}
+                  style={{
+                    backgroundColor: "#34495e",
+                  }}
+                >
+                  <Box alignItems="center">
+                    <Box
+                      w="100%"
+                      style={{
+                        backgroundColor: "#34495e",
+                      }}
+                    >
+                      <Flex
+                        mx="1"
+                        direction="row"
+                        justify="space-evenly"
+                        h="50"
+                      >
+                        <View justifyContent="center" alignItems="center">
+                          <Text fontSize="xs" color="#fff">
+                            {data.getRecentEarthquake.hour}
+                          </Text>
+                          <Heading size="md" color="#fff">
+                            {data.getRecentEarthquake.date}
+                          </Heading>
+                          <Text fontSize="xs" color="#fff">
+                            {date ? date : null}
+                          </Text>
+                        </View>
+                        <Divider
+                          orientation="vertical"
+                          bg="#a1a1aa"
+                          thickness="2"
+                          mx="7"
+                        />
+                        <View justifyContent="center" alignItems="center">
+                          <Feather color="#dc2626" name="activity" />
+                          <Heading size="md" color="#fff">
+                            {data.getRecentEarthquake.magnitude}
+                          </Heading>
+                          <Text color="#fff">Magnitude</Text>
+                        </View>
+                        <Divider
+                          orientation="vertical"
+                          bg="#a1a1aa"
+                          thickness="2"
+                          mx="7"
+                        />
+                        <View justifyContent="center" alignItems="center">
+                          <Feather color="#fbbf24" name="radio" />
+                          <Heading size="sm" color="#fff">
+                            {data.getRecentEarthquake.depth}
+                          </Heading>
+                          <Text color="#fff">Kedalaman</Text>
+                        </View>
+                      </Flex>
+                      <Divider mt="4" mb="2" bg="#a1a1aa" thickness="2" />
+                      <View m="2">
+                        <Ionicons color="#f97316" name="location">
+                          <Text fontSize="xs" color="#fff">
+                            {" "}
+                            {data.getRecentEarthquake.area}
+                          </Text>
+                        </Ionicons>
+                      </View>
+                      <Button
+                        colorScheme="orange"
+                        mt="2"
+                        onPress={() => navigation.navigate("DetailGempa")}
+                      >
+                        Detail Gempa
+                      </Button>
+                    </Box>
+                  </Box>
+                </Stack>
+              </Box>
+            </Box>
+
+            <Box
+              mt="5"
+              mb="4"
+              width="100%"
+              rounded="lg"
+              bg="primary.500"
+              alignItems="center"
+              p="2"
+              style={{
+                backgroundColor: "#828282",
+              }}
+              shadow={2}
+            >
+              <Heading size="md" color="#fff">
+                Gempa Terakhir
+              </Heading>
+            </Box>
+
+            {loading2 ? (
+              <Center flex={1} px="3">
+                <HStack space={2} justifyContent="center">
+                  <Spinner accessibilityLabel="Loading posts" />
+                  <Heading color="emerald.500" fontSize="md">
+                    Loading
+                  </Heading>
+                </HStack>
               </Center>
-          </ScrollView>
-
-        }
-
-      </Center>
-      </ScrollView>
-
-      }
+            ) : (
+              <ScrollView horizontal={true}>
+                <Center flex={1} px="2.5" bg="#ffedd5">
+                  <FlatList
+                    data={data2.getEarthQuakes}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.dateTime}
+                  />
+                </Center>
+              </ScrollView>
+            )}
+          </Center>
+        </ScrollView>
+      )}
     </NativeBaseProvider>
-  )
+  );
 }
 
 // LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
