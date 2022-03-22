@@ -2,6 +2,8 @@ const { gql } = require("apollo-server");
 const axios = require("axios");
 const Queue = require("bull");
 const { redis } = require("../config/connectRedis");
+const userMongoDb = require("./userMongoDb");
+// const
 
 // const eqQueue = new Queue("feltEarthquakes", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
 const sendEqNotif = new Queue("notif", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
@@ -25,8 +27,6 @@ const typeDefs = gql`
   type Query {
     getEarthQuakes: [earthQuake]
     getRecentEarthquake: earthQuake
-    newEarthquakeNotif: earthQuake
-    mockupNotif: message
   }
 `;
 
@@ -91,17 +91,16 @@ const resolvers = {
         return error.response.data;
       }
     },
-
-    newEarthquakeNotif: async () => {
-      const cacheEq = await redis.get("recentEarthquake");
-      const eq = JSON.parse(cacheEq);
-      return eq;
-    },
-    mockupNotif: async () => {
-      return {
-        message: "Gempa baru!",
-      };
-    },
+    // newEarthquakeNotif: async () => {
+    //   const cacheEq = await redis.get("recentEarthquake");
+    //   const eq = JSON.parse(cacheEq);
+    //   return eq;
+    // },
+    // mockupNotif: async () => {
+    //   return {
+    //     message: "Gempa baru!",
+    //   };
+    // },
   },
 };
 
@@ -119,7 +118,27 @@ sendEqNotif.process(async () => {
   if (recentEq.dateTime !== eq.dateTime) {
     console.log(recentEq, eq);
     await redis.set("recentEarthquake", JSON.stringify(recentEq));
-    return await resolvers.Query.newEqNotif();
+    // get user data
+    const user = await userMongoDb.resolvers.Query.getAllMongoUsers();
+    // send notif
+    // harusnya kirim recent earthquake
+    let message = {
+      to: user.expoToken,
+      sound: "default",
+      title: "Ramalan cuaca hari ini",
+      body: "Ini masih trial",
+    };
+    await axios({
+      method: "POST",
+      url: expoUrl,
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(message),
+    });
+    // return await resolvers.Query.newEqNotif();
   }
 });
 

@@ -1,6 +1,7 @@
 const { gql } = require("apollo-server");
 const axios = require("axios");
 const Queue = require("bull");
+const userMongoDb = require("./userMongoDb");
 
 const weatherForecast = new Queue("weatherForecast", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
 
@@ -78,14 +79,17 @@ const resolvers = {
 };
 
 weatherForecast.process(async () => {
-  const lat = -6.1753942;
-  const lon = 106.827183;
   // get user data
+  const user = await userMongoDb.resolvers.Query.getAllMongoUsers();
+  const lat = user.recentCoordinate.split(",")[0];
+  const lon = user.recentCoordinate.split(",")[1];
+  // const recentEq = await eq.resolvers.Query.getRecentEarthquake();
+  // console.log(recentEq);
 
   // get weather info
   const result = await resolvers.Query.weatherNotif(lat, lon);
   let message = {
-    to: "expoPushToken",
+    to: user.expoToken,
     sound: "default",
     title: "Ramalan cuaca hari ini",
   };
@@ -114,6 +118,7 @@ weatherForecast.add(
     repeat: {
       // every 6AM
       cron: `0 6 * * *`,
+      // every: 30000,
     },
   }
 );
