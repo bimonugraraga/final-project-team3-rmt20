@@ -13,18 +13,6 @@ const CustomDrawer = (props) => {
   const auth = useContext(AuthContext);
   // console.log(props.navigation, "<>>>>>>>>")
   let { navigate } = props.navigation;
-  let [access_token, setAT] = useState(null);
-
-  useEffect(() => {
-    AsyncStorage.getItem("access_token")
-      .then((resp) => {
-        console.log(resp, "<<<>>>");
-        setAT(resp);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [access_token]);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -33,6 +21,7 @@ const CustomDrawer = (props) => {
         auth.setAT(null);
         console.log(resp, ">>>>>");
         navigate("Home");
+        s;
       })
       .catch((err) => {
         console.log(err, "<><><>");
