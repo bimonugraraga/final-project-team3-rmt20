@@ -5,7 +5,6 @@ import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER, POST_WEATHER_REPORT } from "../../lib/apollo/queries/weatherQueries";
-// import { cloudinary } from "../../config/connectCloudinary";
 const mime = require("mime");
 
 export default function WeatherForm({ route, navigation }) {
@@ -31,7 +30,6 @@ export default function WeatherForm({ route, navigation }) {
     data.append("file", photo);
     data.append("upload_preset", "jwudmtq3");
     data.append("cloud_name", "ridhasidi");
-    console.log(data, "data<<<<<");
     fetch(`https://api.cloudinary.com/v1_1/ridhasidi/image/upload`, {
       method: "POST",
       body: data,
@@ -40,11 +38,9 @@ export default function WeatherForm({ route, navigation }) {
       },
     })
       .then((res) => {
-        console.log(res);
         return res.json();
       })
       .then((data) => {
-        console.log(data, "<<<<<<<<<");
         setPhotoUrl(data.secure_url);
       })
       .catch((err) => {
@@ -62,7 +58,6 @@ export default function WeatherForm({ route, navigation }) {
     });
 
     if (!result.cancelled) {
-      // console.log(result);
       const uri = result.uri;
       const arr = result.uri.split("/");
       const type = mime.getType(arr[arr.length - 1]);
@@ -72,7 +67,6 @@ export default function WeatherForm({ route, navigation }) {
         type,
         name: newName,
       };
-      console.log("Image ", source);
       setImage(result.uri);
       setShowModal(true);
       cloudinaryUpload(source);
