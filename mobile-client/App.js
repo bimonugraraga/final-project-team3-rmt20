@@ -3,14 +3,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NativeBaseProvider } from "native-base";
 import { SSRProvider } from '@react-aria/ssr'
-import { ApolloProvider } from '@apollo/client';
-import client from './lib/apollo/connection'
-import { Ionicons, MaterialCommunityIcons } from 'react-native-vector-icons';
-import CustomDrawer from './src/components/CustomDrawer';
-import Home from './src/screens/Home';
-import LoginRouter from './src/navigation/LoginRouter';
-import GempaRouter from './src/navigation/EarthquakeRouter';
-import CuacaRouter from './src/navigation/WeatherRouter';
+import { ApolloProvider, useQuery } from "@apollo/client";
+import client from "./lib/apollo/connection";
+import { Ionicons, MaterialCommunityIcons } from "react-native-vector-icons";
+import CustomDrawer from "./src/components/CustomDrawer";
+import Home from "./src/screens/Home";
+import LoginRouter from "./src/navigation/LoginRouter";
+import GempaRouter from "./src/navigation/EarthquakeRouter";
+import CuacaRouter from "./src/navigation/WeatherRouter";
 import registerNNPushToken from "native-notify";
 import { getPushDataObject } from "native-notify";
 import { registerIndieID } from "native-notify";
@@ -18,9 +18,17 @@ import axios from "axios";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
+import { GET_GEMPA } from "./lib/apollo/queries/eqQuery";
 
 const Drawer = createDrawerNavigator();
 export default function App() {
+  const { loading, error, data } = useQuery(GET_GEMPA);
+  console.log(
+    "🚀 ~ file: App.js ~ line 26 ~ App ~ loading, error, data",
+    loading,
+    error,
+    data
+  );
   let [access_token, setAT] = useState(null);
   registerNNPushToken(2333, "EeTai2ZsptKSZ6lG7Ejmqj");
   let pushDataObject = getPushDataObject();
@@ -30,23 +38,22 @@ export default function App() {
     pushDataObject
   );
 
-  const handleNotif = async () => {
-    // Native Notify Indie Push Registration Code
-    await registerIndieID("220334", 2333, "EeTai2ZsptKSZ6lG7Ejmqj");
-    // End of Native Notify Code
+  if (data) {
+    const handleNotif = async () => {
+      // Native Notify Indie Push Registration Code
+      await registerIndieID("220334", 2333, "EeTai2ZsptKSZ6lG7Ejmqj");
+      // End of Native Notify Code
 
-    axios.post(`https://app.nativenotify.com/api/indie/notification`, {
-      subID: "220334",
-      appId: 2333,
-      appToken: "EeTai2ZsptKSZ6lG7Ejmqj",
-      title: "put your push notification title here as a string",
-      message: "put your push notification message here as a string",
-    });
-  };
-
-  useEffect(() => {
+      axios.post(`https://app.nativenotify.com/api/indie/notification`, {
+        subID: "220334",
+        appId: 2333,
+        appToken: "EeTai2ZsptKSZ6lG7Ejmqj",
+        title: "put your push notification title here as a string",
+        message: "put your push notification message here as a string",
+      });
+    };
     handleNotif();
-  }, []);
+  }
 
   useEffect(() => {
     AsyncStorage.getItem("access_token")
