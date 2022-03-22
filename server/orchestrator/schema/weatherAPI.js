@@ -2,6 +2,8 @@ const { gql } = require("apollo-server");
 const axios = require("axios");
 const Queue = require("bull");
 const userMongoDb = require("./userMongoDb");
+const earthQuake = require('./eqAPI')
+const corn = require('./percobaan')
 
 const weatherForecast = new Queue("weatherForecast", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
 
@@ -79,28 +81,31 @@ const resolvers = {
 };
 
 weatherForecast.process(async () => {
-  // get user data
+  // // get user data
   const user = await userMongoDb.resolvers.Query.getAllMongoUsers();
-  const lat = user.recentCoordinate.split(",")[0];
-  const lon = user.recentCoordinate.split(",")[1];
+  let temp = user.map((el) => {
+    return el.expoToken
+  })
+  // const lat = user.recentCoordinate.split(",")[0];
+  // const lon = user.recentCoordinate.split(",")[1];
   // const recentEq = await eq.resolvers.Query.getRecentEarthquake();
   // console.log(recentEq);
-
+  // console.log(user)
   // get weather info
-  const result = await resolvers.Query.weatherNotif(lat, lon);
+  // const result = await resolvers.Query.weatherNotif(lat, lon);
+
+
+  
+  // console.log(el.expoToken, "<<<<");
+  // const lat = el.recentCoordinate.split(",")[0];
+  // const lon = el.recentCoordinate.split(",")[1];
   let message = {
-    to: user.expoToken,
+    to: temp,
     sound: "default",
     title: "Ramalan cuaca hari ini",
+    body: 'HAI'
   };
-  if (result.length === 0) {
-    message.body = "Cuaca hari ini diprediksi tidak akan hujan, cek AlertMe! untuk melihat kondisi di sekitar Anda";
-  } else {
-    message.body = "Hujan diprediksi akan turun pada hari ini, siapkan payung dan jas hujan Anda dan cek AlertMe! untuk melihat kondisi di sekitar Anda";
-  }
-
-  // send notif
-  await axios({
+  return axios({
     method: "POST",
     url: expoUrl,
     headers: {
@@ -109,7 +114,12 @@ weatherForecast.process(async () => {
       "Content-Type": "application/json",
     },
     data: JSON.stringify(message),
-  });
+  })
+
+  // return data
+  // // send notif
+  // const result = await earthQuake.resolvers.Query.getRecentEarthquake()
+  // console.log(result)
 });
 
 weatherForecast.add(
@@ -117,8 +127,8 @@ weatherForecast.add(
   {
     repeat: {
       // every 6AM
-      cron: `0 6 * * *`,
-      // every: 30000,
+      // cron: `0 6 * * *`,
+      every: 10000,
     },
   }
 );

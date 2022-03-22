@@ -25,6 +25,7 @@ const resolvers = {
           method: "GET",
           url: userMongoUrl,
         });
+        // console.log(resp.data)
         return resp.data;
       } catch (error) {
         return error.response.data;
