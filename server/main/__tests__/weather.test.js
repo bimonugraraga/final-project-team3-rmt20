@@ -4,7 +4,8 @@ const {User, WeatherReport} = require('../models')
 const {signToken} = require('../helpers/jwt')
 
 let validToken;
-let invalidToken = 'INVALID_TOKEN'
+let invalidToken1 = 'INVALID_TOKEN'
+let invalidToken2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJiYmJAYmJiLmNvbSIsImlhdCI6MTY0Nzg1Nzg4N30.TKkohoemVxmP0ggViVGMzR2OgJtfCh4ltxkimW3Wn0o"
 
 const userTest = {
   email: 'test1@mail.com',
@@ -538,7 +539,7 @@ describe('POST /reports/weathers', () => {
   test('400 Invalid Input Field  Weather Description', (done) => {
     request(app)
       .post('/reports/weathers')
-      .set('access_token', invalidToken)
+      .set('access_token', invalidToken1)
       .send({
         status: 'aman',
         description: 'test',
@@ -558,7 +559,39 @@ describe('POST /reports/weathers', () => {
 
         console.log(body)
         expect(status).toBe(401)
-        expect(body).toHaveProperty('message', 'Invalid token')
+        expect(body).toHaveProperty('message', 'Invalid Token')
+        done()
+
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test('400 Invalid Input Field  Weather Description', (done) => {
+    request(app)
+      .post('/reports/weathers')
+      .set('access_token', invalidToken2)
+      .send({
+        status: 'aman',
+        description: 'test',
+        photoUrl: 'test',
+        coordinate: 'test',
+        temperature: 20,
+        uvi: 20,
+        pressure: 20,
+        humidity: 20,
+        windspeed: 20,
+        weatherMain: 'test',
+        weatherDesc: 'test',
+        weatherIcon: 'test'
+      })
+      .then((response) => {
+        const {body, status} = response
+
+        console.log(body)
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Invalid Token')
         done()
 
       })

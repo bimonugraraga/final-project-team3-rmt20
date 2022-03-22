@@ -14,6 +14,7 @@ const typeDefs = gql`
   type Mutation {
     register(email: String, password: String): message
     login(email: String, password: String): token
+    saveUserData(expoToken: String, recentCoordinate: String): message
   }
 `;
 
@@ -50,6 +51,23 @@ const resolvers = {
           data: {
             email,
             password,
+          },
+        });
+        return resp.data;
+      } catch (error) {
+        return error.response.data;
+      }
+    },
+
+    saveUserData: async (_, args) => {
+      try {
+        const { expoToken, recentCoordinate } = args;
+        const resp = await axios({
+          method: "POST",
+          url: "mongoendpoint",
+          data: {
+            expoToken,
+            recentCoordinate,
           },
         });
         return resp.data;
