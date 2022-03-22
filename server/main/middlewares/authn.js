@@ -7,8 +7,14 @@ async function authn(req, res, next){
 
   try {
     if (!access_token) {
-      res.status(401).json({"message": "Invalid token"})
-      return
+      // res.status(401).json({"message": "Invalid token"})
+      // return
+      throw{
+        code: 401,
+        name: 'JsonWebTokenError',
+        message: "Invalid token"
+
+      }
     }
 
     let payload = verifyToken(access_token)
@@ -17,8 +23,12 @@ async function authn(req, res, next){
     let targetUser = await User.findByPk(id)
 
     if (!targetUser){
-      res.status(401).json({"message": "Invalid token"})
-      return
+      throw{
+        code: 401,
+        name: 'JsonWebTokenError',
+        message: "Invalid token"
+
+      }
     }
 
     req.loggedUser = {
@@ -29,12 +39,14 @@ async function authn(req, res, next){
     next()
 
   } catch(error){
-    if (error.name === 'JsonWebTokenError'){
-      res.status(401).json({"message": "Invalid token"})
-    } else{
-      res.status(500).json({"message": "Internal server error"})
+    // if (error.name === 'JsonWebTokenError'){
+    //   res.status(401).json({"message": "Invalid token"})
+    // } else{
+    //   res.status(500).json({"message": "Internal server error"})
 
-    }
+    // }
+
+    next(error)
   }
 }
 
