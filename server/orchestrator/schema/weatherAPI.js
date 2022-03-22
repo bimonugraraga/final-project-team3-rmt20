@@ -2,12 +2,16 @@ const { gql } = require("apollo-server");
 const axios = require("axios");
 const Queue = require("bull");
 const userMongoDb = require("./userMongoDb");
-const earthQuake = require('./eqAPI')
-const corn = require('./percobaan')
+const earthQuake = require("./eqAPI");
+const corn = require("./percobaan");
+const { redis } = require("../config/connectRedis");
 
-const weatherForecast = new Queue("weatherForecast", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
+// nama redis dengan function
+// cobacoba=2menit
+// weatherForecast=1s
+// weatherNotif=at6AM
 
-// const weatherNotif = new Queue("weatherNotif", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
+const weatherForecast = new Queue("weatherNotif", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
 
 const typeDefs = gql`
   type weatherDetailApi {
@@ -56,6 +60,7 @@ const resolvers = {
       try {
         const { lat, lon } = args;
         const resp = await axios({ method: "GET", url: baseUrl + `&lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily` });
+        // redis.del("weatherForecast");
         return resp.data;
       } catch (error) {
         return error.response.data;
@@ -82,10 +87,11 @@ const resolvers = {
 
 weatherForecast.process(async () => {
   // // get user data
-  const user = await userMongoDb.resolvers.Query.getAllMongoUsers();
-  let temp = user.map((el) => {
-    return el.expoToken
-  })
+  const users = await userMongoDb.resolvers.Query.getAllMongoUsers();
+  let temp = users.map((el) => {
+    return el.expoToken;
+  });
+  // console.log(temp);
   // const lat = user.recentCoordinate.split(",")[0];
   // const lon = user.recentCoordinate.split(",")[1];
   // const recentEq = await eq.resolvers.Query.getRecentEarthquake();
@@ -94,8 +100,6 @@ weatherForecast.process(async () => {
   // get weather info
   // const result = await resolvers.Query.weatherNotif(lat, lon);
 
-
-  
   // console.log(el.expoToken, "<<<<");
   // const lat = el.recentCoordinate.split(",")[0];
   // const lon = el.recentCoordinate.split(",")[1];
@@ -103,7 +107,7 @@ weatherForecast.process(async () => {
     to: temp,
     sound: "default",
     title: "Ramalan cuaca hari ini",
-    body: 'HAI'
+    body: "HAI",
   };
   return axios({
     method: "POST",
@@ -114,7 +118,7 @@ weatherForecast.process(async () => {
       "Content-Type": "application/json",
     },
     data: JSON.stringify(message),
-  })
+  });
 
   // return data
   // // send notif
@@ -127,8 +131,8 @@ weatherForecast.add(
   {
     repeat: {
       // every 6AM
-      // cron: `0 6 * * *`,
-      every: 10000,
+      cron: `0 6 * * *`,
+      // every: 120000,
     },
   }
 );
