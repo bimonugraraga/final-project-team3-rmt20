@@ -1,51 +1,71 @@
-import { View, Text } from "react-native";
-import { Box, Divider, Modal, Icon, Heading, VStack, FormControl, Input, Button, Center, NativeBaseProvider, Select, CheckIcon, TextArea, Platform, Image } from "native-base";
-import React, { useState, useEffect } from "react";
-import * as ImagePicker from "expo-image-picker";
-import { Ionicons } from "@expo/vector-icons";
-import { useQuery, useMutation } from "@apollo/client";
-import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER, POST_WEATHER_REPORT } from "../../lib/apollo/queries/weatherQueries";
-const mime = require("mime");
+import { View, Text} from 'react-native'
+import { Box, Divider, Modal, Icon, Heading, VStack, FormControl, Input, Button, Center, NativeBaseProvider, Select, CheckIcon, TextArea, Platform, Image} from "native-base";
+import React, { useState, useEffect } from 'react';
+import * as ImagePicker from 'expo-image-picker';
+import { Ionicons } from "@expo/vector-icons"
+import { useQuery,useMutation } from '@apollo/client';
+import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER,POST_WEATHER_REPORT  } from "../../lib/apollo/queries/weatherQueries";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import mime from "mime"
 
-export default function WeatherForm({ route, navigation }) {
-  const { item } = route.params;
+export default function WeatherForm ({route,navigation}){
+
+  // console.log(route, 1)
+  // console.log(navigation, 2)
+  // let {navigate} = props.navigation
+  let [access_token, setAT] = useState(null)
+
+  useEffect(() => {
+    AsyncStorage.getItem('access_token')
+      .then((resp) => {
+        console.log(resp, "<<<>>>")
+        setAT(resp)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [access_token])
+
+
+  const {item} = route.params
   // console.log(item)
   // console.log(item.current.temp)
+  
+    const [image, setImage] = useState(null);
+    const [description,setDescription] = useState('')
+    const [status,setStatus] = useState('')
+    const [showModal, setShowModal] = useState(false)
+    // console.log(status, description)
 
-  const [image, setImage] = useState(null);
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [photoUrl, setPhotoUrl] = useState("");
-  // console.log(status, description)
+    const [photoUrl, setPhotoUrl] = useState("");
+
+    const cloudinaryUpload = (photo) => {
+      const data = new FormData();
+      data.append("file", photo);
+      data.append("upload_preset", "jwudmtq3");
+      data.append("cloud_name", "ridhasidi");
+      fetch(`https://api.cloudinary.com/v1_1/ridhasidi/image/upload`, {
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setPhotoUrl(data.secure_url);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
 
   const ilanginFoto = (e) => {
     e.preventDefault();
     setShowModal(false);
     setImage(null);
-  };
-
-  const cloudinaryUpload = (photo) => {
-    const data = new FormData();
-    data.append("file", photo);
-    data.append("upload_preset", "jwudmtq3");
-    data.append("cloud_name", "ridhasidi");
-    fetch(`https://api.cloudinary.com/v1_1/ridhasidi/image/upload`, {
-      method: "POST",
-      body: data,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setPhotoUrl(data.secure_url);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   const pickImage = async () => {
@@ -57,48 +77,56 @@ export default function WeatherForm({ route, navigation }) {
       quality: 1,
     });
 
-    if (!result.cancelled) {
-      const uri = result.uri;
-      const arr = result.uri.split("/");
-      const type = mime.getType(arr[arr.length - 1]);
-      const newName = new Date().toISOString().split("T")[0] + "_" + arr[arr.length - 1];
-      const source = {
-        uri,
-        type,
-        name: newName,
-      };
-      setImage(result.uri);
-      setShowModal(true);
-      cloudinaryUpload(source);
-    }
-  };
+      if (!result.cancelled) {
+        const uri = result.uri;
+        const arr = result.uri.split("/");
+        const type = mime.getType(arr[arr.length - 1]);
+        const newName = new Date().toISOString().split("T")[0] + "_" + arr[arr.length - 1];
+        const source = {
+          uri,
+          type,
+          name: newName,
+        };
+        setImage(result.uri);
+        setShowModal(true)
+        cloudinaryUpload(source);
+      }
+    };
 
-  let [submitHandler = () => {}, { loading, error, data }] = useMutation(POST_WEATHER_REPORT, {
-    variables: {
-      data: {
-        status: status,
-        description: description,
-        photoUrl: photoUrl,
-        coordinate: `${item.lat},${item.lon}`,
-        temperature: item.current.temp,
-        uvi: item.current.uvi,
-        pressure: item.current.pressure,
-        humidity: item.current.humidity,
-        windspeed: item.current.wind_speed,
-        weatherMain: item.current.weather[0].main,
-        weatherDesc: item.current.weather[0].description,
-        weatherIcon: item.current.weather[0].icon,
-        access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTYsImVtYWlsIjoiYUBhLmNvbSIsImlhdCI6MTY0Nzc4NDg3MH0.w-4vbxAgq2acPj-bjXI7ilhdW7BSPldBVUtoSdmABP0",
-      },
-    },
-  });
+    console.log(photoUrl, "<<<<<")
 
-  // if (data){
-  //   if (data.createWeatherReport.message === "Laporan telah berhasil dibuat") {
-  //     navigation.navigate('DetailCuaca')
-  //   }
-  // }
-  // "message": "Laporan telah berhasil dibuat"
+     let [submitHandler = () => {
+      }, {loading, error, data}] = useMutation(POST_WEATHER_REPORT, {
+        refetchQueries : [
+          GET_ALL_WEATHERS_REPORT
+        ] ,
+        variables: {
+          data :{
+            status : status ,
+            description : description ,
+            photoUrl : photoUrl, 
+            coordinate : `${item.lat},${item.lon}`, 
+            temperature : item.current.temp, 
+            uvi : item.current.uvi, 
+            pressure : item.current.pressure, 
+            humidity : item.current.humidity, 
+            windspeed : item.current.wind_speed, 
+            weatherMain :item.current.weather[0].main, 
+            weatherDesc :item.current.weather[0].description, 
+            weatherIcon :item.current.weather[0].icon, 
+            access_token : access_token
+          }
+        }
+      })
+      console.log(loading,error,data, "<<<<<<<<")
+
+      if (data){
+        if (data.createWeatherReport.message === "Laporan telah berhasil dibuat") {
+          
+          navigation.navigate('DetailCuaca')
+        }
+      }
+      // "message": "Laporan telah berhasil dibuat"
   return (
     <NativeBaseProvider>
       <Center flex={1} px="3">

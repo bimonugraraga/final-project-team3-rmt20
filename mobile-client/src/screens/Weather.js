@@ -11,7 +11,8 @@ import {
   HStack,
   Stack,
   NativeBaseProvider,
-  Spinner
+  Spinner,
+  MaterialIcons
 } from "native-base";
 
 import {Entypo} from 'react-native-vector-icons';
@@ -70,7 +71,7 @@ const getData = async () => {
       setCity(city);
     })();
   }, []);
-  
+
   let text = 'Waiting..';
   let lati = 0
   let long = 0
@@ -85,6 +86,9 @@ const getData = async () => {
     lati = location.coords.latitude
     long = location.coords.longitude
   }
+    // console.log(lati, 1)
+    // console.log(long, 2)
+    // console.log(city)
   const currentCity = citycur
   const currentDistrict = dis
   const lat = lati
@@ -98,7 +102,7 @@ const getData = async () => {
     }
   })
 
-  console.log(loading, error, data, "<--->")
+  // console.log(loading, error, data, "<--->")
 
   if (error) {
     return <View style ={{backgroundColor : "#fef3c7"}}>
@@ -135,6 +139,7 @@ const getData = async () => {
               <Box alignItems="center" style = {styles.boxcuacasataini}>
                 <Box
                   maxW="80"
+                  shadow={2}
                   rounded="lg"
                   overflow="hidden"
                   borderColor="coolGray.200"
@@ -148,7 +153,7 @@ const getData = async () => {
                     borderWidth: 0,
                   }}
                   _light={{
-                    backgroundColor: "#22d3ee",
+                    backgroundColor: "#06b6d4",
                   }}
                 >
               <Box borderWidth={2} rounded="md">

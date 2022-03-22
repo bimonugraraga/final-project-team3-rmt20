@@ -11,15 +11,20 @@ import Home from './src/screens/Home';
 import LoginRouter from './src/navigation/LoginRouter';
 import GempaRouter from './src/navigation/EarthquakeRouter';
 import CuacaRouter from './src/navigation/WeatherRouter';
-
+import EqNotif from './src/components/expoPushNotif';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 
+import * as Notifications from 'expo-notifications'
+import * as Permissions from 'expo-permissions'
 
 const Drawer = createDrawerNavigator();
 export default function App() {
   let [access_token, setAT] = useState(null)
   
+
+
+
   useEffect(() => {
     AsyncStorage.getItem('access_token')
       .then((resp) => {
@@ -29,7 +34,15 @@ export default function App() {
       .catch((err) => {
         console.log(err)
       })
+
+
+
   }, [access_token])
+
+
+
+
+
 
   const loginDrawer = () => {
     if (!access_token){
@@ -71,6 +84,9 @@ export default function App() {
             <Drawer.Screen name="Home" options={{title: 'Beranda', drawerIcon: () => {
               return <Ionicons name="home" size={25} color="#fff" />
             }}}  component={Home} />
+            <Drawer.Screen name="EqNotif" options={{title: 'Notif', drawerIcon: () => {
+              return <Ionicons name="home" size={25} color="#fff" />
+            }}}  component={EqNotif}/>
             <Drawer.Screen name="GempaRouter" options={{title: 'Gempa', drawerIcon: () => {
               return <MaterialCommunityIcons name="alert-octagram-outline" size={25} color="#fff" />
             }}}  component={GempaRouter} />
