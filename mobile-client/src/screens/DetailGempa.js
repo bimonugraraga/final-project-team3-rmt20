@@ -158,7 +158,7 @@ export default function DetailGempa({navigation}) {
                 
                 
               </MapView>
-            }
+              }
           </AspectRatio>
         </Box>
 

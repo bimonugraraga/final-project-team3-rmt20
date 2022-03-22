@@ -7,7 +7,7 @@ import { ApolloProvider } from '@apollo/client';
 import client from './lib/apollo/connection'
 import { Ionicons, MaterialCommunityIcons } from 'react-native-vector-icons';
 import CustomDrawer from './src/components/CustomDrawer';
-import Home from './src/screens/Home';
+import Home from './src/screens/Home'
 import LoginRouter from './src/navigation/LoginRouter';
 import GempaRouter from './src/navigation/EarthquakeRouter';
 import CuacaRouter from './src/navigation/WeatherRouter';
