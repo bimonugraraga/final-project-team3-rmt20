@@ -4,6 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, Button, Platform } from 'react-native';
 import { useQuery } from '@apollo/client';
 import {GET_GEMPA} from '../../lib/apollo/queries/eqQuery.js'
+import * as BackgroundFetch from 'expo-background-fetch';
+import * as TaskManager from 'expo-task-manager';
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -12,16 +15,17 @@ Notifications.setNotificationHandler({
   }),
 });
 export default function EqNotif() {
-  let {loading, error, data, refetch} = useQuery(GET_GEMPA)
+  let {loading, error, data} = useQuery(GET_GEMPA)
   console.log(loading, error, data)
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
+  const [readyTo, setReady] = useState(false)
   const notificationListener = useRef();
   const responseListener = useRef();
-
+  const MINUTE_MS = 2000;
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-
+  
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
@@ -31,10 +35,15 @@ export default function EqNotif() {
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       console.log(response);
     });
-
+    const interval = setInterval(() => {
+      console.log('Logs every', MINUTE_MS);
+      setReady(true)
+      sendPushNotification(expoPushToken, data);
+    }, MINUTE_MS);
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
+      clearInterval(interval)
     };
   }, []);
   
@@ -58,7 +67,7 @@ export default function EqNotif() {
       <Button
         title="Press to Send Notification"
         onPress={async () => {
-          await sendPushNotification(expoPushToken, data);
+           sendPushNotification(expoPushToken, data);
         }}
       />
     </View>
@@ -88,7 +97,7 @@ async function sendPushNotification(expoPushToken, data) {
   const message = {
     to: expoPushToken,
     sound: 'default',
-    title: `WASPADA GEMPA!${city}`,
+    title: `WASPADA GEMPA! ${city}`,
     body: `${data.getRecentEarthquake.date}, Scala: ${data.getRecentEarthquake.magnitude}`,
     data: { someData: data.getRecentEarthquake.depth },
   };
@@ -131,6 +140,8 @@ async function registerForPushNotificationsAsync() {
       lightColor: '#FF231F7C',
     });
   }
-
+  console.log(token)
   return token;
 }
+
+
