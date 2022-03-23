@@ -167,16 +167,16 @@ const getData = async () => {
                 <AspectRatio w="100%" ratio={16 / 9 }>
                 <MapView
                       initialRegion={{
-                        latitude: lat,
-                        longitude: lon,
+                        latitude: data?.fetchCurrentWeather.lat,
+                        longitude: data?.fetchCurrentWeather.lon,
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                       }}
                       >
                       <Marker 
                       coordinate={{
-                        latitude: lat,
-                        longitude:  lon,
+                        latitude: data?.fetchCurrentWeather.lat,
+                        longitude:  data?.fetchCurrentWeather.lon,
                       }}
                       pinColor="red"
                       >
@@ -192,7 +192,7 @@ const getData = async () => {
                         {currentCity}, {currentDistrict}
                       </Heading>
                     </Stack>
-                   <Divider bg="#a1a1aa" thickness="2" />
+                  <Divider bg="#a1a1aa" thickness="2" />
                     <Box style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
                       <AspectRatio w="30%" ratio={16 / 9}>
                         <Image
