@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { View, Text, Divider, Button } from "native-base";
+import { Image } from "react-native";
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -65,7 +66,14 @@ const CustomDrawer = (props) => {
             padding: 50,
           }}
         >
-          <Ionicons name="alert-circle-outline" size={40} color="#fff" />
+          <Image
+            style={{
+              width: 50,
+              height: 50,
+              marginHorizontal: 15,
+            }}
+            source={require("../../assets/logo.png")}
+          />
           <Text fontSize={40} fontWeight="bold" color="#fff">
             AlertMe
           </Text>
