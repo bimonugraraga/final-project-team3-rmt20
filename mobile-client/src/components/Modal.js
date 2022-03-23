@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Modal, FormControl, Input, Center, NativeBaseProvider, Checkbox, Text, Container, WarningOutlineIcon, Box  } from "native-base";
-import { useState } from "react";
 
 export default function ModalForm() {
 
   const [showModal, setShowModal] = useState(true);
-  const [groupValue, setGroupValue] = React.useState(["ExponentPushToken[pDcgbXA0Ii0YA__0TDxF3e]"]);
+  const [groupValue, setGroupValue] = React.useState([""]);
   console.log(groupValue);
   
   const submitHandler = () => {
@@ -65,3 +64,4 @@ export default function ModalForm() {
   );
 };
     
+

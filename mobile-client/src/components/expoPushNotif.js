@@ -14,6 +14,7 @@ Notifications.setNotificationHandler({
     shouldSetBadge: false,
   }),
 });
+
 export default function EqNotif() {
   let {loading, error, data} = useQuery(GET_GEMPA)
   console.log(loading, error, data)
