@@ -536,7 +536,7 @@ describe('POST /reports/weathers', () => {
       })
   })
 
-  test('400 Invalid Input Field  Weather Description', (done) => {
+  test('400 Invalid Input Field  Invalid Token', (done) => {
     request(app)
       .post('/reports/weathers')
       .set('access_token', invalidToken1)
@@ -568,7 +568,7 @@ describe('POST /reports/weathers', () => {
       })
   })
 
-  test('400 Invalid Input Field  Weather Description', (done) => {
+  test('400 Invalid Input Field  Invalid Token', (done) => {
     request(app)
       .post('/reports/weathers')
       .set('access_token', invalidToken2)
