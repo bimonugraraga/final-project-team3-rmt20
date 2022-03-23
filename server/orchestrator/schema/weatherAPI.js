@@ -7,11 +7,10 @@ const userMongoDb = require("./userMongoDb");
 // const { redis } = require("../config/connectRedis");
 
 // nama redis dengan function
-// cobacoba=2menit
-// weatherForecast=1s
-// weatherNotif=at6AM
+// cobacoba=1menit
+// notifEvery6AM
 
-const weatherForecast = new Queue("weatherNotif", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
+const weatherForecast = new Queue("notifEvery6AM", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
 
 const typeDefs = gql`
   type weatherDetailApi {
@@ -60,7 +59,6 @@ const resolvers = {
       try {
         const { lat, lon } = args;
         const resp = await axios({ method: "GET", url: baseUrl + `&lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily` });
-        // redis.del("weatherForecast");
         return resp.data;
       } catch (error) {
         return error.response.data;
@@ -78,8 +76,8 @@ const resolvers = {
           }
         });
         return data;
+        // return [];
       } catch (error) {
-        // console.log(error);
         return error.response.data;
       }
     },
@@ -89,32 +87,29 @@ const resolvers = {
 weatherForecast.process(async () => {
   // get user data
   let users = await userMongoDb.resolvers.Query.getAllMongoUsers();
-  // console.log(users);
-  users.forEach(async (el) => {
-    const lat = el.recentCoordinates.split(",")[0];
-    const lon = el.recentCoordinates.split(",")[1];
-    // get weather info
-    const result = await resolvers.Query.weatherNotif(+lat, +lon);
-    // console.log(result, "??????????");
-    if (result.length === 0) {
-      el.body = "Cuaca hari ini diprediksi tidak akan hujan, cek AlertMe! untuk melihat kondisi di sekitar Anda";
-    } else {
-      el.body = "Hujan diprediksi akan turun pada hari ini, siapkan payung dan jas hujan Anda dan cek AlertMe! untuk melihat kondisi di sekitar Anda";
-    }
-  });
-  console.log(users);
-
-  let message = users.map((el) => {
-    let obj = {
-      to: el.expoToken,
-      sound: "default",
-      title: "Ramalan cuaca hari ini",
-      body: users.body,
-    };
-    return obj;
-  });
-  console.log(message, "<<<<<<<<<<<");
-
+  let messages = await Promise.all(
+    users.map(async (el) => {
+      let newObj = {
+        to: el.expoToken,
+        sound: "default",
+        title: "Ramalan cuaca hari ini",
+      };
+      const lat = el.recentCoordinates.split(",")[0];
+      const lon = el.recentCoordinates.split(",")[1];
+      let obj;
+      // get weather info for each user
+      const result = await resolvers.Query.weatherNotif(obj, { lat: +lat, lon: +lon });
+      if (result.length === 0) {
+        newObj.body = "Cuaca hari ini diprediksi tidak akan hujan, cek AlertMe! untuk melihat kondisi di sekitar Anda";
+      } else {
+        newObj.body = "Hujan diprediksi akan turun pada hari ini, siapkan payung dan jas hujan Anda dan cek AlertMe! untuk melihat kondisi di sekitar Anda";
+      }
+      // messages.push(newObj);
+      return newObj;
+    })
+  );
+  // console.log(messages);
+  console.log("Sending notifications");
   return axios({
     method: "POST",
     url: expoUrl,
@@ -123,7 +118,7 @@ weatherForecast.process(async () => {
       "Accept-encoding": "gzip, deflate",
       "Content-Type": "application/json",
     },
-    data: JSON.stringify(message),
+    data: JSON.stringify(messages),
   });
 });
 
@@ -133,7 +128,7 @@ weatherForecast.add(
     repeat: {
       // every 6AM
       cron: `0 6 * * *`,
-      // every: 120000,
+      // every: 60000,
     },
   }
 );
