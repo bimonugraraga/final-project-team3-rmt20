@@ -187,7 +187,6 @@ export default function WeatherForm ({route,navigation}){
 
               <View justifyContent="center" alignItems="center">
                 <Button leftIcon={<Icon as={Ionicons} name="cloud-upload-outline" size="sm" />} mt="2" w="50%" colorScheme="indigo" title="Pick an image from camera roll" onPress={pickImage}>
-                  {" "}
                   Upload Foto
                 </Button>
                 {image ? (
