@@ -105,7 +105,8 @@ export default function CardReportUser ({item}) {
           <Modal.Body>
           <Center >
               <Box alignItems="center" style={styles.boxlokasilain} mt="10">
-                  <Box mb= "5" maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
+                  <Box mb= "5" maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" 
+                  _dark={{
                     borderColor: "coolGray.600",
                     backgroundColor: "gray.700"
                   }} _web={{
@@ -137,7 +138,8 @@ export default function CardReportUser ({item}) {
                       </AspectRatio>
                       <Center bg="#3f3f46" _dark={{
                         bg: "#3f3f46"
-                        }} _text={{
+                        }} 
+                        _text={{
                           color: "warmGray.50",
                           fontWeight: "700",
                           fontSize: "xs"
@@ -145,16 +147,27 @@ export default function CardReportUser ({item}) {
                         {item.description}
                       </Center>
                     </Box>
-                    <Stack p="4" space={3} style={{backgroundColor: "#e2e8f0"}}>
+                    <Stack p="4" space={3} 
+                    bg={{
+                      linearGradient: {
+                        colors: ["#191645", "#43C6AC"],
+                        start: [0, 0],
+                        end: [0, 1]
+                      }
+                    }}   _text={{
+                      fontSize: "md",
+                      fontWeight: "bold",
+                      color: "white"
+                    }}>
                       <View style= {{flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
                         <Stack space={2}>
-                          <Heading size="sm" ml="-1">
+                          <Heading size="sm" ml="-1" color="white">
                             {item.coordinate}
                           </Heading>
                           <Text fontSize="xs" _light={{
-                            color: "violet.500"
+                            color: "white"
                             }} _dark={{
-                              color: "violet.400"
+                              color: "white"
                             }} fontWeight="500" ml="-0.5" mt="-1">
                             {date}
                           </Text>
@@ -165,27 +178,29 @@ export default function CardReportUser ({item}) {
                             alt="image"
                           />
                         </AspectRatio>
-                        <Text style={{fontSize: 17, fontWeight: "bold", color: "#1e293b", marginStart: 5}}>{item.temperature}°C</Text>
+                        <Text style={{fontSize: 17, fontWeight: "bold", color: "white", marginStart: 5}}>{item.temperature}°C</Text>
                       </View>
-                      <Text fontWeight="bold" color="#1e293b" marginBottom= "1.5" style= {{textAlign: "center"}}>
+                      <Divider bg="#a1a1aa" thickness="2" />
+                      <Text fontWeight="bold" color="white" marginBottom= "1.5" style= {{textAlign: "center"}}>
                            Kondisi</Text>
                       <View style= {{flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
                         <View style= {{flexDirection: "row", alignItems: "center"}}>
-                          <Entypo name = "direction"  />
-                          <Text fontWeight="400" style={{marginStart: 5}}>
+                          <Entypo name = "direction" color="white"  />
+                          <Text fontWeight="400" color="white" style={{marginStart: 5}}>
                             {item.windspeed} m/s WSW
                           </Text>
                         </View>
-                        <Entypo name = "air"> <Text fontWeight="400" style={{marginStart: 5}}>
+                        <Entypo name = "air" color="white"> <Text fontWeight="400" style={{marginStart: 5, color :"white"}}>
                           {item.pressure} hPa
                         </Text></Entypo>
                       </View>
                       <View style= {{flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
-                        <Text fontWeight="400" style={{marginStart: 5}}> Status: {item.status}</Text>
-                        <MaterialCommunityIcons name = "air-humidifier"><Text fontWeight="400" style={{marginStart: 10}}>
+                        <Text fontWeight="400" style={{marginStart: 5, color: "white"}}> Status: {item.status}</Text>
+                        <MaterialCommunityIcons color="white" name = "air-humidifier"><Text fontWeight="400" style={{marginStart: 10, color :"white"}}>
                             {item.humidity} %</Text> </MaterialCommunityIcons>
                       </View>
-                      <Text fontWeight="bold" color="#1e293b" marginBottom= "1.5" style= {{textAlign: "center"}}>
+                      <Divider bg="#a1a1aa" thickness="2" />
+                      <Text fontWeight="bold" color="#1e293b" marginBottom= "1.5" style= {{textAlign: "center", color : "white"}}>
                         {item.description}</Text>
                       <AspectRatio w="100%" >
                           <Image

@@ -14,6 +14,7 @@ export default function WeatherForm ({route,navigation}){
   // console.log(navigation, 2)
   // let {navigate} = props.navigation
   let [access_token, setAT] = useState(null)
+  console.log(access_token, 'dari form gempa');
 
   useEffect(() => {
     AsyncStorage.getItem('access_token')

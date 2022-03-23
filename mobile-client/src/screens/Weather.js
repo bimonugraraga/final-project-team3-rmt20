@@ -1,4 +1,4 @@
-import { View,ScrollView,TouchableOpacity,StyleSheet,ActivityIndicator } from "react-native";
+import { View,ScrollView,TouchableOpacity,StyleSheet,ActivityIndicator,Dimensions } from "react-native";
 import { Button, Row } from "native-base";
 import React, { useState, useEffect } from "react";
 import {
@@ -12,7 +12,8 @@ import {
   Stack,
   NativeBaseProvider,
   Spinner,
-  MaterialIcons
+  MaterialIcons,
+  Divider
 } from "native-base";
 
 import {Entypo} from 'react-native-vector-icons';
@@ -191,6 +192,7 @@ const getData = async () => {
                         {currentCity}, {currentDistrict}
                       </Heading>
                     </Stack>
+                   <Divider bg="#a1a1aa" thickness="2" />
                     <Box style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
                       <AspectRatio w="30%" ratio={16 / 9}>
                         <Image

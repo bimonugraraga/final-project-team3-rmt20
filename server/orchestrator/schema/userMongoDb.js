@@ -12,7 +12,7 @@ const typeDefs = gql`
   }
 
   extend type Mutation {
-    createUserMongo(expoToken: String, recentCoordinate: String): message
+    createUserMongo(expoToken: String, recentCoordinates: String): message
   }
 `;
 
@@ -25,6 +25,7 @@ const resolvers = {
           method: "GET",
           url: userMongoUrl,
         });
+        // console.log(resp.data)
         return resp.data;
       } catch (error) {
         return error.response.data;
@@ -48,13 +49,13 @@ const resolvers = {
   Mutation: {
     createUserMongo: async (_, args) => {
       try {
-        const { expoToken, recentCoordinate } = args;
+        const { expoToken, recentCoordinates } = args;
         const resp = await axios({
           method: "POST",
           url: userMongoUrl,
           data: {
             expoToken,
-            recentCoordinate,
+            recentCoordinates,
           },
         });
         return resp.data;
