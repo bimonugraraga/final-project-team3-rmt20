@@ -41,7 +41,7 @@ export default function Gempa({navigation}) {
   }, [])
 
   const renderItem = ({ item }) => (
-    <CardGempa item={item}/>
+    <CardGempa item={item}  navigation={navigation}/>
   )
 
   if (error) {

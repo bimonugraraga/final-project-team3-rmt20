@@ -1,6 +1,6 @@
-import react from 'react'
+import React from 'react'
 import { View } from 'react-native'
-import { Box, Heading, Text, Stack, Divider, Flex, NativeBaseProvider, Center} from "native-base";
+import { Box, Heading, Text, Stack, Divider, Flex, NativeBaseProvider, Center, Button} from "native-base";
 import { useEffect, useState } from 'react';
 import { formatDistance, subHours } from 'date-fns'
 import {Feather, Ionicons} from 'react-native-vector-icons';
@@ -12,8 +12,10 @@ const config = {
     "linear-gradient": LinearGradient
   }
 };
-export default function CardGempa({item}) {
+export default function CardGempa(props) {
 
+  const navigation = props.navigation
+  const item = props.item
   const [date, setDate] = useState('')
   useEffect(() => {
     const time = formatDistance(subHours(new Date(item.dateTime), 3), new Date(), { addSuffix: true })
@@ -25,7 +27,7 @@ export default function CardGempa({item}) {
     <Center>
     <Box alignItems="center">
       <Box mb="2" maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1"
-       bg={{
+      bg={{
         linearGradient: {
           colors: ["#191645", "#43C6AC"],
           start: [0, 0],
@@ -65,6 +67,7 @@ export default function CardGempa({item}) {
             </Box>
           </Box>
         </Stack>
+      <Button onPress={() => navigation.navigate('DetailGempaTerakhir', {item: item})}>Detail Gempa</Button>
       </Box>
     </Box>
     </Center>

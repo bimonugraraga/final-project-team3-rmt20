@@ -4,7 +4,7 @@ const axios = require("axios");
 const typeDefs = gql`
   type MongoUser {
     expoToken: String
-    recentCoordinate: String
+    recentCoordinates: String
   }
   extend type Query {
     getAllMongoUsers: [MongoUser]
@@ -48,6 +48,7 @@ const resolvers = {
 
   Mutation: {
     createUserMongo: async (_, args) => {
+      console.log(args, "<<<<<")
       try {
         const { expoToken, recentCoordinates } = args;
         const resp = await axios({

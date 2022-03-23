@@ -24,3 +24,4 @@ export const SAVE_USER_DATA = gql`
     }
   }
 `;
+

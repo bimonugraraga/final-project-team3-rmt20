@@ -48,6 +48,7 @@ export default function Login({ navigation }) {
       });
   }
 
+
   return (
     <NativeBaseProvider>
       <Center flex={1} px="3">
