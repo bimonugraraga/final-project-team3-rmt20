@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useEffect,useContext} from 'react'
 import { View,TouchableOpacity,ActivityIndicator, StyleSheet,Dimensions,FlatList,ScrollView, RefreshControl, LogBox} from 'react-native'
 import { Button} from "native-base";
 import { Box, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider,Spinner,MaterialIcons,Divider } from "native-base";
@@ -8,6 +8,8 @@ import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/
 import MapView, {Callout, Geojson, Marker }  from 'react-native-maps';
 import CardReportUser from '../components/CardReportUser'
 import * as Location from 'expo-location';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AuthContext from "../context";
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
@@ -23,10 +25,26 @@ const config = {
   }
 };
 
+
 export default function DetailWeather({navigation,route}) {
 
-
+  // console.log(navigation, route, "<<<<")
+  const auth = useContext(AuthContext);
   // console.log(route.params)
+
+  let [access_token, setAT] = useState(null)
+  // console.log(access_token, 'dari form gempa');
+
+  useEffect(() => {
+    AsyncStorage.getItem('access_token')
+      .then((resp) => {
+        // console.log(resp, "<<<>>>")
+        auth.setAT(resp)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [access_token])
 
   const [location, setLocation] = useState(null);
   const [city, setCity] = useState(null);
@@ -66,7 +84,7 @@ export default function DetailWeather({navigation,route}) {
     const currentDistrict = dis
     const lat = lati
     const lon = long
-
+   
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -75,8 +93,8 @@ export default function DetailWeather({navigation,route}) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  // const lat = route.params.lat
-  // const lon = route.params.lon
+  // const latParams = route.params.lat
+  // const lonParams = route.params.lon
   // const currentCity = route.params.currentCity
   // const currentDistrict = route.params.currentDistrict
   
@@ -87,7 +105,7 @@ export default function DetailWeather({navigation,route}) {
     }
   })
 
-  // console.log(loading, error, data, "<--->")
+  // console.log(loading, error, data, "<---------->")
 
   let {loading: loading2, error : error2, data: data2} = useQuery(GET_ALL_WEATHERS_REPORT)
   // console.log(loading2, error2, data2, "<--->")
@@ -108,6 +126,16 @@ export default function DetailWeather({navigation,route}) {
   const renderItem = ({ item }) => (
     <CardReportUser item={item}/>
   )
+
+  const reportButton = () => {
+    if (auth.access_token){
+      return(
+        <TouchableOpacity><Button colorScheme='orange'  mt="0"
+                        onPress={() => navigation.navigate('FormCuaca', {item: data.fetchCurrentWeather})}
+                      >Report Cuaca</Button></TouchableOpacity>
+      )
+    }
+  }
 
   return (
     <ScrollView nestedScrollEnabled={true}
@@ -131,7 +159,51 @@ export default function DetailWeather({navigation,route}) {
         
           : (
             <View style = {{marginBottom : 10}}> 
+            
             <Center flex={1} px="3" style ={{backgroundColor : "#e4e4e7"}}>
+               <Box mt ="5" borderWidth={2} rounded="md" borderColor="#f97316" >
+                <AspectRatio w="100%" >
+                {loading ? 
+                  <Center flex={1} px="3">
+                  <HStack space={2} justifyContent="center">
+                    <Spinner accessibilityLabel="Loading posts" />
+                    <Heading color="emerald.500" fontSize="md">
+                      Loading
+                    </Heading>
+                  </HStack>
+                </Center>
+                :
+                <MapView
+                    initialRegion={{
+                      latitude: route.params?.lat,
+                      longitude: route.params?.lon,
+                      latitudeDelta: 0.0922,
+                      longitudeDelta: 0.0421,
+                    }}
+                    >
+                    <Marker 
+                      coordinate={{
+                        latitude: route.params?.lat,
+                        longitude: route.params?.lon,
+                      }}
+                      pinColor="red"
+                      >
+                      <Callout><Text>Lokasi Saat Ini</Text></Callout>
+                    </Marker>
+                  </MapView>
+                }
+                </AspectRatio>
+                <Center bg="#3f3f46" 
+                _dark={{
+                  bg: "#3f3f46"
+                  }} _text={{
+                    color: "warmGray.50",
+                    fontWeight: "700",
+                    fontSize: "xs"
+                  }} position="absolute" bottom="0" px="3" py="1.5">
+                  {data.fetchCurrentWeather.current.weather[0].description}
+                </Center>
+              </Box>
                <Box alignItems="center" style={styles.boxlokasilain} mt="5">
                   <Box mb= "5" maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" 
                   _dark={{
@@ -143,38 +215,6 @@ export default function DetailWeather({navigation,route}) {
                   }} _light={{
                     backgroundColor: "gray.50"
                   }}>
-                    <Box >
-                      <AspectRatio w="100%" >
-                        <MapView
-                          initialRegion={{
-                            latitude: data.fetchCurrentWeather.lat,
-                            longitude: data.fetchCurrentWeather.lon,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
-                          }}
-                          >
-                          <Marker 
-                            coordinate={{
-                              latitude: data.fetchCurrentWeather.lat,
-                              longitude:  data.fetchCurrentWeather.lon,
-                            }}
-                            pinColor="red"
-                            >
-                            <Callout><Text>Lokasi Saat Ini</Text></Callout>
-                          </Marker>
-                        </MapView>
-                      </AspectRatio>
-                      <Center bg="#3f3f46" 
-                      _dark={{
-                        bg: "#3f3f46"
-                        }} _text={{
-                          color: "warmGray.50",
-                          fontWeight: "700",
-                          fontSize: "xs"
-                        }} position="absolute" bottom="0" px="3" py="1.5">
-                        {data.fetchCurrentWeather.current.weather[0].description}
-                      </Center>
-                    </Box>
                     <Stack p="4" space={3} 
                     bg={{
                       linearGradient: {
@@ -212,7 +252,7 @@ export default function DetailWeather({navigation,route}) {
                       <View style ={{alignItems: "center"}}>
                       <AspectRatio w="30%" ratio={16 / 9}>
                           <Image
-                            source={{ uri: `http://openweathermap.org/img/wn/${data.fetchCurrentWeather.current.weather[0].icon}@2x.png` }}
+                            source={{ uri: data? `http://openweathermap.org/img/wn/${data.fetchCurrentWeather.current.weather[0].icon}@2x.png` : null }}
                             alt="image"
                           />
                         </AspectRatio>
@@ -237,9 +277,10 @@ export default function DetailWeather({navigation,route}) {
                         <MaterialCommunityIcons color= "white" name = "air-humidifier"><Text fontWeight="400" style={{marginStart: 10 , color : "white"}}>
                             {data.fetchCurrentWeather.current.humidity} %</Text> </MaterialCommunityIcons>
                       </View>
-                      <TouchableOpacity><Button colorScheme='orange'  mt="0"
+                      {/* <TouchableOpacity><Button colorScheme='orange'  mt="0"
                         onPress={() => navigation.navigate('FormCuaca', {item: data.fetchCurrentWeather})}
-                      >Report Cuaca</Button></TouchableOpacity>
+                      >Report Cuaca</Button></TouchableOpacity> */}
+                      {reportButton()}
                     </Stack>
                   </Box>
                 </Box>

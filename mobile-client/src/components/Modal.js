@@ -25,7 +25,7 @@ export default function ModalForm(props) {
       }
     }
   )
-  console.log(loading,error, data)
+  console.log(loading,error, data, "<O>")
   return (
     <NativeBaseProvider>
       <Center flex={1} px="3">

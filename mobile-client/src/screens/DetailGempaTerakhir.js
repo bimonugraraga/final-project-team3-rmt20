@@ -1,16 +1,13 @@
 import React from 'react'
 import { View } from 'react-native'
-import { Box, Spinner, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider, Button, Divider, Flex, Modal,TouchableOpacity} from "native-base";
-import { useEffect, useState, useContext } from 'react';
+import { Box, Spinner, Heading, AspectRatio, Text, Center, HStack, Stack, NativeBaseProvider, Divider, Flex} from "native-base";
+import { useEffect, useState } from 'react';
 import { formatDistance, subHours} from 'date-fns'
-import {Feather, Ionicons, FontAwesome5} from 'react-native-vector-icons';
+import {Feather, Ionicons} from 'react-native-vector-icons';
 import MapView, {Callout, Marker }  from 'react-native-maps';
 import { useQuery } from '@apollo/client';
-import { GET_GEMPA, GET_USER_REPORT_GEMPA } from '../../lib/apollo/queries/eqQuery';
-import { MaterialIcons } from 'react-native-vector-icons';
+import { GET_USER_REPORT_GEMPA } from '../../lib/apollo/queries/eqQuery';
 import {Svg, Image as ImageSvg} from 'react-native-svg';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import AuthContext from "../context";
 
 const LinearGradient = require("expo-linear-gradient").LinearGradient;
 
@@ -20,43 +17,27 @@ const config = {
   }
 };
 
-export default function DetailGempa({navigation}) {
+export default function DetailGempaTerakhir({route}) {
+  const item = route.params.item
+  console.log(item);
 
-  const auth = useContext(AuthContext);
-  let [access_token, setAT] = useState(null)
-  console.log(access_token, 'dari form gempa');
-
-  useEffect(() => {
-    AsyncStorage.getItem('access_token')
-      .then((resp) => {
-        // console.log(resp, "<<<>>>")
-        auth.setAT(resp)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [access_token])
-
-  const { loading, error, data } = useQuery(GET_GEMPA)
   let coor
   let time
   let ltd
   let lng
-  if(data.getRecentEarthquake) {
-    coor = data.getRecentEarthquake?.coordinates
-    time = data.getRecentEarthquake?.dateTime
-    const a =  data.getRecentEarthquake?.coordinates
+  if(item) {
+    coor = item.coordinates
+    time = item.dateTime
+    const a =  item.coordinates
     const b = a.split(',')
     ltd = Number(b[0])
     lng = Number(b[1])
   }
 
-  const { loading: loading1, error: error1, data: data1 } = useQuery(GET_USER_REPORT_GEMPA, {
+  const { loading: loading1, error : error1, data : data1 } = useQuery(GET_USER_REPORT_GEMPA, {
     variables: {
       coordinates: coor, 
       dateTime: time
-      // coordinates: "-6.93,105.37", 
-      // dateTime: "2022-03-19 21:10:16.000 +0700"
     }
   })
 
@@ -81,33 +62,26 @@ export default function DetailGempa({navigation}) {
 
   const [date, setDate] = useState('')
   useEffect(() => {
-    const time = formatDistance(subHours(new Date(data.getRecentEarthquake.dateTime), 3), new Date(), { addSuffix: true })
+    const time = formatDistance(subHours(new Date(item.dateTime), 3), new Date(), { addSuffix: true })
     setDate(time)
   }, [])
+  console.log(error1);
 
-  if (error) {
-    return (
-      <NativeBaseProvider>
-        <Center flex={1} px="3">
-          <MaterialIcons name="error" size={30} />
-          <Text>Something Went Wrong</Text>
-        </Center>
-      </NativeBaseProvider>
-    )
-  }
-
-  const reportButton = () => {
-    if (auth.access_token){
-      return(
-        <Button colorScheme='orange' mt="2" onPress={() => navigation.navigate('FormGempa', {item : data.getRecentEarthquake})}>Form Pengaduan Gempa</Button>
-      )
-    }
-  }
+  // if (error1) {
+  //   return (
+  //     <NativeBaseProvider>
+  //       <Center flex={1} px="3">
+  //         <MaterialIcons name="error" size={30} />
+  //         <Text>Something Went Wrong</Text>
+  //       </Center>
+  //     </NativeBaseProvider>
+  //   )
+  // }
 
   return (
     <NativeBaseProvider  config={config}>
       {
-        loading ?
+        loading1 ?
         <Center flex={1} px="3">
           <HStack space={2} justifyContent="center">
             <Spinner accessibilityLabel="Loading posts" />
@@ -121,16 +95,8 @@ export default function DetailGempa({navigation}) {
       <Center flex={1} px="3" bg="#e4e4e7">
         <Box borderWidth={2} rounded="md" borderColor="#f97316">
           <AspectRatio w="100%" ratio={4/4}>
-            {loading1 ?
-              <Center flex={1} px="3">
-                <HStack space={2} justifyContent="center">
-                  <Spinner accessibilityLabel="Loading posts" />
-                  <Heading color="emerald.500" fontSize="md">
-                    Loading
-                  </Heading>
-                </HStack>
-              </Center>
-              :
+            {
+              data1 ?
               <MapView
                 initialRegion={{
                   latitude: ltd,
@@ -179,11 +145,28 @@ export default function DetailGempa({navigation}) {
                       </Callout>
                     </Marker>
                   ))}
-                    
-                
-                
               </MapView>
-              }
+              :
+              <MapView
+                initialRegion={{
+                  latitude: ltd,
+                  longitude: lng,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                }}
+                >
+                  <Marker 
+                  coordinate={{
+                    latitude: ltd,
+                    longitude: lng,
+                  }}
+                  pinColor="red"
+                  >
+                    <Callout><Text>Pusat Gempa</Text></Callout>
+                  </Marker>
+              </MapView>
+
+            }
           </AspectRatio>
         </Box>
 
@@ -205,39 +188,34 @@ export default function DetailGempa({navigation}) {
                 <Box w="100%">
                   <Flex mx="1" direction="row" justify="space-evenly" h="50">
                     <View justifyContent="center" alignItems="center">
-                      <Text fontSize="xs" color="#fff">{data.getRecentEarthquake.hour}</Text>
-                      <Heading size="md" color="#fff">{data.getRecentEarthquake.date}</Heading>
+                      <Text fontSize="xs" color="#fff">{item.hour}</Text>
+                      <Heading size="md" color="#fff">{item.date}</Heading>
                       <Text fontSize="xs" color="#fff">{date}</Text>
                     </View >
                     <Divider orientation="vertical" bg="#a1a1aa" thickness="2" mx="7" />
                     <View justifyContent="center" alignItems="center">
                       <Feather color="#dc2626" name="activity" />
-                      <Heading size="md" color="#fff">{data.getRecentEarthquake.magnitude}</Heading>
+                      <Heading size="md" color="#fff">{item.magnitude}</Heading>
                       <Text color="#fff">Magnitude</Text>
                     </View>
                     <Divider orientation="vertical" bg="#a1a1aa" thickness="2" mx="7" />
                     <View justifyContent="center" alignItems="center">
                       <Feather color="#fbbf24" name="radio" />
-                      <Heading size="sm" color="#fff">{data.getRecentEarthquake.depth}</Heading>
+                      <Heading size="sm" color="#fff">{item.depth}</Heading>
                       <Text color="#fff">Kedalaman</Text>
                     </View>
                   </Flex>
                   <Divider mt="4" mb="2" bg="#a1a1aa" thickness="2" />
                   <View m="2">
-                    <Ionicons color="#f97316" name="location"><Text fontSize="xs" color="#fff"> {data.getRecentEarthquake.area}</Text></Ionicons>
-                    <Ionicons  color="#fde047" name="map"><Text fontSize="xs" color="#fff"> (skala MMI) dirasakan pada Wilayah : {data.getRecentEarthquake.dirasakan}</Text></Ionicons>
-                    <FontAwesome5  color="#fde047" name="podcast"><Text fontSize="xs" color="#fff"> {data.getRecentEarthquake.potensi}</Text></FontAwesome5>
+                    <Ionicons color="#f97316" name="location"><Text fontSize="xs" color="#fff"> {item.area}</Text></Ionicons>
+                    <Ionicons  color="#fde047" name="map"><Text fontSize="xs" color="#fff"> (skala MMI) dirasakan pada Wilayah : {item.dirasakan}</Text></Ionicons>
                   </View>
                 </Box>
               </Box>
-              {/* <Button colorScheme='orange' mt="2" onPress={() => navigation.navigate('FormGempa', {item : data.getRecentEarthquake})}>Form Pengaduan Gempa</Button> */}
-              {reportButton()}
             </Stack>
           </Box>
         </Box>
-
       </Center>
-
       }
     </NativeBaseProvider>
   )
