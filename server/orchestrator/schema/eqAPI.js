@@ -103,14 +103,15 @@ sendEqNotif.process(async () => {
     let expoTokens = users.map((el) => {
       return el.expoToken;
     });
-    // send notif
-    // harusnya kirim recent earthquake
+    // send notif to all users
     let message = {
       to: expoTokens,
       sound: "default",
       title: "Info Gempa",
-      body: `Gempa bermagnitude ${recentEq.magnitude}. ${recentEq.area}. Potensi: ${recentEq.potensi}`,
+      body: `Gempa dengan magnitude ${recentEq.magnitude}. ${recentEq.area}. Potensi: ${recentEq.potensi}`,
     };
+    console.log(message.body);
+
     return axios({
       method: "POST",
       url: expoUrl,
