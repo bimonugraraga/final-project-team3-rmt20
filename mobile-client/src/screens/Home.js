@@ -37,13 +37,16 @@ export default function Home() {
   const notificationListener = useRef();
   const responseListener = useRef();
   const [location, setLocation] = useState(null);
-  console.log(expoPushToken, '<<');
+  // console.log(expoPushToken, '<<');
   useEffect(() => {
-    console.log('hilmi');
+    // console.log('hilmi');
     registerForPushNotificationsAsync().then(token => {
-      console.log(token, 'token then');
-      setExpoPushToken(token)
-    });
+      // console.log(token, 'token then');
+      return setExpoPushToken(token)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
@@ -122,9 +125,9 @@ export default function Home() {
 
     let coor
     if(location) {
-      coor = `${location.coords.latitude},${location.coords.longitude} `
+      coor = `${location.coords.latitude},${location.coords.longitude}`
     }
-
+    console.log(coor)
     const todayDate = new Date().toLocaleString('en-US', { hour: 'numeric', hour12: true })
 
   // const [date, setDate] = useState("");
@@ -158,7 +161,10 @@ export default function Home() {
       </Center> 
         :
       <Center flex={1} >
-        <ModalForm  />
+        <ModalForm 
+        expoPushToken={expoPushToken}
+        coor={coor}
+        />
 
         <Box position="absolute">
           <AspectRatio w="100%" ratio={windowWidth / windowHeight }>
@@ -570,7 +576,7 @@ export default function Home() {
 
 
 async function registerForPushNotificationsAsync() {
-  console.log('registertoken <<<');
+  // console.log('registertoken <<<');
   let token;
   if (Device.isDevice) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -597,7 +603,7 @@ async function registerForPushNotificationsAsync() {
       lightColor: '#FF231F7C',
     });
   }
-  console.log(token, 'token notif')
+  // console.log(token, 'token notif')
   return token;
 }
 

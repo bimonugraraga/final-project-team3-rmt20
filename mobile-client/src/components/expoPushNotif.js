@@ -23,7 +23,7 @@ export default function EqNotif() {
   const [readyTo, setReady] = useState(false)
   const notificationListener = useRef();
   const responseListener = useRef();
-  const MINUTE_MS = 2000;
+
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
   
@@ -36,15 +36,9 @@ export default function EqNotif() {
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       console.log(response);
     });
-    const interval = setInterval(() => {
-      console.log('Logs every', MINUTE_MS);
-      setReady(true)
-      sendPushNotification(expoPushToken, data);
-    }, MINUTE_MS);
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
-      clearInterval(interval)
     };
   }, []);
   
