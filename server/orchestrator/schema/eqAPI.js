@@ -4,7 +4,7 @@ const Queue = require("bull");
 const { redis } = require("../config/connectRedis");
 const userMongoDb = require("./userMongoDb");
 
-const sendEqNotif = new Queue("notif", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
+const sendEqNotif = new Queue("earthquakeNotif", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
 
 const typeDefs = gql`
   type earthQuake {
@@ -97,7 +97,7 @@ sendEqNotif.process(async () => {
   const eq = JSON.parse(cacheEq);
   // check if the recent EQ is the same as the previous one
   if (recentEq.dateTime !== eq.dateTime) {
-    console.log(recentEq, eq);
+    // console.log(recentEq, eq);
     await redis.set("recentEarthquake", JSON.stringify(recentEq));
     // get user data
     const users = await userMongoDb.resolvers.Query.getAllMongoUsers();
@@ -112,7 +112,7 @@ sendEqNotif.process(async () => {
     });
 
     // send notif to all users
-    console.log("Send notifications", messages);
+    console.log("Send new earthquake notifications");
 
     return axios({
       method: "POST",
