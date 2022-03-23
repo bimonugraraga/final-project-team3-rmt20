@@ -1,8 +1,10 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: 'https://097d-110-137-38-233.ngrok.io',
-  cache: new InMemoryCache()
-})
+
+  uri: "https://1955-2404-8000-1024-1fb6-5408-30ce-2df6-cebc.ngrok.io",
+  cache: new InMemoryCache(),
+});
+
 
 export default client;
