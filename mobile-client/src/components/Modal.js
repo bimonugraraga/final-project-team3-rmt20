@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Modal, FormControl, Input, Center, NativeBaseProvider, Checkbox, Text, Container, WarningOutlineIcon, Box  } from "native-base";
+import { Button, Modal, FormControl, Input, Center, NativeBaseProvider, Checkbox, Text, Container, WarningOutlineIcon, Box, Heading  } from "native-base";
 import { useMutation } from '@apollo/client';
 import { SAVE_USER_DATA } from '../../lib/apollo/queries/userQueries';
 
@@ -46,6 +46,7 @@ export default function ModalForm(props) {
                     <Checkbox.Group mt="2" colorScheme="green" defaultValue={groupValue} accessibilityLabel="choose multiple items" onChange={values => {
                     setGroupValue(values || []);
                   }} alignItems="flex-start">
+                    <Heading>Akses Notifikasi</Heading>
                       <Checkbox value="Notifikasi" my="1">
                         Akses Notifikasi
                       </Checkbox>
