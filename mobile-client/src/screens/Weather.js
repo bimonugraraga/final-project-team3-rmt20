@@ -167,16 +167,16 @@ const getData = async () => {
                 <AspectRatio w="100%" ratio={16 / 9 }>
                 <MapView
                       initialRegion={{
-                        latitude: data.fetchCurrentWeather?.lat,
-                        longitude: data.fetchCurrentWeather?.lon,
+                        latitude: data?.fetchCurrentWeather.lat,
+                        longitude: data?.fetchCurrentWeather.lon,
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                       }}
                       >
                       <Marker 
                       coordinate={{
-                        latitude: data.fetchCurrentWeather?.lat,
-                        longitude:  data.fetchCurrentWeather?.lon,
+                        latitude: data?.fetchCurrentWeather.lat,
+                        longitude:  data?.fetchCurrentWeather.lon,
                       }}
                       pinColor="red"
                       >
