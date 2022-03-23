@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useEffect,useContext} from 'react'
 import { View,TouchableOpacity,ActivityIndicator, StyleSheet,Dimensions,FlatList,ScrollView, RefreshControl, LogBox} from 'react-native'
 import { Button} from "native-base";
 import { Box, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider,Spinner,MaterialIcons,Divider } from "native-base";
@@ -9,7 +9,7 @@ import MapView, {Callout, Geojson, Marker }  from 'react-native-maps';
 import CardReportUser from '../components/CardReportUser'
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import AuthContext from "../context";
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
@@ -25,10 +25,26 @@ const config = {
   }
 };
 
+
 export default function DetailWeather({navigation,route}) {
 
-
+  // console.log(navigation, route, "<<<<")
+  const auth = useContext(AuthContext);
   // console.log(route.params)
+
+  let [access_token, setAT] = useState(null)
+  // console.log(access_token, 'dari form gempa');
+
+  useEffect(() => {
+    AsyncStorage.getItem('access_token')
+      .then((resp) => {
+        // console.log(resp, "<<<>>>")
+        auth.setAT(resp)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [access_token])
 
   const [location, setLocation] = useState(null);
   const [city, setCity] = useState(null);
@@ -68,7 +84,7 @@ export default function DetailWeather({navigation,route}) {
     const currentDistrict = dis
     const lat = lati
     const lon = long
-
+   
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -89,7 +105,7 @@ export default function DetailWeather({navigation,route}) {
     }
   })
 
-  // console.log(loading, error, data, "<--->")
+  // console.log(loading, error, data, "<---------->")
 
   let {loading: loading2, error : error2, data: data2} = useQuery(GET_ALL_WEATHERS_REPORT)
   // console.log(loading2, error2, data2, "<--->")
@@ -110,6 +126,16 @@ export default function DetailWeather({navigation,route}) {
   const renderItem = ({ item }) => (
     <CardReportUser item={item}/>
   )
+
+  const reportButton = () => {
+    if (auth.access_token){
+      return(
+        <TouchableOpacity><Button colorScheme='orange'  mt="0"
+                        onPress={() => navigation.navigate('FormCuaca', {item: data.fetchCurrentWeather})}
+                      >Report Cuaca</Button></TouchableOpacity>
+      )
+    }
+  }
 
   return (
     <ScrollView nestedScrollEnabled={true}
@@ -149,16 +175,16 @@ export default function DetailWeather({navigation,route}) {
                 :
                 <MapView
                     initialRegion={{
-                      latitude: route.params.lat,
-                      longitude: route.params.lon,
+                      latitude: route.params?.lat,
+                      longitude: route.params?.lon,
                       latitudeDelta: 0.0922,
                       longitudeDelta: 0.0421,
                     }}
                     >
                     <Marker 
                       coordinate={{
-                        latitude: route.params.lat,
-                        longitude: route.params.lon,
+                        latitude: route.params?.lat,
+                        longitude: route.params?.lon,
                       }}
                       pinColor="red"
                       >
@@ -226,7 +252,7 @@ export default function DetailWeather({navigation,route}) {
                       <View style ={{alignItems: "center"}}>
                       <AspectRatio w="30%" ratio={16 / 9}>
                           <Image
-                            source={{ uri: `http://openweathermap.org/img/wn/${data.fetchCurrentWeather.current.weather[0].icon}@2x.png` }}
+                            source={{ uri: data? `http://openweathermap.org/img/wn/${data.fetchCurrentWeather.current.weather[0].icon}@2x.png` : null }}
                             alt="image"
                           />
                         </AspectRatio>
@@ -251,9 +277,10 @@ export default function DetailWeather({navigation,route}) {
                         <MaterialCommunityIcons color= "white" name = "air-humidifier"><Text fontWeight="400" style={{marginStart: 10 , color : "white"}}>
                             {data.fetchCurrentWeather.current.humidity} %</Text> </MaterialCommunityIcons>
                       </View>
-                      <TouchableOpacity><Button colorScheme='orange'  mt="0"
+                      {/* <TouchableOpacity><Button colorScheme='orange'  mt="0"
                         onPress={() => navigation.navigate('FormCuaca', {item: data.fetchCurrentWeather})}
-                      >Report Cuaca</Button></TouchableOpacity>
+                      >Report Cuaca</Button></TouchableOpacity> */}
+                      {reportButton()}
                     </Stack>
                   </Box>
                 </Box>

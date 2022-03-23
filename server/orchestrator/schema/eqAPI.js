@@ -90,49 +90,50 @@ const resolvers = {
   },
 };
 
-// sendEqNotif.process(async () => {
-//   const recentEq = await resolvers.Query.getRecentEarthquake();
-//   const cacheEq = await redis.get("recentEarthquake");
-//   const eq = JSON.parse(cacheEq);
-//   // console.log(recentEq, eq);
-//   if (recentEq.dateTime !== eq.dateTime) {
-//     console.log(recentEq, eq);
-//     await redis.set("recentEarthquake", JSON.stringify(recentEq));
-//     // get user data
-//     const users = await userMongoDb.resolvers.Query.getAllMongoUsers();
-//     let expoTokens = users.map((el) => {
-//       return el.expoToken;
-//     });
-//     // send notif to all users
-//     let message = {
-//       to: expoTokens,
-//       sound: "default",
-//       title: "Info Gempa",
-//       body: `Gempa dengan magnitude ${recentEq.magnitude}. ${recentEq.area}. Potensi: ${recentEq.potensi}`,
-//     };
-//     console.log(message.body);
+sendEqNotif.process(async () => {
+  const recentEq = await resolvers.Query.getRecentEarthquake();
+  const cacheEq = await redis.get("recentEarthquake");
+  const eq = JSON.parse(cacheEq);
+  // console.log(recentEq, eq);
+  // check if the recent EQ is the same as the previous one
+  if (recentEq.dateTime !== eq.dateTime) {
+    console.log(recentEq, eq);
+    await redis.set("recentEarthquake", JSON.stringify(recentEq));
+    // get user data
+    const users = await userMongoDb.resolvers.Query.getAllMongoUsers();
+    let expoTokens = users.map((el) => {
+      return el.expoToken;
+    });
+    // send notif to all users
+    let message = {
+      to: expoTokens,
+      sound: "default",
+      title: "Info Gempa",
+      body: `Gempa dengan magnitude ${recentEq.magnitude}. ${recentEq.area}. Potensi: ${recentEq.potensi}`,
+    };
+    console.log(message.body);
 
-//     return axios({
-//       method: "POST",
-//       url: expoUrl,
-//       headers: {
-//         Accept: "application/json",
-//         "Accept-encoding": "gzip, deflate",
-//         "Content-Type": "application/json",
-//       },
-//       data: JSON.stringify(message),
-//     });
-//   }
-// });
+    return axios({
+      method: "POST",
+      url: expoUrl,
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(message),
+    });
+  }
+});
 
-// sendEqNotif.add(
-//   {},
-//   {
-//     repeat: {
-//       every: 60000,
-//     },
-//   }
-// );
+sendEqNotif.add(
+  {},
+  {
+    repeat: {
+      every: 60000,
+    },
+  }
+);
 
 module.exports = {
   typeDefs,
