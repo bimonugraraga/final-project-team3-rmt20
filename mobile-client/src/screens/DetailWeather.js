@@ -8,6 +8,8 @@ import { GET_ALL_WEATHERS_REPORT, GET_CURRENT_WEATHER  } from "../../lib/apollo/
 import MapView, {Callout, Geojson, Marker }  from 'react-native-maps';
 import CardReportUser from '../components/CardReportUser'
 import * as Location from 'expo-location';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
@@ -75,8 +77,8 @@ export default function DetailWeather({navigation,route}) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  // const lat = route.params.lat
-  // const lon = route.params.lon
+  // const latParams = route.params.lat
+  // const lonParams = route.params.lon
   // const currentCity = route.params.currentCity
   // const currentDistrict = route.params.currentDistrict
   
@@ -131,7 +133,51 @@ export default function DetailWeather({navigation,route}) {
         
           : (
             <View style = {{marginBottom : 10}}> 
+            
             <Center flex={1} px="3" style ={{backgroundColor : "#e4e4e7"}}>
+               <Box mt ="5" borderWidth={2} rounded="md" borderColor="#f97316" >
+                <AspectRatio w="100%" >
+                {loading ? 
+                  <Center flex={1} px="3">
+                  <HStack space={2} justifyContent="center">
+                    <Spinner accessibilityLabel="Loading posts" />
+                    <Heading color="emerald.500" fontSize="md">
+                      Loading
+                    </Heading>
+                  </HStack>
+                </Center>
+                :
+                <MapView
+                    initialRegion={{
+                      latitude: route.params.lat,
+                      longitude: route.params.lon,
+                      latitudeDelta: 0.0922,
+                      longitudeDelta: 0.0421,
+                    }}
+                    >
+                    <Marker 
+                      coordinate={{
+                        latitude: route.params.lat,
+                        longitude: route.params.lon,
+                      }}
+                      pinColor="red"
+                      >
+                      <Callout><Text>Lokasi Saat Ini</Text></Callout>
+                    </Marker>
+                  </MapView>
+                }
+                </AspectRatio>
+                <Center bg="#3f3f46" 
+                _dark={{
+                  bg: "#3f3f46"
+                  }} _text={{
+                    color: "warmGray.50",
+                    fontWeight: "700",
+                    fontSize: "xs"
+                  }} position="absolute" bottom="0" px="3" py="1.5">
+                  {data.fetchCurrentWeather.current.weather[0].description}
+                </Center>
+              </Box>
                <Box alignItems="center" style={styles.boxlokasilain} mt="5">
                   <Box mb= "5" maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" 
                   _dark={{
@@ -143,38 +189,6 @@ export default function DetailWeather({navigation,route}) {
                   }} _light={{
                     backgroundColor: "gray.50"
                   }}>
-                    <Box >
-                      <AspectRatio w="100%" >
-                        <MapView
-                          initialRegion={{
-                            latitude: data.fetchCurrentWeather.lat,
-                            longitude: data.fetchCurrentWeather.lon,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
-                          }}
-                          >
-                          <Marker 
-                            coordinate={{
-                              latitude: data.fetchCurrentWeather.lat,
-                              longitude:  data.fetchCurrentWeather.lon,
-                            }}
-                            pinColor="red"
-                            >
-                            <Callout><Text>Lokasi Saat Ini</Text></Callout>
-                          </Marker>
-                        </MapView>
-                      </AspectRatio>
-                      <Center bg="#3f3f46" 
-                      _dark={{
-                        bg: "#3f3f46"
-                        }} _text={{
-                          color: "warmGray.50",
-                          fontWeight: "700",
-                          fontSize: "xs"
-                        }} position="absolute" bottom="0" px="3" py="1.5">
-                        {data.fetchCurrentWeather.current.weather[0].description}
-                      </Center>
-                    </Box>
                     <Stack p="4" space={3} 
                     bg={{
                       linearGradient: {
