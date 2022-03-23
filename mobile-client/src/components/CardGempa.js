@@ -67,7 +67,7 @@ export default function CardGempa(props) {
             </Box>
           </Box>
         </Stack>
-      <Button onPress={() => navigation.navigate('DetailGempaTerakhir', {item: item})}>Detail Gempa</Button>
+      <Button colorScheme='orange' onPress={() => navigation.navigate('DetailGempaTerakhir', {item: item})}>Detail Gempa</Button>
       </Box>
     </Box>
     </Center>

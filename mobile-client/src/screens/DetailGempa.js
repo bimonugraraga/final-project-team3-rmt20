@@ -1,7 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
-import { Box, Spinner, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider, Button, Divider, Flex, Modal} from "native-base";
-import { useEffect, useState } from 'react';
+import { Box, Spinner, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider, Button, Divider, Flex, Modal,TouchableOpacity} from "native-base";
+import { useEffect, useState, useContext } from 'react';
 import { formatDistance, subHours} from 'date-fns'
 import {Feather, Ionicons, FontAwesome5} from 'react-native-vector-icons';
 import MapView, {Callout, Marker }  from 'react-native-maps';
@@ -9,6 +9,8 @@ import { useQuery } from '@apollo/client';
 import { GET_GEMPA, GET_USER_REPORT_GEMPA } from '../../lib/apollo/queries/eqQuery';
 import { MaterialIcons } from 'react-native-vector-icons';
 import {Svg, Image as ImageSvg} from 'react-native-svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AuthContext from "../context";
 
 const LinearGradient = require("expo-linear-gradient").LinearGradient;
 
@@ -19,6 +21,21 @@ const config = {
 };
 
 export default function DetailGempa({navigation}) {
+
+  const auth = useContext(AuthContext);
+  let [access_token, setAT] = useState(null)
+  console.log(access_token, 'dari form gempa');
+
+  useEffect(() => {
+    AsyncStorage.getItem('access_token')
+      .then((resp) => {
+        // console.log(resp, "<<<>>>")
+        auth.setAT(resp)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [access_token])
 
   const { loading, error, data } = useQuery(GET_GEMPA)
   let coor
@@ -77,6 +94,14 @@ export default function DetailGempa({navigation}) {
         </Center>
       </NativeBaseProvider>
     )
+  }
+
+  const reportButton = () => {
+    if (auth.access_token){
+      return(
+        <Button colorScheme='orange' mt="2" onPress={() => navigation.navigate('FormGempa', {item : data.getRecentEarthquake})}>Form Pengaduan Gempa</Button>
+      )
+    }
   }
 
   return (
@@ -205,7 +230,8 @@ export default function DetailGempa({navigation}) {
                   </View>
                 </Box>
               </Box>
-              <Button colorScheme='orange' mt="2" onPress={() => navigation.navigate('FormGempa', {item : data.getRecentEarthquake})}>Form Pengaduan Gempa</Button>
+              {/* <Button colorScheme='orange' mt="2" onPress={() => navigation.navigate('FormGempa', {item : data.getRecentEarthquake})}>Form Pengaduan Gempa</Button> */}
+              {reportButton()}
             </Stack>
           </Box>
         </Box>
