@@ -7,21 +7,63 @@ import { GET_GEMPA } from '../../lib/apollo/queries/eqQuery';
 import { GET_CURRENT_WEATHER } from '../../lib/apollo/queries/weatherQueries';
 import { formatDistance, subHours } from "date-fns";
 import { MaterialIcons, Ionicons, FontAwesome5, Feather, Entypo, MaterialCommunityIcons } from "react-native-vector-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import * as Location from 'expo-location';
+import ModalForm from '../components/Modal';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const wait = (timeout) => {
-  return new Promise(resolve => setTimeout(resolve, timeout));
-}
+// const wait = (timeout) => {
+//   return new Promise(resolve => setTimeout(resolve, timeout));
+// }
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function Home() {
 
   const [shouldShow, setShouldShow] = useState(false)
-
   const { loading, error, data } = useQuery(GET_GEMPA)
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+  const [location, setLocation] = useState(null);
+  // console.log(expoPushToken, '<<');
+  useEffect(() => {
+    // console.log('hilmi');
+    registerForPushNotificationsAsync().then(token => {
+      // console.log(token, 'token then');
+      return setExpoPushToken(token)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+
+    
+  }, []);
 
   let ltd
   let lng
@@ -31,9 +73,7 @@ export default function Home() {
     ltd = Number(b[0])
     lng = Number(b[1])
   }
-  console.log(ltd, lng);
 
-  const [location, setLocation] = useState(null);
   const [city, setCity] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   useEffect(() => {
@@ -83,6 +123,11 @@ export default function Home() {
       img = data2.fetchCurrentWeather.current.weather[0].icon
     }
 
+    let coor
+    if(location) {
+      coor = `${location.coords.latitude},${location.coords.longitude}`
+    }
+    console.log(coor)
     const todayDate = new Date().toLocaleString('en-US', { hour: 'numeric', hour12: true })
 
   // const [date, setDate] = useState("");
@@ -116,6 +161,11 @@ export default function Home() {
       </Center> 
         :
       <Center flex={1} >
+        <ModalForm 
+        expoPushToken={expoPushToken}
+        coor={coor}
+        />
+
         <Box position="absolute">
           <AspectRatio w="100%" ratio={windowWidth / windowHeight }>
             <MapView
@@ -523,3 +573,37 @@ export default function Home() {
     </NativeBaseProvider>
   )
 }
+
+
+async function registerForPushNotificationsAsync() {
+  // console.log('registertoken <<<');
+  let token;
+  if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+  // console.log(token, 'token notif')
+  return token;
+}
+

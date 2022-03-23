@@ -86,7 +86,7 @@ export default function App() {
                 <Drawer.Screen
                   name="Home"
                   options={{
-                    title: "Beranda",
+                    title: "AlertMe!",
                     drawerIcon: () => {
                       return <Ionicons name="home" size={25} color="#fff" />;
                     },
@@ -134,22 +134,6 @@ export default function App() {
                     },
                   }}
                   component={CuacaRouter}
-                />
-                <Drawer.Screen
-                  name="Gradient"
-                  options={{
-                    title: "Gradient",
-                    drawerIcon: () => {
-                      return (
-                        <MaterialCommunityIcons
-                          name="weather-pouring"
-                          size={25}
-                          color="#fff"
-                        />
-                      );
-                    },
-                  }}
-                  component={Gradient}
                 />
                 {/* <Drawer.Screen name="LoginRouter" options={{title: 'Masuk', drawerIcon: () => {
               return <MaterialCommunityIcons name="login" size={25} color="#fff" />

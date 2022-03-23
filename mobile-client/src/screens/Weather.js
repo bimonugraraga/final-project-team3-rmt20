@@ -272,8 +272,5 @@ const styles = StyleSheet.create ({
 
     elevation: 24,
 
-  },
-  devider : {
-    width : windowWidth*0.9 
   }
 })
