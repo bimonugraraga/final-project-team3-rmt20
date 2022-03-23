@@ -18,8 +18,8 @@ export const USER_REGISTER = gql`
 `;
 
 export const SAVE_USER_DATA = gql`
-  mutation SaveUserData($expoToken: String, $recentCoordinate: String) {
-    saveUserData(expoToken: $expoToken, recentCoordinate: $recentCoordinate) {
+  mutation($expoToken: String, $recentCoordinates: String) {
+    createUserMongo(expoToken: $expoToken, recentCoordinates: $recentCoordinates) {
       message
     }
   }

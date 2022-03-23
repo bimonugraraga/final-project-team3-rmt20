@@ -1,17 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Modal, FormControl, Input, Center, NativeBaseProvider, Checkbox, Text, Container, WarningOutlineIcon, Box  } from "native-base";
+import { SAVE_USER_DATA } from '../../lib/apollo/queries/userQueries';
+import { useMutation, useQuery } from "@apollo/client";
 
-export default function ModalForm() {
-
+export default function ModalForm(props) {
+  console.log(props);
   const [showModal, setShowModal] = useState(true);
   const [groupValue, setGroupValue] = React.useState([""]);
-  console.log(groupValue);
   
-  const submitHandler = () => {
-    if(groupValue.length < 4) {
-      setShowModal(true)
+  // const submitHandler = () => {
+  //   if(groupValue.length < 4) {
+  //     setShowModal(true)
+  //   }
+  // }
+  let [submitHandler = () => {}, { loading, error, data }] = useMutation(
+    SAVE_USER_DATA,
+    {
+      variables: {
+        expoToken: props.expoToken,
+        recentCoordinates: props.coor,
+      },
     }
-  }
+  );
 
   return (
     <NativeBaseProvider>
