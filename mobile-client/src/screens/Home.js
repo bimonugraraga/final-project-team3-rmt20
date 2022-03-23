@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Spinner, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider, Button, Divider, Flex} from 'native-base';
+import { Box, Switch, Spinner, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider, Button, Divider, Flex} from 'native-base';
 import { View, Dimensions} from 'react-native'
 import MapView, { Callout, Marker, Circle} from "react-native-maps";
 import { useQuery } from '@apollo/client';
@@ -15,10 +15,6 @@ import * as Notifications from 'expo-notifications';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-
-// const wait = (timeout) => {
-//   return new Promise(resolve => setTimeout(resolve, timeout));
-// }
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -37,11 +33,9 @@ export default function Home() {
   const notificationListener = useRef();
   const responseListener = useRef();
   const [location, setLocation] = useState(null);
-  // console.log(expoPushToken, '<<');
+
   useEffect(() => {
-    // console.log('hilmi');
     registerForPushNotificationsAsync().then(token => {
-      // console.log(token, 'token then');
       return setExpoPushToken(token)
     })
     .catch((err) => {
@@ -130,12 +124,6 @@ export default function Home() {
     console.log(coor)
     const todayDate = new Date().toLocaleString('en-US', { hour: 'numeric', hour12: true })
 
-  // const [date, setDate] = useState("");
-  // useEffect(() => {
-  //   const time = formatDistance(subHours(new Date(data.getRecentEarthquake.dateTime), 3), new Date(), { addSuffix: true });
-  //   setDate(time);
-  // }, []);
-
   if (error) {
     return (
       <NativeBaseProvider>
@@ -198,8 +186,15 @@ export default function Home() {
           </AspectRatio>
           </Box>
 
-<View style={{marginTop: windowHeight *0.54}} >
-  <Box bg="#34495e" style={{ width: windowWidth * 0.95, height: windowHeight * 0.45}} rounded="xl">
+<View style={{marginTop: windowHeight *0.1}} >
+  <Box alignItems="center" bg="#34495e" style={{ width: windowWidth * 0.95, height: windowHeight * 0.4}} rounded="xl">
+    <Box mb="-4"  flexDirection="row" justifyContent="space-around" style={{ width: windowWidth * 0.95}} >
+        <Heading size="xs" mt="5" color="#fff">Gempa</Heading>
+        <Switch size="lg" offTrackColor="indigo.100" onTrackColor="indigo.200" onThumbColor="#f59e0b" offThumbColor="#be123c" 
+        onValueChange={() => setShouldShow(!shouldShow)}
+        />
+        <Heading size="xs" mt="5" color="#fff">Cuaca</Heading>
+    </Box>
   
 {
   shouldShow ?
@@ -245,7 +240,7 @@ export default function Home() {
                             alt="image"
                           />
                         </AspectRatio>
-                      <Heading size="md" color="#fff" >{data2?.fetchCurrentWeather.current.temp} °C</Heading>
+                      <Heading size="md" color="#fff" >{data2?.fetchCurrentWeather.current.temp} Â°C</Heading>
                     </View>
                     <View justifyContent="center" alignItems="center">
                       <Text color="#fff">
@@ -533,10 +528,10 @@ export default function Home() {
                 </View>
                 <View mt="1">
                 <FontAwesome5 color="#fde047" name="podcast">
-                    <Text fontSize="xs" color="#fff">
+                    <Heading fontSize="sm" color="#fff">
                       {" "}
                       {data.getRecentEarthquake.potensi}
-                    </Text>
+                    </Heading>
                   </FontAwesome5>
                 </View>
               </Box>
@@ -547,21 +542,6 @@ export default function Home() {
       </Box>
     </View>
 }
-
-    <View>
-      {
-        shouldShow ?
-          <Button
-            m="2"
-            onPress={() => setShouldShow(!shouldShow)}
-          > Gempa</Button>
-        :    
-          <Button
-            m="2"
-            onPress={() => setShouldShow(!shouldShow)}
-          > Cuaca</Button>
-      }
-    </View>
 
   </Box>
 </View>
@@ -576,7 +556,6 @@ export default function Home() {
 
 
 async function registerForPushNotificationsAsync() {
-  // console.log('registertoken <<<');
   let token;
   if (Device.isDevice) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -603,7 +582,5 @@ async function registerForPushNotificationsAsync() {
       lightColor: '#FF231F7C',
     });
   }
-  // console.log(token, 'token notif')
   return token;
 }
-
