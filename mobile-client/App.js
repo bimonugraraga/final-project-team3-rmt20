@@ -14,10 +14,11 @@ import CuacaRouter from './src/navigation/WeatherRouter';
 import EqNotif from './src/components/expoPushNotif';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
+import SplashScreen from "react-native-splash-screen";
 
-import * as Notifications from 'expo-notifications'
-import * as Permissions from 'expo-permissions'
-import Gradient from './src/geoLocation/Gradient';
+import * as Notifications from "expo-notifications";
+import * as Permissions from "expo-permissions";
+import Gradient from "./src/geoLocation/Gradient";
 import AuthContext from "./src/context";
 const Drawer = createDrawerNavigator();
 
