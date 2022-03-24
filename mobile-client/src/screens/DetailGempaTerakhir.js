@@ -19,7 +19,6 @@ const config = {
 
 export default function DetailGempaTerakhir({route}) {
   const item = route.params.item
-  console.log(item);
 
   let coor
   let time
@@ -34,7 +33,7 @@ export default function DetailGempaTerakhir({route}) {
     lng = Number(b[1])
   }
 
-  const { loading: loading1, error : error1, data : data1 } = useQuery(GET_USER_REPORT_GEMPA, {
+  const { loading: loading1, error: error1, data: data1 } = useQuery(GET_USER_REPORT_GEMPA, {
     variables: {
       coordinates: coor, 
       dateTime: time
@@ -65,18 +64,6 @@ export default function DetailGempaTerakhir({route}) {
     const time = formatDistance(subHours(new Date(item.dateTime), 3), new Date(), { addSuffix: true })
     setDate(time)
   }, [])
-  console.log(error1);
-
-  // if (error1) {
-  //   return (
-  //     <NativeBaseProvider>
-  //       <Center flex={1} px="3">
-  //         <MaterialIcons name="error" size={30} />
-  //         <Text>Something Went Wrong</Text>
-  //       </Center>
-  //     </NativeBaseProvider>
-  //   )
-  // }
 
   return (
     <NativeBaseProvider  config={config}>
@@ -149,7 +136,7 @@ export default function DetailGempaTerakhir({route}) {
               :
               <MapView
                 initialRegion={{
-                  latitude: ltd,
+                    latitude: ltd,
                   longitude: lng,
                   latitudeDelta: 0.0922,
                   longitudeDelta: 0.0421,
@@ -157,7 +144,7 @@ export default function DetailGempaTerakhir({route}) {
                 >
                   <Marker 
                   coordinate={{
-                    latitude: ltd,
+                      latitude: ltd,
                     longitude: lng,
                   }}
                   pinColor="red"
@@ -165,8 +152,8 @@ export default function DetailGempaTerakhir({route}) {
                     <Callout><Text>Pusat Gempa</Text></Callout>
                   </Marker>
               </MapView>
+          }
 
-            }
           </AspectRatio>
         </Box>
 

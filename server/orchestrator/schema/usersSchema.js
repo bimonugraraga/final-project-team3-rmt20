@@ -17,7 +17,10 @@ const typeDefs = gql`
   }
 `;
 
-const baseUrl = "http://localhost:3000/users";
+const BASE_URL = `https://final-project-weather-v1.herokuapp.com`
+// const BASE_URL = `http://localhost:3000`
+
+const baseUrl = BASE_URL+"/users";
 
 const resolvers = {
   Mutation: {

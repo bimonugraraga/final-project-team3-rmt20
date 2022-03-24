@@ -4,7 +4,7 @@ const Queue = require("bull");
 const { redis } = require("../config/connectRedis");
 const userMongoDb = require("./userMongoDb");
 
-const sendEqNotif = new Queue("notif", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
+const sendEqNotif = new Queue("earthquakeNotif", `redis://:${process.env.REDISPASSWORD}@${process.env.REDISENDPOINT}:${process.env.REDISPORT}`);
 
 const typeDefs = gql`
   type earthQuake {
@@ -27,6 +27,7 @@ const typeDefs = gql`
   }
 `;
 
+const expoUrl = "https://exp.host/--/api/v2/push/send";
 const baseUrl = "https://data.bmkg.go.id/DataMKG/TEWS/";
 
 const resolvers = {
@@ -94,24 +95,24 @@ sendEqNotif.process(async () => {
   const recentEq = await resolvers.Query.getRecentEarthquake();
   const cacheEq = await redis.get("recentEarthquake");
   const eq = JSON.parse(cacheEq);
-  // console.log(recentEq, eq);
   // check if the recent EQ is the same as the previous one
   if (recentEq.dateTime !== eq.dateTime) {
-    console.log(recentEq, eq);
+    // console.log(recentEq, eq);
     await redis.set("recentEarthquake", JSON.stringify(recentEq));
     // get user data
     const users = await userMongoDb.resolvers.Query.getAllMongoUsers();
-    let expoTokens = users.map((el) => {
-      return el.expoToken;
+    let messages = users.map((el) => {
+      let obj = {
+        to: el.expoToken,
+        sound: "default",
+        title: "Info Gempa",
+        body: `Gempa bermagnitude ${recentEq.magnitude}. ${recentEq.area}. Pada tanggal ${recentEq.date} pukul ${recentEq.hour}. Potensi: ${recentEq.potensi}`,
+      };
+      return obj;
     });
+
     // send notif to all users
-    let message = {
-      to: expoTokens,
-      sound: "default",
-      title: "Info Gempa",
-      body: `Gempa dengan magnitude ${recentEq.magnitude}. ${recentEq.area}. Potensi: ${recentEq.potensi}`,
-    };
-    console.log(message.body);
+    console.log("Send new earthquake notifications");
 
     return axios({
       method: "POST",
@@ -121,7 +122,7 @@ sendEqNotif.process(async () => {
         "Accept-encoding": "gzip, deflate",
         "Content-Type": "application/json",
       },
-      data: JSON.stringify(message),
+      data: JSON.stringify(messages),
     });
   }
 });
