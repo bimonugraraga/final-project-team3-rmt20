@@ -6,6 +6,7 @@ class reportController {
     try {
       // first look for EQ event
       let { dateTime, coordinates } = req.query;
+      console.log(req.query);
       let temp = new Date(dateTime)
       console.log(req.query)
       const event = await EarthquakeEvent.findOne({
@@ -92,7 +93,6 @@ class reportController {
           message: "Report not found",
         };
       }
-
       res.status(200).json(report);
     } catch (err) {
       next(err);

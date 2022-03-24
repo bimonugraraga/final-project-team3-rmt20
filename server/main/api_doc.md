@@ -339,15 +339,17 @@ Request:
 - body
 ```json
 {
-  "date": "string",
-  "hour": "string",
-  "dateTime": "date",
-  "coordinates": "string",
-  "magnitude": "float",
-  "depth": "integer",
-  "area": "string",
-  "potensi": "string",
-  "dirasakan": "string",
+  "earthquakeEvent":  {
+    "date": "string",
+    "hour": "string",
+    "dateTime": "date",
+    "coordinates": "string",
+    "magnitude": "float",
+    "depth": "integer",
+    "area": "string",
+    "potensi": "string",
+    "dirasakan": "string"
+  }
 }
 ```
 
