@@ -3,10 +3,10 @@ const { verifyPassword } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
 class AuthnController {
   static async registerUser(req, res, next) {
-    console.log("REGISTER USER");
+    // console.log("REGISTER USER");
 
     let { email, password } = req.body;
-    console.log(req.body, "INI REGIS");
+    // console.log(req.body, "INI REGIS");
     try {
       let newUser = await User.create({
         email,
@@ -15,28 +15,12 @@ class AuthnController {
 
       res.status(201).json({ message: `${newUser.email} telah berhasil terdaftar` });
     } catch (error) {
-      // console.log(error)
-      // if (error.name === "SequelizeValidationError" || error.name === "SequelizeUniqueConstraintError") {
-
-      //   res.status(400).json({ message: error.errors[0].message });
-      // } else {
-      //   res.status(500).json({ message: "Internal server error" });
-      // }
       next(error)
     }
   }
 
   static async loginUser(req, res, next) {
     let { email, password } = req.body;
-    console.log(
-      "🚀 ~ file: authControllers.js ~ line 28 ~ AuthnController ~ loginUser ~ req.body",
-      req.body
-    );
-    console.log(
-      "🚀 ~ file: authControllers.js ~ line 28 ~ AuthnController ~ loginUser ~ email, password",
-      email,
-      password
-    );
     
     try {
       let targetUser = await User.findOne({
@@ -66,7 +50,7 @@ class AuthnController {
         id: targetUser.id,
         email: targetUser.email,
       };
-      console.log(payload, "<>")
+      // console.log(payload, "<>")
 
       let access_token = signToken(payload);
       res.status(200).json({ access_token: access_token });

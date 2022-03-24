@@ -11,7 +11,6 @@ import Home from './src/screens/Home'
 import LoginRouter from './src/navigation/LoginRouter';
 import GempaRouter from './src/navigation/EarthquakeRouter';
 import CuacaRouter from './src/navigation/WeatherRouter';
-import EqNotif from './src/components/expoPushNotif';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import SplashScreen from "react-native-splash-screen";
@@ -24,17 +23,6 @@ const Drawer = createDrawerNavigator();
 
 export default function App() {
   let [access_token, setAT] = useState(null);
-
-  // useEffect(() => {
-  //   AsyncStorage.getItem("access_token")
-  //     .then((resp) => {
-  //       console.log(resp, "<<<>>>");
-  //       setAT(resp);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, [access_token]);
 
   const loginDrawer = () => {
     if (!access_token) {
@@ -94,16 +82,6 @@ export default function App() {
                   }}
                   component={Home}
                 />
-                {/* <Drawer.Screen
-                  name="EqNotif"
-                  options={{
-                    title: "Notif",
-                    drawerIcon: () => {
-                      return <Ionicons name="home" size={25} color="#fff" />;
-                    },
-                  }}
-                  component={EqNotif}
-                /> */}
                 <Drawer.Screen
                   name="GempaRouter"
                   options={{
@@ -136,9 +114,6 @@ export default function App() {
                   }}
                   component={CuacaRouter}
                 />
-                {/* <Drawer.Screen name="LoginRouter" options={{title: 'Masuk', drawerIcon: () => {
-              return <MaterialCommunityIcons name="login" size={25} color="#fff" />
-            }}}  component={LoginRouter} /> */}
                 {loginDrawer()}
               </Drawer.Navigator>
             </NavigationContainer>

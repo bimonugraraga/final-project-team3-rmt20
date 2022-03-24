@@ -2,8 +2,8 @@ const { gql } = require("apollo-server");
 
 const axios = require("axios");
 
-const BASE_URL = `https://final-project-weather-v1.herokuapp.com`
-// const BASE_URL = `http://localhost:3000`
+// const BASE_URL = `https://final-project-weather-v1.herokuapp.com`
+const BASE_URL = `http://localhost:3000`
 
 const typeDefs = gql`
   type weatherReport {

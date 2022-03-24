@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Dimensions } from 'react-native'
 import { Box, Heading, Text, Stack, Divider, Flex, NativeBaseProvider, Center, Button, Pressable} from "native-base";
 import { useEffect, useState } from 'react';
 import { formatDistance, subHours } from 'date-fns'
@@ -12,6 +12,10 @@ const config = {
     "linear-gradient": LinearGradient
   }
 };
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 export default function CardGempa(props) {
 
   const navigation = props.navigation
@@ -31,11 +35,12 @@ export default function CardGempa(props) {
               isPressed
             }) => {
               
-              return <Box mb="2" maxW="80" rounded="lg" overflow="hidden" 
+              return <Box mb="2" rounded="lg" overflow="hidden" 
                       style={{
                         transform: [{
                           scale: isPressed ? 0.99 : 1
-                        }]
+                        }],
+                        width: windowWidth * 0.9
                       }} 
                       borderColor="coolGray.200" borderWidth="1"
                       bg={{

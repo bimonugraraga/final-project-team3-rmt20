@@ -364,6 +364,22 @@ describe("Earthquake Reports /reports/earthquakes", () => {
           done();
         });
     });
+    it("200 success fetch all Earthquake reports", (done) => {
+      request(app)
+        .get("/reports/earthquakes")
+        .query({
+          dateTime: "2021-03-16T14:12:00+00:00",
+          coordinates: "-3.70,128.12",
+        })
+        .send(report)
+        .end((err, res) => {
+          if (err) done(err);
+          const { body, status } = res;
+          expect(status).toBe(404);
+          expect(body).toHaveProperty("message", "Event not found");
+          done();
+        });
+    });
     it("200 success get one Earthquake report", (done) => {
       request(app)
         .get("/reports/earthquakes/1")

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Dimensions } from 'react-native'
 import { Box, Spinner, Heading, AspectRatio, Image, Text, Center, HStack, Stack, NativeBaseProvider, Button, Divider, Flex, Modal,TouchableOpacity} from "native-base";
 import { useEffect, useState, useContext } from 'react';
 import { formatDistance, subHours} from 'date-fns'
@@ -19,6 +19,9 @@ const config = {
     "linear-gradient": LinearGradient
   }
 };
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 export default function DetailGempa({navigation}) {
 
@@ -188,7 +191,7 @@ export default function DetailGempa({navigation}) {
         </Box>
 
         <Box alignItems="center" mt="2">
-          <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" 
+          <Box style={{width: windowWidth * 0.92}} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" 
             bg={{
               linearGradient: {
                 colors: ["#191645", "#43C6AC"],
