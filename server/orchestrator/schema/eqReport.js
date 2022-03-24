@@ -38,7 +38,7 @@ const typeDefs = gql`
   }
 `;
 
-const baseUrl = "http://localhost:3000/reports/earthquakes";
+const baseUrl = "https://main-alertme.herokuapp.com/reports/earthquakes";
 
 const resolvers = {
   Query: {

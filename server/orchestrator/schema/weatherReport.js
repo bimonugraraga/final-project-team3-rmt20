@@ -53,7 +53,7 @@ const typeDefs = gql`
   }
 `;
 
-const baseUrl = "http://localhost:3000/reports/weathers";
+const baseUrl = "https://main-alertme.herokuapp.com/reports/weathers";
 
 const resolvers = {
   Query: {
