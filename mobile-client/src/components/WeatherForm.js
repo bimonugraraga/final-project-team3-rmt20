@@ -124,10 +124,7 @@ export default function WeatherForm ({route,navigation}){
       if (data){
         if (data.createWeatherReport.message === "Laporan telah berhasil dibuat") {
           
-          navigation.navigate('DetailCuaca', {
-            lat : item.lat,
-            lon : item.lon
-          })
+          navigation.navigate('DetailCuaca')
         }
       }
       // "message": "Laporan telah berhasil dibuat"
