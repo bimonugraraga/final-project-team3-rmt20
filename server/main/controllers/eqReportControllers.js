@@ -93,7 +93,6 @@ class reportController {
           message: "Report not found",
         };
       }
-
       res.status(200).json(report);
     } catch (err) {
       next(err);
