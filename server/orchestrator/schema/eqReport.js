@@ -38,10 +38,7 @@ const typeDefs = gql`
   }
 `;
 
-// const BASE_URL = `https://final-project-weather-v1.herokuapp.com`
-const BASE_URL = `http://localhost:3000`
-
-const baseUrl = BASE_URL+"/reports/earthquakes";
+const baseUrl = "https://main-alertme.herokuapp.com/reports/earthquakes";
 
 const resolvers = {
   Query: {

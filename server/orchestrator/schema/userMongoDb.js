@@ -16,7 +16,7 @@ const typeDefs = gql`
   }
 `;
 
-const userMongoUrl = "http://localhost:4001/expo-tokens";
+const userMongoUrl = "https://final-project-mongo-expo.herokuapp.com/expo-tokens";
 const resolvers = {
   Query: {
     getAllMongoUsers: async () => {

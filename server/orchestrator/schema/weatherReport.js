@@ -56,7 +56,7 @@ const typeDefs = gql`
   }
 `;
 
-const baseUrl = BASE_URL+"/reports/weathers";
+const baseUrl = "https://main-alertme.herokuapp.com/reports/weathers";
 
 const resolvers = {
   Query: {
