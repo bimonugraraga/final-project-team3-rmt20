@@ -2,16 +2,26 @@ const { EarthquakeReport, EarthquakeEvent, User } = require("../models");
 
 class reportController {
   static async allEarthquakeReport(req, res, next) {
+    console.log("EARTH QUAKE")
     try {
       // first look for EQ event
-      const { dateTime, coordinates } = req.query;
+      let { dateTime, coordinates } = req.query;
+      let temp = new Date(dateTime)
+      console.log(req.query)
       const event = await EarthquakeEvent.findOne({
         where: {
-          dateTime,
+          dateTime: temp,
           coordinates,
         },
       });
-
+      console.log(event)
+      if (!event){
+        throw {
+          name: "NOT FOUND",
+          code: 404,
+          message: "Event not found"
+        }
+      }
       // then get all associated reports
       const reports = await EarthquakeReport.findAll({
         where: {
@@ -22,8 +32,10 @@ class reportController {
           attributes: ["email"],
         },
       });
+      console.log(reports, "<<<")
       res.status(200).json(reports);
     } catch (err) {
+      console.log(err)
       next(err);
     }
   }
