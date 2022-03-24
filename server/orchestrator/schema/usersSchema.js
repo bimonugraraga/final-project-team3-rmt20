@@ -17,7 +17,7 @@ const typeDefs = gql`
   }
 `;
 
-const baseUrl = "http://localhost:3000/users";
+const baseUrl = "https://main-alertme.herokuapp.com/users";
 
 const resolvers = {
   Mutation: {
