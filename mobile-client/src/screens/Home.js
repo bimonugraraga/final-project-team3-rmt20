@@ -186,8 +186,8 @@ export default function Home() {
           </AspectRatio>
           </Box>
 
-<View style={{marginTop: windowHeight *0.1}} >
-  <Box alignItems="center" bg="#34495e" style={{ width: windowWidth * 0.95, height: windowHeight * 0.4}} rounded="xl">
+<View style={{marginTop: windowHeight *0.6}} >
+  <Box alignItems="center" bg="#34495e" style={{ width: windowWidth * 0.95, height: windowHeight * 0.5}} rounded="xl">
     <Box mb="-4"  flexDirection="row" justifyContent="space-around" style={{ width: windowWidth * 0.95}} >
         <Heading size="xs" mt="5" color="#fff">Gempa</Heading>
         <Switch size="lg" offTrackColor="indigo.100" onTrackColor="indigo.200" onThumbColor="#f59e0b" offThumbColor="#be123c" 
@@ -528,10 +528,10 @@ export default function Home() {
                 </View>
                 <View mt="1">
                 <FontAwesome5 color="#fde047" name="podcast">
-                    <Heading fontSize="sm" color="#fff">
+                    <Text fontSize="xs" color="#fff">
                       {" "}
                       {data.getRecentEarthquake.potensi}
-                    </Heading>
+                    </Text>
                   </FontAwesome5>
                 </View>
               </Box>

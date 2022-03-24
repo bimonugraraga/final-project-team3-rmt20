@@ -163,7 +163,7 @@ export default function Gempa({navigation}) {
           </Center>
           :
           <ScrollView horizontal={true}>
-            <Center flex={1} px="2.5" bg="#e4e4e7">
+            <Center flex={1} px="3" bg="#e4e4e7">
               <FlatList
                 data={data2.getEarthQuakes}
                 renderItem={renderItem}
