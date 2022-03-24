@@ -12,12 +12,12 @@ class ReportController {
       let allWeatherReport = await WeatherReport.findAll({
         include: {
           model: User,
-          attribute: {
+          attributes: {
             exclude: ["password"],
           },
-          where: {
-            createdAt: {
-              [Op.between]: [agoDate, todayDate],
+        where: {
+          createdAt: {
+            [Op.between]: [agoDate, todayDate],
             },
           },
         },
@@ -33,7 +33,7 @@ class ReportController {
   }
 
   static async getOneWeatherReport(req, res, next) {
-    console.log("GET ONE WEATHER REPORT");
+    
     let { id } = req.params;
     try {
       let oneWeatherReport = await WeatherReport.findOne({
