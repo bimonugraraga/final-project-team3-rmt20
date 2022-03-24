@@ -27,17 +27,18 @@ const config = {
 
 
 export default function DetailWeather({navigation,route}) {
-  console.log(navigation, route, "<<<<")
+
+  // console.log(navigation, route, "<<<<")
   const auth = useContext(AuthContext);
   // console.log(route.params)
 
   let [access_token, setAT] = useState(null)
-  console.log(access_token, 'dari form gempa');
+  // console.log(access_token, 'dari form gempa');
 
   useEffect(() => {
     AsyncStorage.getItem('access_token')
       .then((resp) => {
-        console.log(resp, "<<<>>>")
+        // console.log(resp, "<<<>>>")
         auth.setAT(resp)
       })
       .catch((err) => {
@@ -83,7 +84,7 @@ export default function DetailWeather({navigation,route}) {
     const currentDistrict = dis
     const lat = lati
     const lon = long
-
+   
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -104,7 +105,7 @@ export default function DetailWeather({navigation,route}) {
     }
   })
 
-  console.log(loading, error, data, "<---------->")
+  // console.log(loading, error, data, "<---------->")
 
   let {loading: loading2, error : error2, data: data2} = useQuery(GET_ALL_WEATHERS_REPORT)
   // console.log(loading2, error2, data2, "<--->")
@@ -174,16 +175,16 @@ export default function DetailWeather({navigation,route}) {
                 :
                 <MapView
                     initialRegion={{
-                      latitude: route.params.lat,
-                      longitude: route.params.lon,
+                      latitude: route.params?.lat,
+                      longitude: route.params?.lon,
                       latitudeDelta: 0.0922,
                       longitudeDelta: 0.0421,
                     }}
                     >
                     <Marker 
                       coordinate={{
-                        latitude: route.params.lat,
-                        longitude: route.params.lon,
+                        latitude: route.params?.lat,
+                        longitude: route.params?.lon,
                       }}
                       pinColor="red"
                       >
