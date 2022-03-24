@@ -87,39 +87,43 @@ const resolvers = {
 weatherForecast.process(async () => {
   // get user data
   let users = await userMongoDb.resolvers.Query.getAllMongoUsers();
-  let messages = await Promise.all(
-    users.map(async (el) => {
-      let newObj = {
-        to: el.expoToken,
-        sound: "default",
-        title: "Ramalan cuaca hari ini",
-      };
-      const lat = el.recentCoordinates.split(",")[0];
-      const lon = el.recentCoordinates.split(",")[1];
-      let obj;
-      // get weather info for each user
-      const result = await resolvers.Query.weatherNotif(obj, { lat: +lat, lon: +lon });
-      if (result.length === 0) {
-        newObj.body = "Cuaca hari ini diprediksi tidak akan hujan, cek AlertMe! untuk melihat kondisi di sekitar Anda";
-      } else {
-        newObj.body = "Hujan diprediksi akan turun pada hari ini, siapkan payung dan jas hujan Anda dan cek AlertMe! untuk melihat kondisi di sekitar Anda";
-      }
-      // messages.push(newObj);
-      return newObj;
-    })
-  );
-  // console.log(messages);
-  console.log("Sending notifications");
-  return axios({
-    method: "POST",
-    url: expoUrl,
-    headers: {
-      Accept: "application/json",
-      "Accept-encoding": "gzip, deflate",
-      "Content-Type": "application/json",
-    },
-    data: JSON.stringify(messages),
-  });
+  if (users.length !== 0) {
+    let messages = await Promise.all(
+      users.map(async (el) => {
+        let newObj = {
+          to: el.expoToken,
+          sound: "default",
+          title: "Ramalan cuaca hari ini",
+        };
+        const lat = el.recentCoordinates.split(",")[0];
+        const lon = el.recentCoordinates.split(",")[1];
+        let obj;
+        // get weather info for each user
+        const result = await resolvers.Query.weatherNotif(obj, { lat: +lat, lon: +lon });
+        if (result.length === 0) {
+          newObj.body = "Cuaca hari ini diprediksi tidak akan hujan, cek AlertMe! untuk melihat kondisi di sekitar Anda";
+        } else if (result.some((e) => e.weather[0].main === "Thunderstorm")) {
+          newObj.body = "Waspada! Hujan lebat diprediksi akan turun pada hari ini, siapkan payung dan jas hujan dan cek AlertMe! untuk melihat kondisi di sekitar Anda";
+        } else {
+          newObj.body = "Hujan diprediksi akan turun pada hari ini, siapkan payung dan jas hujan Anda dan cek AlertMe! untuk melihat kondisi di sekitar Anda";
+        }
+        // messages.push(newObj);
+        return newObj;
+      })
+    );
+    // console.log(messages);
+    console.log("Sending notifications");
+    return axios({
+      method: "POST",
+      url: expoUrl,
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(messages),
+    });
+  }
 });
 
 weatherForecast.add(

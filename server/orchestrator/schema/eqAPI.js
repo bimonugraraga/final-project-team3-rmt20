@@ -101,29 +101,31 @@ sendEqNotif.process(async () => {
     await redis.set("recentEarthquake", JSON.stringify(recentEq));
     // get user data
     const users = await userMongoDb.resolvers.Query.getAllMongoUsers();
-    let messages = users.map((el) => {
-      let obj = {
-        to: el.expoToken,
-        sound: "default",
-        title: "Info Gempa",
-        body: `Gempa bermagnitude ${recentEq.magnitude}. ${recentEq.area}. Pada tanggal ${recentEq.date} pukul ${recentEq.hour}. Potensi: ${recentEq.potensi}`,
-      };
-      return obj;
-    });
+    if (users.length !== 0) {
+      let messages = users.map((el) => {
+        let obj = {
+          to: el.expoToken,
+          sound: "default",
+          title: "Info Gempa",
+          body: `Gempa bermagnitude ${recentEq.magnitude}. ${recentEq.area}. Pada tanggal ${recentEq.date} pukul ${recentEq.hour}. Potensi: ${recentEq.potensi}`,
+        };
+        return obj;
+      });
 
-    // send notif to all users
-    console.log("Send new earthquake notifications");
+      // send notif to all users
+      console.log("Send new earthquake notifications");
 
-    return axios({
-      method: "POST",
-      url: expoUrl,
-      headers: {
-        Accept: "application/json",
-        "Accept-encoding": "gzip, deflate",
-        "Content-Type": "application/json",
-      },
-      data: JSON.stringify(messages),
-    });
+      return axios({
+        method: "POST",
+        url: expoUrl,
+        headers: {
+          Accept: "application/json",
+          "Accept-encoding": "gzip, deflate",
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify(messages),
+      });
+    }
   }
 });
 
