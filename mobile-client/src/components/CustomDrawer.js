@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { View, Text, Divider, Button } from "native-base";
-import { Image } from "react-native";
+import { Image, Dimensions } from "react-native";
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -10,9 +10,10 @@ import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AuthContext from "../context";
 
+const windowHeight = Dimensions.get('window').height;
+
 const CustomDrawer = (props) => {
   const auth = useContext(AuthContext);
-  // console.log(props.navigation, "<>>>>>>>>")
   let { navigate } = props.navigation;
 
   const handleLogout = (e) => {
@@ -82,22 +83,11 @@ const CustomDrawer = (props) => {
         <DrawerItemList {...props} />
 
         <View>
-          {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: 40,
-            marginLeft: 20
-          }}
-          >
-            <AntDesign name="logout" size={25} color="#fff"/>
-            <Button size="lg" variant="ghost" colorScheme="orange"><Text fontSize={20} ml="-2" fontWeight="bold" color="#fff">Logout</Text></Button>
-          </View> */}
           {logoutDrawer()}
           <View
             style={{
               alignItems: "center",
-              marginTop: 250,
+              marginTop: windowHeight * 0.39,
             }}
           >
             <Divider mb="2"></Divider>
