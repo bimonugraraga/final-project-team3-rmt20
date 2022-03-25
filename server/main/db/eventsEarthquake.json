@@ -1,0 +1,168 @@
+[
+  {
+    "date": "16 Mar 2022",
+    "hour": "21:12:00 WIB",
+    "dateTime": "2022-03-16T14:12:00+00:00",
+    "coordinates": "-3.70,128.12",
+    "magnitude": "2.7",
+    "depth": 10,
+    "area": "Pusat gempa berada di laut 47 km Baratdaya Kairatu",
+    "dirasakan": "II-III Ambon",
+    "potensi": "Tidak berpotensi tsunami",
+    "shakeMap": "20220319080340.mmi.jpg"
+  },
+  {
+    "date": "16 Mar 2022",
+    "hour": "17:06:14 WIB",
+    "dateTime": "2022-03-16T10:06:14+00:00",
+    "coordinates": "-3.69,128.13",
+    "magnitude": "2.6",
+    "depth": 10,
+    "area": "Pusat gempa berada di laut 6 km Barat Ambon",
+    "dirasakan": "II Ambon",
+    "potensi": "Tidak berpotensi tsunami"
+  },
+  {
+    "date": "16 Mar 2022",
+    "hour": "14:14:28 WIB",
+    "dateTime": "2022-03-16T07:14:28+00:00",
+    "coordinates": "-3.70,128.12",
+    "magnitude": "3.3",
+    "depth": 10,
+    "area": "Pusat gempa berada di laut 7 km Barat Ambon",
+    "dirasakan": "III Ambon",
+    "potensi": "Tidak berpotensi tsunami"
+  },
+  {
+    "date": "16 Mar 2022",
+    "hour": "11:06:43 WIB",
+    "dateTime": "2022-03-16T04:06:43+00:00",
+    "coordinates": "-7.90,107.04",
+    "magnitude": "4.2",
+    "depth": 16,
+    "area": "Pusat gempa berada di laut 109 km Tenggara Kota Sukabumi",
+    "dirasakan": "II Singajaya, II Cidaun, II Agrabinta, II Cidora",
+    "potensi": "Tidak berpotensi tsunami"
+  },
+  {
+    "date": "16 Mar 2022",
+    "hour": "10:00:01 WIB",
+    "dateTime": "2022-03-16T03:00:01+00:00",
+    "coordinates": "-7.94,106.94",
+    "magnitude": "5.5",
+    "depth": 10,
+    "area": "Pusat gempa berada di laut 113 km Tenggara Kota Sukabumi",
+    "dirasakan": "III Garut, IV Cianjur, II-III Lebak Selatan, II Jakarta, II Banjar, II Bandung Barat, II Bekasi, III Bayah, III Panimbang, III Pandeglang, II-III Cilegon, II Tangerang Selatan, IV Pelabuhan Ratu, II-III Sukabumi, II Bandung, II Depok, II Serang, II Purwakarta",
+    "potensi": "Tidak berpotensi tsunami"
+  },
+  {
+    "date": "15 Mar 2022",
+    "hour": "23:53:22 WIB",
+    "dateTime": "2022-03-15T16:53:22+00:00",
+    "coordinates": "-7.26,107.72",
+    "magnitude": "3.6",
+    "depth": 1,
+    "area": "Pusat gempa berada di darat 17 km Tenggara Kab. Bandung",
+    "dirasakan": "III Ciparay",
+    "potensi": "Tidak berpotensi tsunami"
+  },
+  {
+    "date": "15 Mar 2022",
+    "hour": "23:51:18 WIB",
+    "dateTime": "2022-03-15T16:51:18+00:00",
+    "coordinates": "-7.30,107.72",
+    "magnitude": "3.2",
+    "depth": 17,
+    "area": "Pusat gempa berada di darat 21 km Barat Daya Kab. Garut",
+    "dirasakan": "III Ciparay",
+    "potensi": "Tidak berpotensi tsunami"
+  },
+  {
+    "date": "15 Mar 2022",
+    "hour": "19:12:30 WIB",
+    "dateTime": "2022-03-15T12:12:30+00:00",
+    "coordinates": "-0.55,98.47",
+    "magnitude": "5.3",
+    "depth": 25,
+    "area": "Pusat gempa berada di laut 144 Km Tenggara Nias Selatan",
+    "dirasakan": "II Pasaman, II Nias Selatan",
+    "potensi": "Tidak berpotensi tsunami"
+  },
+  {
+    "date": "14 Mar 2022",
+    "hour": "21:15:18 WIB",
+    "dateTime": "2022-03-14T14:15:18+00:00",
+    "coordinates": "-8.12,107.82",
+    "magnitude": "3.9",
+    "depth": 27,
+    "area": "Pusat gempa berada di laut 88 km Barat daya Kab.Pangandaran",
+    "dirasakan": "III Pangandaran, III Cijulang, III Bungbulang, III Garut, II Tasikmalaya",
+    "potensi": "Tidak berpotensi tsunami"
+  },
+  {
+    "date": "14 Mar 2022",
+    "hour": "21:12:10 WIB",
+    "dateTime": "2022-03-14T14:12:10+00:00",
+    "coordinates": "-0.56,98.54",
+    "magnitude": "5.4",
+    "depth": 16,
+    "area": "Pusat gempa berada di laut 149 km Tenggara Nias Selatan",
+    "dirasakan": "II-III Simpang Empat, II-III Pasaman Barat, II Padang, III Siberut, III-IV Nias Selatan, II-III Nias Barat",
+    "potensi": "Tidak berpotensi tsunami"
+  },
+  {
+    "date": "14 Mar 2022",
+    "hour": "10:08:46 WIB",
+    "dateTime": "2022-03-14T03:08:46+00:00",
+    "coordinates": "0.02,126.70",
+    "magnitude": "4.9",
+    "depth": 10,
+    "area": "Pusat gempa berada di Laut 110 km Barat Daya Tidore",
+    "dirasakan": "II Ternate",
+    "potensi": "Tidak berpotensi tsunami"
+  },
+  {
+    "date": "14 Mar 2022",
+    "hour": "04:38:43 WIB",
+    "dateTime": "2022-03-13T21:38:43+00:00",
+    "coordinates": "-0.66,98.45",
+    "magnitude": "6.0",
+    "depth": 26,
+    "area": "Pusat gempa berada di laut 154 km tenggara Nias Selatan",
+    "dirasakan": "IV Nias Selatan, III Padang, III Siberut, III Gunungsitoli, II Padang Panjang, II Pariaman",
+    "potensi": "Tidak berpotensi tsunami"
+  },
+  {
+    "date": "14 Mar 2022",
+    "hour": "04:09:21 WIB",
+    "dateTime": "2022-03-13T21:09:21+00:00",
+    "coordinates": "-0.71,98.50",
+    "magnitude": "6.9",
+    "depth": 25,
+    "area": "Pusat gempa berada di laut 161 km Tenggara NiasSelatan",
+    "dirasakan": "IV Padang, IV Siberut, IV Nias Selatan, IV Gunungsitoli, III Padang Panjang, III Bukit Tinggi, III Pasaman Barat, III Tua Pejat, III Pariaman, II Dhamasraya, II Payakumbuh, II Kerinci, II Tapanuli Selatan, II Pesisir Selatan, II Batusangkar, II Padang Pariaman, II Solok, VI Hibala, V Pulau-pulau batu, V Pulau-pulau batu barat, V Tanah masa, V Siberut utara, V Siberut barat",
+    "potensi": "Tidak berpotensi tsunami"
+  },
+  {
+    "date": "13 Mar 2022",
+    "hour": "19:46:37 WIB",
+    "dateTime": "2022-03-13T12:46:37+00:00",
+    "coordinates": "-7.22,107.60",
+    "magnitude": "2.5",
+    "depth": 4,
+    "area": "Pusat gempa berada di darat 23 km Tenggara Kabupaten Bandung",
+    "dirasakan": "II Pangalengan",
+    "potensi": "Tidak berpotensi tsunami"
+  },
+  {
+    "date": "13 Mar 2022",
+    "hour": "10:11:50 WIB",
+    "dateTime": "2022-03-13T03:11:50+00:00",
+    "coordinates": "-6.95,107.21",
+    "magnitude": "3.0",
+    "depth": 7,
+    "area": "Pusat gempa berada di darat 16 km Tenggara Kabupaten Cianjur",
+    "dirasakan": "III Cibeber, III Bojongpicung, III Ciranjang, II Cianjur",
+    "potensi": "Tidak berpotensi tsunami"
+  }
+]

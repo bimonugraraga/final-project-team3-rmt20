@@ -1,0 +1,47 @@
+[
+  {
+    "status": "Aman",
+    "description": "test",
+    "photoUrl" : "https://cdn.iconscout.com/icon/free/png-256/weather-2191838-1846632.png",
+    "coordinate" : "-12.94,106.94",
+    "temperature": 20,
+    "uvi": 20,
+    "pressure" :  5,
+    "humidity" : 70,
+    "windspeed" : 6,
+    "weatherMain": "test",
+    "weatherDesc" : "test",
+    "weatherIcon" : "https://i.pinimg.com/originals/77/0b/80/770b805d5c99c7931366c2e84e88f251.png",
+    "UserId" : 1
+  },
+  {
+    "status": "Aman",
+    "description": "test",
+    "photoUrl" : "https://cdn.iconscout.com/icon/free/png-256/weather-2191838-1846632.png",
+    "coordinate" : "-12.94,106.94",
+    "temperature": 20,
+    "uvi": 20,
+    "pressure" :  5,
+    "humidity" : 70,
+    "windspeed" : 6,
+    "weatherMain": "test",
+    "weatherDesc" : "test",
+    "weatherIcon" : "https://i.pinimg.com/originals/77/0b/80/770b805d5c99c7931366c2e84e88f251.png",
+    "UserId" : 1
+  },
+  {
+    "status": "Aman",
+    "description": "test",
+    "photoUrl" : "https://cdn.iconscout.com/icon/free/png-256/weather-2191838-1846632.png",
+    "coordinate" : "-12.94,106.94",
+    "temperature": 20,
+    "uvi": 20,
+    "pressure" :  5,
+    "humidity" : 70,
+    "windspeed" : 6,
+    "weatherMain": "test",
+    "weatherDesc" : "test",
+    "weatherIcon" : "https://i.pinimg.com/originals/77/0b/80/770b805d5c99c7931366c2e84e88f251.png",
+    "UserId" : 1
+  }
+]

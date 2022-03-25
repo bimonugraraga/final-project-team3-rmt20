@@ -1,0 +1,34 @@
+[
+  {
+    "UserId": 1,
+    "EventquakeId": 1,
+    "status": "Safe",
+    "description": "disini aman banget",
+    "photoUrl": "imageUrlContoh",
+    "coordinate": "-12.94,106.94"
+  },
+  {
+    "UserId": 1,
+    "EventquakeId": 2,
+    "status": "Danger",
+    "description": "disini sedikit kerassa",
+    "photoUrl": "imageUrlContoh",
+    "coordinate": "-12.94,106.94"
+  },
+  {
+    "UserId": 1,
+    "EventquakeId": 2,
+    "status": "Danger",
+    "description": "pohon tumbang",
+    "photoUrl": "imageUrlContoh",
+    "coordinate": "-12.64,106.533"
+  },
+  {
+    "UserId": 1,
+    "EventquakeId": 3,
+    "status": "Danger",
+    "description": "disini kerasa banget",
+    "photoUrl": "imageUrlContoh",
+    "coordinate": "-12.94,106.94"
+  }
+]
