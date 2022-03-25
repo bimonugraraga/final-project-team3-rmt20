@@ -1,8 +1,10 @@
 {
   "expo": {
-    "name": "mobile-client",
-    "plugins": ["expo-camera"],
-    "slug": "mobile-client",
+    "name": "AlertMe",
+    "plugins": [
+      "expo-camera"
+    ],
+    "slug": "alertme",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
@@ -14,7 +16,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -26,6 +30,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": ""
   }
 }

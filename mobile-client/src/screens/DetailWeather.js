@@ -307,7 +307,7 @@ export default function DetailWeather({navigation,route}) {
                   <ScrollView horizontal={true} style={{ width: "100%" }}>
                     <Center flex={1} px="2.5" bg="#e4e4e7">
                       <FlatList 
-                        data={data2.getWeatherReports}
+                        data={data2?.getWeatherReports}
                         renderItem={renderItem}
                         keyExtractor={(item) => item.id}
                         

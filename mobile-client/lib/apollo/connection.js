@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: "http://d212-140-213-150-253.ngrok.io",
+  uri: "https://final-project-alertme-graphql.herokuapp.com",
   cache: new InMemoryCache(),
 });
 

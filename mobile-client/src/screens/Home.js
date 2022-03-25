@@ -240,7 +240,7 @@ export default function Home() {
                             alt="image"
                           />
                         </AspectRatio>
-                      <Heading size="md" color="#fff" >{data2?.fetchCurrentWeather.current.temp} Â°C</Heading>
+                      <Heading size="md" color="#fff" >{data2?.fetchCurrentWeather.current.temp} °C</Heading>
                     </View>
                     <View justifyContent="center" alignItems="center">
                       <Text color="#fff">
